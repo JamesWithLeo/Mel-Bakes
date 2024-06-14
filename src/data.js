@@ -9,12 +9,12 @@ import cupcake6 from './assets/images/cupcake6.png';
 
 
 export const cupcakes = [ 
-    {name: 'Straberrylunch', image: cupcake1, price: '130.00' , isAvailable:true},
-    {name: 'CherryTop', image: cupcake2, price:'110.00' , isAvailable:true},
-    {name:'Vanilla Spring', image: cupcake3, price:'120.00', isAvailable:true},
-    {name:'Cherry Spring',image:cupcake4, price: '120.00', isAvailable:true},
-    {name:'CherryBit' , image: cupcake5, price:'130.00', isAvailable:true},
-    {name:'Choco Puff', image: cupcake6, price: '130.00', isAvailable:true},
+    {id:1 , name: 'Straberrylunch', image: cupcake1, price: '130.00' , isAvailable:true},
+    {id:2 , name: 'CherryTop', image: cupcake2, price:'110.00' , isAvailable:true},
+    {id:3 , name:'Vanilla Spring', image: cupcake3, price:'120.00', isAvailable:true},
+    {id:4 , name:'Cherry Spring',image:cupcake4, price: '120.00', isAvailable:true},
+    {id:5 , name:'CherryBit' , image: cupcake5, price:'130.00', isAvailable:true},
+    {id:6 , name:'Choco Puff', image: cupcake6, price: '130.00', isAvailable:true},
     
 ]
 export default cupcakes

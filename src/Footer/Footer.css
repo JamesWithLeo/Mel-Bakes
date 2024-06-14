@@ -1,0 +1,30 @@
+footer {
+  height: max-content;
+  max-width: 1440px;
+  width: 100%;
+}
+#author {
+  color: #454255;
+  font-size: calc(10px + .4vw);
+}
+
+footer h1 {
+  color: goldenrod;
+}
+footer p {
+  color: wheat;
+}
+
+
+
+#author {
+  color: #454255;
+  font-size: calc(10px + .4vw);
+}
+
+footer h1 {
+  color: goldenrod;
+}
+footer p {
+  color: wheat;
+}

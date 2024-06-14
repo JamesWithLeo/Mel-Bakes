@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app.js';
-import Signin from './pages/Signin.jsx';
+import SigIn from './SignIn/Signin.jsx';
 
 import {
   createBrowserRouter,
@@ -10,7 +10,7 @@ import {
 
 const route = createBrowserRouter([
   {path:"/", element:<App />},
-  {path:"Signin/", element:<Signin />}
+  {path:"Signin/", element:<SigIn />}
 
 ])
 

@@ -38,6 +38,7 @@ h1, h2, h3, h4, h5, h6, p {
   top: 0;
   justify-content: center;
   background-color: var(--light-color-002);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
 }
 #footerWrapper {
   height: max-content;
@@ -55,29 +56,7 @@ h1, h2, h3, h4, h5, h6, p {
   display: flex;
   flex-direction: column;
 }
-header {
-  max-width: 1440px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background-color: var(--light-color-002);
-  justify-content: space-between ;
-}
-#headerButton {
-  margin-right: 1em;
-  display: flex;
-  gap: 1.5em;
-  align-items: center;
-}
-#cart {
-  color: var(--dark-color-000);
-}
-#contactUsButton {
-  border: var(--dark-color-000) .2em solid;
-  background-color: transparent;
-  padding: .6em .8em;
-  border-width: .1em;
-}
+
 
 main {
   max-width: 1440px;
@@ -113,12 +92,7 @@ main {
   grid-row: 5;
   width: max-content;
   height: max-content;
-  padding: .8em 1.4em;
   justify-self: right;
-  border: none;
-  background-color: var(--dark-color-000);
-  color: white;
-  border-radius: 1.5em;
 }
 
 #gallaryContainer {
@@ -168,28 +142,6 @@ main {
   padding: 1em 1em 10em 1em;
 }
 
-
-
-footer {
-  z-index: 1;
-  height: max-content;
-  max-width: 1440px;
-  width: 100%;
-}
-#author {
-  color: #454255;
-  font-size: calc(10px + .4vw);
-}
-
-footer h1 {
-  color: goldenrod;
-}
-footer p {
-  color: wheat;
-}
-
-
-/* modal container  */
 
 @media screen and (max-width:540px) {
   main {

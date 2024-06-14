@@ -1,26 +1,34 @@
-import { React } from "react"
+// system
+import { React, useContext } from "react"
 import './LoginAccount.css';
 import { Link } from "react-router-dom";
 import Styled from 'styled-components';
+// { ThemeConsumer, ThemeContext, ThemeProvider }
+// import { Button, PrimaryTheme, PrimaryThemeOutline } from "../app";
+// system
+
+// design assets 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+// design assets
 
 const CustomLink = Styled(Link)`
-justify-self: center;
-width: max-content;
-height: max-content;
-text-decoration: none;
-color: #424874;
-font-size: 14px;
-background-color: white ;
-padding: .6em 1.4em;
-border-radius: .2em;
-grid-column: 2;
-grid-row: 5;
-border: #424874 .1em solid;
+  justify-self: center;
+  width: max-content;
+  height: max-content;
+  text-decoration: none;
+  color: #424874;
+  font-size: 14px;
+  background-color: white ;
+  padding: .6em 1.4em;
+  border-radius: .2em;
+  grid-column: 2;
+  grid-row: 5;
+  border: #424874 .1em solid;
 `;
 function LoginAccount({ displayProp, setDisplay}){
-
+  // const primaryTheme = useContext(PrimaryTheme);
+  // const primaryThemeOutline = useContext(PrimaryThemeOutline);
   return (
     <div id='loginWrapper' style={{display:displayProp}}>
       
@@ -33,6 +41,11 @@ function LoginAccount({ displayProp, setDisplay}){
         <p id="forgotAccountButton">Forgot Password</p>
         <p id="remeberAccountButton">Remember me</p>
 
+        {/* <ThemeProvider theme={primaryTheme}>
+          <Button>hello</Button>
+        </ThemeProvider> */}
+
+        
         <CustomLink to={'Signin'} id="SignInButton" onClick={()=>setDisplay(false)}>Create Account</CustomLink>
       </div>
 

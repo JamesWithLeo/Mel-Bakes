@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProductCard.css'
 
-function ProductCard({ProductName, ProductImg, ProductPrice, ProductSelected}) {
+function ProductCard({ProductName, ProductImg, ProductPrice, ProductSelected,}) {
 
   
   function onOpen(){

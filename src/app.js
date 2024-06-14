@@ -1,47 +1,78 @@
 import './app.css';
 import { Outlet } from 'react-router-dom';
-import { useState } from 'react';
-
+import { useState, useContext } from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+// major components
+import FooterComponent from './Footer/Footer.jsx';
+import HeaderComponent from './Header/Header.jsx';
+// components
 import plaidPattern from './assets/images/pattern.svg';
 import cupcakes from './data.js';
-import ProductCard from './components/ProductCard.jsx';
-import LoginAccount from './components/LoginAccount.jsx';
-import Gallary from './components/GallerySlideshow.jsx';
-import ViewProduct from './components/ViewProduct.jsx';
-
+import ProductCard from './Product/ProductCard.jsx';
+import LoginAccount from './Login/LoginAccount.jsx';
+import Gallary from './GallerySlideshow/GallerySlideshow.jsx';
+import ViewProduct from './Product/ViewProduct.jsx';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faCode, faFilter, } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, } from '@fortawesome/free-solid-svg-icons';
+
+// styled
+export const Button = styled.button`
+  font-size: calc(10px + .4vw);
+  padding: .6em 1em;
+  border-radius: 3px;
+  
+  color: ${props => props.theme.fg};
+  background-color: ${props => props.theme.bg};
+  border: ${props => props.theme.border};
+`
+Button.defaultProps = {
+  theme: {
+    bg : '#424874',
+    fg : 'white'
+  }
+}
+export const PrimaryTheme = {
+  fg : 'white',
+  bg : '#424874',
+  border: 'none',
+}
+export const PrimaryThemeOutline = {
+  fg : '#424874',
+  bg : 'transparent',
+  border : '#424874 .1em solid'
+}
+// styled
+
 
 
 function App() {
+
   const [user, IsUser] = useState(false);
-  const [productModalDisplay, setProductModalDisplay] = useState(false);
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
+  const [productModalDisplay, setProductModalDisplay] = useState(false);
   
+
   const Cupcake = cupcakes.map((cupcake) => {
     if (cupcake.isAvailable) {
-      return <ProductCard 
-                key={crypto.randomUUID()}
+      return (
+        <ProductCard 
+                key={cupcake.id}
                 ProductName={cupcake.name} 
                 ProductImg={cupcake.image}
                 ProductPrice={cupcake.price}
                 ProductSelected={setProductModalDisplay}
-                />
+        />
+        )
     } else { return null; }
   })
 
 
   return (
     <div id='bodyWrapper' style={{backgroundImage:`url(${plaidPattern})`}}>
+
       <div id='headerWrapper'>
-        <header>
-            <h1>Mel Bakes</h1>
-            <div id='headerButton'>
-              <FontAwesomeIcon icon={faShoppingCart} fontSize={22} id='cart'/>
-              <button id='contactUsButton'>Contact Us</button>
-            </div>
-        </header>
+        <HeaderComponent />
       </div>
 
       {loginModalDisplay ? (
@@ -49,6 +80,7 @@ function App() {
         ) : (
         <LoginAccount displayProp={'none'} setDisplay={setLoginModalDisplay} />
       )}
+      
       {productModalDisplay ? <ViewProduct setDisplay={setProductModalDisplay} displayProp={productModalDisplay}/> : null}
 
       <div id='mainWrapper'>
@@ -67,11 +99,14 @@ function App() {
             </h1>
             <p>Every bite tells a story of freshness and flavor,<br/> Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth,<br /> our delightful treats promise to bring joy and satisfaction..<br/> Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
             </p>
-            <button onClick={ ()=> {
-              setLoginModalDisplay(true);
-              }} id='loginButton'>
-                Taste Now!
-            </button>
+            <ThemeProvider theme={PrimaryTheme}>
+              <Button onClick={ ()=> {
+                setLoginModalDisplay(true);
+                }} id='loginButton'>
+                  Taste Now!
+              </Button>
+            </ThemeProvider>
+            
 
 
           </div>
@@ -91,6 +126,7 @@ function App() {
           <div id='filterWrapper'>
             <FontAwesomeIcon icon={faFilter} fontSize={20} className='icon' id='filterIcon'/>
             <button id='filterButton'>Filter</button>
+            <Button theme={PrimaryTheme} >Hello World</Button>
           </div>
 
           <div id='productContainerWrapper'>
@@ -104,26 +140,7 @@ function App() {
       </div>
 
       <div id='footerWrapper'>
-        <footer>
-          <div>
-            <h1>About</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> 
-          </div>
-          <div>
-            <h1>ingredients</h1>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </div>
-          <div>
-            <h1>Customers Service</h1>
-          </div>
-          <div>
-            <h1>Follow Us</h1>
-          </div>
-            <h1 id='author'>CODED BY JAMES LEO <FontAwesomeIcon icon={faCode} id='endTag'/>
-            </h1>
-        </footer>
+        <FooterComponent />
       </div>
       <Outlet />
     </div>
