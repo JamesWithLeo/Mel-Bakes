@@ -1,0 +1,21 @@
+
+
+#loginSigninWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: normal;
+  /* height: max-content; */
+  padding: 1em 1em;
+}
+
+#loginSigninWrapper__div {
+  /* display: flex; */
+  height: max-content;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4em
+}
+
+#loginSigninWrapper__div ~ input {
+  outline: #424874;
+}

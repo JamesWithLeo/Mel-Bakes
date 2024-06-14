@@ -1,0 +1,37 @@
+html {
+  --primary-color-000:  #DCD6F7;
+  --primary-color-001: #A6B1E1;
+  --secondary-color-001: #A6B1E1;
+  --light-color-002:  #F4EEFF;
+  --dark-color-000: #424874;
+  --darker: #393646;
+  box-sizing:border-box;
+}
+
+
+#container {
+  width: max-content;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  justify-self: left;
+  gap: 1.8em;
+  height: max-content;
+}
+.icon {
+  color: var(--dark-color-000);
+}
+
+#filterWrapper {
+  display: flex;
+  gap: .5em;
+}
+#filterButton {
+  padding: .3em 0em;
+  background-color: transparent;
+  border: transparent;
+  color: var(--darker);
+  font-weight: 700;
+}
+
