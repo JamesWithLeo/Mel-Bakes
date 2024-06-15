@@ -1,7 +1,7 @@
 import './app.css';
 import { Outlet } from 'react-router-dom';
-import { useState, useContext } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import { useState, } from 'react';
+import { ThemeProvider } from 'styled-components';
 // major components
 import FooterComponent from './Footer/Footer.jsx';
 import HeaderComponent from './Header/Header.jsx';
@@ -16,35 +16,7 @@ import ViewProduct from './Product/ViewProduct.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, } from '@fortawesome/free-solid-svg-icons';
 
-// styled
-export const Button = styled.button`
-  font-size: calc(10px + .4vw);
-  padding: .6em 1em;
-  border-radius: 3px;
-  
-  color: ${props => props.theme.fg};
-  background-color: ${props => props.theme.bg};
-  border: ${props => props.theme.border};
-`
-Button.defaultProps = {
-  theme: {
-    bg : '#424874',
-    fg : 'white'
-  }
-}
-export const PrimaryTheme = {
-  fg : 'white',
-  bg : '#424874',
-  border: 'none',
-}
-export const PrimaryThemeOutline = {
-  fg : '#424874',
-  bg : 'transparent',
-  border : '#424874 .1em solid'
-}
-// styled
-
-
+import { Button, PrimaryTheme,  } from './Styled/Styled.jsx';
 
 function App() {
 

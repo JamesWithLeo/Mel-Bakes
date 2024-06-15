@@ -5,6 +5,7 @@ header {
   align-items: center;
   background-color: var(--light-color-002);
   justify-content: space-between ;
+
 }
 
 #headerButton {
