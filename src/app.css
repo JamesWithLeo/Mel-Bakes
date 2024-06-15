@@ -75,12 +75,14 @@ main {
   grid-template-rows:5fr 1fr 1fr 1fr 1fr 5fr;
 }
 #welcomeContainer h1{
+  font-family: 'Lobster';
   margin: 0em;
   grid-column: 2 ;
   grid-row: 2;
   font-size: calc(12px + 2.8vw);
 }
 #welcomeContainer p {
+  font-family: 'Raleway';
   margin: 0em;
   grid-column: 2;
   grid-row: 3;
@@ -170,4 +172,22 @@ main {
     height: max-content;
 
   }
+}
+
+@font-face {
+  font-family: 'Advent';
+  src: url(./assets/fonts/Advent_Pro/AdventPro-Italic-VariableFont_wdth\,wght.ttf);
+}
+
+@font-face {
+  font-family: 'Lobster';
+  src: url(./assets/fonts/Lobster_Two/LobsterTwo-Regular.ttf);
+}
+@font-face {
+  font-family: 'Raleway';
+  src: url(./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf);
+}
+@font-face {
+  font-family: 'Redhat';
+  src: url(./assets/fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf);
 }

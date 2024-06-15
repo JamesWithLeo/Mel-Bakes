@@ -61,7 +61,7 @@ function App() {
         ) : (
           <main>
           <div id='welcomeContainer'>
-            <h1>Welcome to 
+            <h1>Welcome to&#160;
               <span style={{
                 backgroundColor:"#424874", 
                 color:"white", padding:"0em .2em", 

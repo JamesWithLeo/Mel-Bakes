@@ -50,6 +50,7 @@
 #productName {
     margin: 0em;
     font-size: calc(14  px + .5vw);
+    font-family: 'Redhat';
 
 }
 #productPrice {
@@ -57,6 +58,7 @@
     color: goldenrod;
     font-weight: 500;
     margin: .5em 0em 0em 0em;
+    font-family: 'Raleway';
 }
 
 @media screen and (max-width:540px) {

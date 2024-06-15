@@ -12,6 +12,7 @@ export const Button = styled.button`
   background-color: ${props => props.theme.bg};
   border: ${props => props.theme.border};
   transition: ease-in-out 300ms;
+  font-family: 'Redhat';
 
 `
 Button.defaultProps = {
