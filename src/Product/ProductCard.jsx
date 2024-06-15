@@ -6,6 +6,7 @@ function ProductCard({ProductName, ProductImg, ProductPrice, ProductSelected,}) 
   
   function onOpen(){
     ProductSelected(true)
+    document.body.style.overflowY = 'hidden'
   }
   return (
     <div id='card' onClick={onOpen}>

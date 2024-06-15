@@ -1,6 +1,15 @@
+#loginWrapper__outsideWrapper {
+  height: 100vh;
+  width: 100%;
+  background-color: pink;
+  position: fixed;
+  background-color: var(--darker);
+  opacity: .9;
+}
+
 #loginWrapper {
   z-index: 4;
-  position: absolute;
+  position: fixed;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10%;
