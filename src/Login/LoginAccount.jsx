@@ -20,7 +20,7 @@ function LoginAccount({ displayProp, setDisplay}){
 
   return (
     <>
-    <div id="loginWrapper__outsideWrapper" style={{display:displayProp}}>
+    <div id="loginWrapper__outsideWrapper" style={{display:displayProp}} onClick={exitLogin}>
     </div>
     <div id='loginWrapper' style={{display:displayProp}}>
       <FontAwesomeIcon icon={faRightFromBracket} id='exitLogin' onClick={exitLogin}/>

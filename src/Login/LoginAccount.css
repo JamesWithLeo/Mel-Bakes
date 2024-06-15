@@ -27,12 +27,12 @@
   color: lightgrey;
   font-size: calc(20px + .4vw);
   justify-self: right;
-  padding: 1em;
+  padding: .8em;
 }
 #tbLoginContainer {
   display: grid;
   grid-template-columns: .5fr 2fr .5fr;
-  grid-template-rows: 1fr 1fr .5fr 1fr .5fr 1fr .5fr .5fr .5fr .5fr 2fr;
+  grid-template-rows: .5fr 1fr .5fr 1fr .5fr 1fr .5fr .5fr .5fr 1fr;
 }
 /* .loginTB {} */
 .loginTB:focus {
@@ -61,24 +61,26 @@
   width: max-content;
   height: max-content;
   grid-column: 2;
-  grid-row: 8;
+  grid-row: 7;
   justify-self: right;
   margin: 0;
   font-size: calc(8px + .4vw);
+  align-self: center;
 
 }
 #remeberAccountButton {
   width: max-content;
   height: max-content;
   grid-column: 2;
-  grid-row: 8;
+  grid-row: 7;
   margin: 0;
   font-size: calc(8px + .4vw);
+  align-self: center;
 }
 
 #SignInButton {
   grid-column: 2;
-  grid-row: 10;
+  grid-row: 9;
 }
 #SignInButton:hover {
   transform: scale(1.05);
