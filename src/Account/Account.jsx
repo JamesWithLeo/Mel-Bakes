@@ -1,14 +1,19 @@
-import {React, useContext, createContext  } from "react";
+import {React, useContext  } from "react";
 import { Link } from "react-router-dom";
 import './Account.css';
 import plaidPattern from '../assets/images/pattern.svg';
 import FooterComponent from "../Footer/Footer";
 import { Button, CustomLink, Input, PrimaryTheme } from "../Styled/Styled";
 
-
+import { AccountContext } from "../MyContext";
 
 function Account(){
-
+  const myContext = useContext(AccountContext);
+  const handleCreateAccount = () => {
+    myContext.Username = document.getElementById('usernameSigninTB').value;
+    myContext.Gmail = document.getElementById('gmailSigninTB').value;
+    myContext.Password = document.getElementById('passwordSigninTB').value;
+  }
   return (
     <div id="bodyWrapper" style={{backgroundImage:`url(${plaidPattern})`}}>
       <div id="headerWrapper">
@@ -25,7 +30,7 @@ function Account(){
             <Input type="text" placeholder="Enter gmail" id="gmailSigninTB"/>
             <Input type="password" placeholder="Create password"/>
             <Input type="password" placeholder="Confirm password" id="passwordSigninTB"/>
-            <Button theme={PrimaryTheme}>Sign in</Button>
+            <Button theme={PrimaryTheme} onClick={handleCreateAccount}>Sign in</Button>
           </div>
         </main>
       </div>

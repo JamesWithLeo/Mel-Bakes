@@ -1,5 +1,5 @@
 // system
-import { React, useContext } from "react"
+import { React } from "react"
 import './LoginAccount.css';
 import { ThemeProvider } from "styled-components";
 import {CustomLink, Input, Button, PrimaryTheme, PrimaryThemeOutline} from '../Styled/Styled'
@@ -10,13 +10,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 // design assets
 
-function LoginAccount({ displayProp, setDisplay}){
 
+function LoginAccount({ displayProp, setDisplay}){
   const exitLogin = () => {
     setDisplay(false);
     document.body.style.overflowY = 'scroll'
   }
-
 
   return (
     <>
@@ -31,7 +30,6 @@ function LoginAccount({ displayProp, setDisplay}){
         <Button theme={PrimaryTheme} id="LoginAccountButton">Login</Button>
         <p id="forgotAccountButton">Forgot Password</p>
         <p id="remeberAccountButton">Remember me</p>
-
         <CustomLink to={'Account'} id="SignInButton" onClick={exitLogin}>Create Account</CustomLink>
       </div>
 

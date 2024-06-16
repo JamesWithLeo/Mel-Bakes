@@ -1,6 +1,6 @@
 import './app.css';
 import { Outlet } from 'react-router-dom';
-import { useState, } from 'react';
+import { useState, useContext, createContext } from 'react';
 import { ThemeProvider } from 'styled-components';
 // major components
 import FooterComponent from './Footer/Footer.jsx';
@@ -15,11 +15,16 @@ import ViewProduct from './Product/ViewProduct.jsx';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, } from '@fortawesome/free-solid-svg-icons';
-
+// styled
 import { Button, PrimaryTheme,  } from './Styled/Styled.jsx';
+
+import { AccountContext } from './MyContext.jsx';
 
 function App() {
 
+  const MyContext = useContext(AccountContext);
+
+  
   const [user, IsUser] = useState(false);
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [productModalDisplay, setProductModalDisplay] = useState(false);
@@ -29,11 +34,11 @@ function App() {
     if (cupcake.isAvailable) {
       return (
         <ProductCard 
-                key={cupcake.id}
-                ProductName={cupcake.name} 
-                ProductImg={cupcake.image}
-                ProductPrice={cupcake.price}
-                ProductSelected={setProductModalDisplay}
+          key={cupcake.id}
+          ProductName={cupcake.name} 
+          ProductImg={cupcake.image}
+          ProductPrice={cupcake.price}
+          ProductSelected={setProductModalDisplay}
         />
         )
     } else { return null; }
@@ -47,17 +52,19 @@ function App() {
         <HeaderComponent />
       </div>
 
+
       {loginModalDisplay ? (
-          <LoginAccount displayProp={'grid'} setDisplay={setLoginModalDisplay} />
-        ) : (
+        <LoginAccount displayProp={'grid'} setDisplay={setLoginModalDisplay} />
+          ) : (
         <LoginAccount displayProp={'none'} setDisplay={setLoginModalDisplay} />
       )}
+
       
       {productModalDisplay ? <ViewProduct setDisplay={setProductModalDisplay} displayProp={productModalDisplay}/> : null}
 
       <div id='mainWrapper'>
         {user ? (
-          <h1>Hello</h1>
+          null
         ) : (
           <main>
           <div id='welcomeContainer'>
@@ -71,6 +78,7 @@ function App() {
             </h1>
             <p>Every bite tells a story of freshness and flavor,<br/> Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth,<br /> our delightful treats promise to bring joy and satisfaction..<br/> Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
             </p>
+
             <ThemeProvider theme={PrimaryTheme}>
               <Button onClick={()=> {
                 setLoginModalDisplay(true)
@@ -79,12 +87,10 @@ function App() {
                   Taste Now!
               </Button>
             </ThemeProvider>
-            
-
-
           </div>
           <div id='gallaryContainer'>
             <Gallary />
+              <h1>{MyContext.Username}</h1>
           </div>
 
 
