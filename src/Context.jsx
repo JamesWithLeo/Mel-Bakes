@@ -19,12 +19,13 @@ class Account{
   }
 }
 
+//object
 export const AccountContext = createContext({
   Username : "",
   Gmail : "",
-  Password : ""
+  Password : "",
+  IsLogged : false
   }
 );
 
-const itemCart = []
-export const CartContext = createContext(itemCart)
+// export const cartDisplayContext = createContext(true)

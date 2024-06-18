@@ -1,9 +1,8 @@
 import React from "react";
 import ccg1 from '../assets/images/ccG1.jpg';
 import ccg2 from '../assets/images/ccG2.jpg'; 
-import './GallerySlideshow.css';
 
-
+import './GalleryAsGuest.css';
 function Gallary(){
   return (
     <div id="gallery">

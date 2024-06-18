@@ -11,7 +11,8 @@ import {  faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 // design assets
 
 
-function LoginAccount({ displayProp, setDisplay}){
+function LoginAccount({setDisplay}){
+  
   const exitLogin = () => {
     setDisplay(false);
     document.body.style.overflowY = 'scroll'
@@ -19,9 +20,9 @@ function LoginAccount({ displayProp, setDisplay}){
 
   return (
     <>
-    <div id="loginWrapper__outsideWrapper" style={{display:displayProp}} onClick={exitLogin}>
+    <div id="loginWrapper__outsideWrapper" onClick={exitLogin}>
     </div>
-    <div id='loginWrapper' style={{display:displayProp}}>
+    <div id='loginWrapper'>
       <FontAwesomeIcon icon={faRightFromBracket} id='exitLogin' onClick={exitLogin}/>
 
       <div id="tbLoginContainer">
@@ -30,7 +31,7 @@ function LoginAccount({ displayProp, setDisplay}){
         <Button theme={PrimaryTheme} id="LoginAccountButton">Login</Button>
         <p id="forgotAccountButton">Forgot Password</p>
         <p id="remeberAccountButton">Remember me</p>
-        <CustomLink to={'Account'} id="SignInButton" onClick={exitLogin}>Create Account</CustomLink>
+        <CustomLink to={'Signin'} id="SignInButton" onClick={exitLogin}>Create Account</CustomLink>
       </div>
 
     </div>

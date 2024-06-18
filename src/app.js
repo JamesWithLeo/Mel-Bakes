@@ -1,34 +1,43 @@
 import './app.css';
 import { Outlet } from 'react-router-dom';
-import { useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext, lazy, Suspense } from 'react';
 import { ThemeProvider } from 'styled-components';
 // major components
 import FooterComponent from './Footer/Footer.jsx';
 import HeaderComponent from './Header/Header.jsx';
 // components
-import plaidPattern from './assets/images/pattern.svg';
 import cupcakes from './data.js';
+import plaidPattern from './assets/images/pattern.svg';
 import ProductCard from './Product/ProductCard.jsx';
+import CartComponent from './Product/CartComponent.jsx';
 import LoginAccount from './Login/LoginAccount.jsx';
 import Gallary from './GallerySlideshow/GallerySlideshow.jsx';
 import ViewProduct from './Product/ViewProduct.jsx';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, } from '@fortawesome/free-solid-svg-icons';
 // styled
 import { Button, PrimaryTheme,  } from './Styled/Styled.jsx';
 
-import { AccountContext } from './MyContext.jsx';
+import { AccountContext } from './Context.jsx';
+import Homepage from './Home/Homepage.jsx';
+
+
 
 function App() {
 
-  const MyContext = useContext(AccountContext);
+  const Account = useContext(AccountContext);
+  // const [IsUser, setIsUser] = useState(Account.IsLogged);
+  const [IsUser, setIsUser] = useState(true);
 
-  
-  const [user, IsUser] = useState(false);
+
+
+  const [cartModalDisplay, SetCartModalDisplay] = useState(false);
+
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [productModalDisplay, setProductModalDisplay] = useState(false);
-  
+
 
   const Cupcake = cupcakes.map((cupcake) => {
     if (cupcake.isAvailable) {
@@ -48,23 +57,37 @@ function App() {
   return (
     <div id='bodyWrapper' style={{backgroundImage:`url(${plaidPattern})`}}>
 
-      <div id='headerWrapper'>
-        <HeaderComponent />
+      <div id='headerWrapper' >
+        <HeaderComponent setCartDisplayProp={SetCartModalDisplay}/>
       </div>
 
+      {cartModalDisplay ? (
+        <CartComponent setDisplay={SetCartModalDisplay}/>
+        ) : (
+          null
+        )
+      }
 
       {loginModalDisplay ? (
-        <LoginAccount displayProp={'grid'} setDisplay={setLoginModalDisplay} />
+        <LoginAccount setDisplay={setLoginModalDisplay} />
           ) : (
-        <LoginAccount displayProp={'none'} setDisplay={setLoginModalDisplay} />
+        null
       )}
 
       
-      {productModalDisplay ? <ViewProduct setDisplay={setProductModalDisplay} displayProp={productModalDisplay}/> : null}
+      {productModalDisplay ? (
+        <ViewProduct setDisplay={setProductModalDisplay}/> 
+        ) : ( 
+          null 
+        )
+      }
 
       <div id='mainWrapper'>
-        {user ? (
-          null
+        {IsUser ? (
+          <>
+            {/* <Gallary /> */}
+            <Homepage />
+          </>
         ) : (
           <main>
           <div id='welcomeContainer'>
@@ -89,8 +112,8 @@ function App() {
             </ThemeProvider>
           </div>
           <div id='gallaryContainer'>
+            <h1>{Account.Username}</h1>
             <Gallary />
-              <h1>{MyContext.Username}</h1>
           </div>
 
 

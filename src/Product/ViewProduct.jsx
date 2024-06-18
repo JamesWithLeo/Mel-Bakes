@@ -3,7 +3,7 @@ import './ViewProduct.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark  } from "@fortawesome/free-solid-svg-icons";
 
-function ViewProduct({displayProp, setDisplay, productName, productPrice}){
+function ViewProduct({setDisplay, productName, productPrice}){
   
   const exitViewProduct = () => {
     setDisplay(false)

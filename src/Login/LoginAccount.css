@@ -4,7 +4,8 @@
   background-color: pink;
   position: fixed;
   background-color: var(--darker);
-  opacity: .9;
+  opacity: .5;
+  display: block;
 }
 
 #loginWrapper {
@@ -16,7 +17,13 @@
   border-radius: 1em;
   background-color: white;
   height: calc(230px + 30vh);
-  width: calc(150px + 20vw);
+  width: calc(150px + 25vw);
+  max-width: 500px;
+  max-height: 500px;
+  min-height: max-content;
+  min-width: max-content;
+
+  display: grid;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
 
   grid-template-columns: 1fr;
@@ -34,7 +41,9 @@
   grid-template-columns: .5fr 2fr .5fr;
   grid-template-rows: .5fr 1fr .5fr 1fr .5fr 1fr .5fr .5fr .5fr 1fr;
 }
-/* .loginTB {} */
+.loginTB{
+  height: 100%;
+}
 .loginTB:focus {
   outline: var(--dark-color-000) .1em solid;
 }
@@ -82,6 +91,22 @@
   grid-column: 2;
   grid-row: 9;
 }
+#SignInButton:active, #SignInButton:any-link {
+  color: #424874;
+}
 #SignInButton:hover {
   transform: scale(1.05);
 }
+@media screen and (max-width:425px){
+  #loginWrapper {
+    height: 50vh;
+    width: 100%;
+  }
+}
+
+/* @media screen and (max-width:768px){
+  #loginWrapper {
+    height: 50vh;
+    width: 80%;
+  }
+} */
