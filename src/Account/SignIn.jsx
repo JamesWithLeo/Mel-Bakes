@@ -1,16 +1,24 @@
-import {React, useContext, createContext  } from "react";
-import { Link } from "react-router-dom";
-import './Account.css';
+import {React, useContext,  } from "react";
+import './SignIn.css';
 import plaidPattern from '../assets/images/pattern.svg';
 import FooterComponent from "../Footer/Footer";
-import { Button, CustomLink, Input, PrimaryTheme } from "../Styled/Styled";
+import {  CustomLink, Input, PrimaryTheme } from "../Styled/Styled";
 
+import { AccountContext } from "../Context.jsx";
 
+function SignIn(){
 
-function Account(){
-
+  const Account = useContext(AccountContext);
+  
+  const handleCreateAccount = () => {
+    Account.Username = document.getElementById('usernameSigninTB').value;
+    Account.Gmail = document.getElementById('gmailSigninTB').value;
+    Account.Password = document.getElementById('passwordSigninTB').value;
+    Account.IsLogged = true
+  }
   return (
     <div id="bodyWrapper" style={{backgroundImage:`url(${plaidPattern})`}}>
+
       <div id="headerWrapper">
         <header>
           <h1>Mel Bakes</h1>
@@ -25,7 +33,12 @@ function Account(){
             <Input type="text" placeholder="Enter gmail" id="gmailSigninTB"/>
             <Input type="password" placeholder="Create password"/>
             <Input type="password" placeholder="Confirm password" id="passwordSigninTB"/>
-            <Button theme={PrimaryTheme}>Sign in</Button>
+            <CustomLink 
+              theme={PrimaryTheme} 
+              onClick={handleCreateAccount}
+              to={'/'}>
+                Sign in
+            </CustomLink>
           </div>
         </main>
       </div>
@@ -38,4 +51,4 @@ function Account(){
     </div>
   )
 }
-export default Account;
+export default SignIn;

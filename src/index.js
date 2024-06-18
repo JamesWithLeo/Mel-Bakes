@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app.js';
-import Account from './Account/Account.jsx';
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import SignIn from './Account/SignIn.jsx';
 
 const route = createBrowserRouter([
+
+  
   {path:"/", element:<App />},
-  {path:"Account/", element:<Account />}
+  {path:"Signin/", element:<SignIn />}
 
 ])
 

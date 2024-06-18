@@ -70,9 +70,10 @@ main {
 }
 #welcomeContainer {
   width: 50%;
+  /* height: 100%; */
   display: grid;
   grid-template-columns: 1fr 10fr 1fr;
-  grid-template-rows:5fr 1fr 1fr 1fr 1fr 5fr;
+  grid-template-rows:10fr .5fr .5fr .5fr .5fr 10fr;
 }
 #welcomeContainer h1{
   font-family: 'Lobster';
@@ -152,18 +153,18 @@ main {
 }
 
 
-@media screen and (max-width:540px) {
+@media screen and (max-width:768px) {
   main {
     flex-direction: column-reverse;
-    height: max-content;
+    height:max-content;
 
   }
   #welcomeContainer {
     width: 100%;
-    /* height: 50%; */
+    /* height: 100%; */
     justify-self: baseline;
-    height: max-content;
-    grid-template-rows:.5fr .1fr .1fr .1fr .1fr .1fr;
+    /* height: max-content; */
+    grid-template-rows:.5fr .1fr 1fr .1fr .1fr .1fr;
 
   }
   #gallaryContainer {
