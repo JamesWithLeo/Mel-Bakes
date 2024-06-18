@@ -6,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import FooterComponent from './Footer/Footer.jsx';
 import HeaderComponent from './Header/Header.jsx';
 // components
-import cupcakes from './data.js';
 import plaidPattern from './assets/images/pattern.svg';
 import ProductCard from './Product/ProductCard.jsx';
 import CartComponent from './Product/CartComponent.jsx';
@@ -23,13 +22,17 @@ import { Button, PrimaryTheme,  } from './Styled/Styled.jsx';
 import { AccountContext } from './Context.jsx';
 import Homepage from './Home/Homepage.jsx';
 
+import cupcakes from './data.js';
+import Product from './Product/Product.jsx';
+export const ViewProductContext = createContext(undefined);
+export const ProductIndexContext = createContext(undefined);
 
 
 function App() {
 
   const Account = useContext(AccountContext);
-  // const [IsUser, setIsUser] = useState(Account.IsLogged);
-  const [IsUser, setIsUser] = useState(true);
+  const [IsUser, setIsUser] = useState(Account.IsLogged);
+  // const [IsUser, setIsUser] = useState(true);
 
 
 
@@ -38,20 +41,9 @@ function App() {
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [productModalDisplay, setProductModalDisplay] = useState(false);
 
-
-  const Cupcake = cupcakes.map((cupcake) => {
-    if (cupcake.isAvailable) {
-      return (
-        <ProductCard 
-          key={cupcake.id}
-          ProductName={cupcake.name} 
-          ProductImg={cupcake.image}
-          ProductPrice={cupcake.price}
-          ProductSelected={setProductModalDisplay}
-        />
-        )
-    } else { return null; }
-  })
+  const [ViewProductDisplay, setViewProductDisplay] = useState(false);
+  const [productIndex, setProductIndex] = useState(0);
+  // const viewProductContext = useContext(ViewProductContext)
 
 
   return (
@@ -81,6 +73,8 @@ function App() {
           null 
         )
       }
+      {ViewProductDisplay ? (
+        <ViewProduct setDisplay={setViewProductDisplay} productIndex={[productIndex]} setProductIndex={setProductIndex}  ProductsObj={cupcakes}/> ) : null }
 
       <div id='mainWrapper'>
         {IsUser ? (
@@ -104,8 +98,8 @@ function App() {
 
             <ThemeProvider theme={PrimaryTheme}>
               <Button onClick={()=> {
-                setLoginModalDisplay(true)
-                document.body.style.overflowY = 'hidden'
+                setLoginModalDisplay(true);
+                document.body.style.overflowY = 'hidden';
                 }} id='loginButton'>
                   Taste Now!
               </Button>
@@ -134,7 +128,13 @@ function App() {
           <div id='productContainerWrapper'>
             <h1>Cupcakes</h1>
             <div id='productContainer'>
-              {Cupcake}
+              
+              <ProductIndexContext.Provider value={setProductIndex}>
+                <ViewProductContext.Provider value={setViewProductDisplay}>
+                  <Product />
+                </ViewProductContext.Provider>
+              </ProductIndexContext.Provider>
+
             </div>
           </div>
 
