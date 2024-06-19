@@ -1,30 +1,65 @@
 footer {
   height: max-content;
+  padding: 5rem 3rem;
   max-width: 1440px;
   width: 100%;
-}
-#author {
-  color: #454255;
-  font-size: calc(10px + .4vw);
+
 }
 
 footer h1 {
   color: goldenrod;
 }
-footer p {
-  color: wheat;
+footer h3 {
+  color: white;
 }
 
+
+.AboutAndCeoWrapper {
+  display: flex;
+  /* justify-content: space-evenly; */
+  gap: 5rem;
+}
+#aboutWrapper {
+  width: 60%;
+}
+#content {
+  text-align: justify;
+  font-size: calc(14px + .4vw);
+  width: 100%;
+  color: white;
+
+}
+.contentButton {
+  font-size: calc(20px + .4vw);
+  font-weight: 800;
+  color: goldenrod;
+  background-color: transparent;
+  font-family: 'Raleway';
+  border: 2px solid #2b2a35;
+  padding: .3em .8em;
+  margin-right: .1em;
+
+}
+.contentImg {
+  height: 300px;
+  width: 300px;
+  background-color: white;
+  align-self: center;
+}
+
+.customersServiceWrapper {
+  display: flex;
+  gap: 5rem;
+
+}
+#logoutButtonWrapper {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: right;
+}
 
 
 #author {
-  color: #454255;
-  font-size: calc(10px + .4vw);
-}
-
-footer h1 {
-  color: goldenrod;
-}
-footer p {
-  color: wheat;
+  color: #2b2a35;
+  font-size: calc(20px + .4vw);
 }

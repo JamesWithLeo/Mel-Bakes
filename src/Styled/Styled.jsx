@@ -11,6 +11,7 @@ export const Button = styled.button`
   color: ${props => props.theme.fg};
   background-color: ${props => props.theme.bg};
   border: ${props => props.theme.border};
+  margin: ${props => props.theme.margin};
   transition: ease-in-out 300ms;
   font-family: 'Redhat';
 
@@ -32,6 +33,14 @@ export const PrimaryThemeOutline = {
   border : '#424874 .1em solid'
 }
 // styled
+export const GoldButtonTheme = {
+  fg : 'goldenrod',
+  bg : 'transparent',
+  // bg : 'var(--dark-color-000)',
+  border : 'goldenrod .1em solid',
+  margin : '0em .2em 0em 0em'
+}
+
 
 export const CustomLink = styled(Link)`
   justify-self: center;
