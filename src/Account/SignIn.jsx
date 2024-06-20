@@ -44,9 +44,7 @@ function SignIn(){
       </div>
 
       <div id="footerWrapper">
-        <footer>
           <FooterComponent />
-        </footer>
       </div>
     </div>
   )
