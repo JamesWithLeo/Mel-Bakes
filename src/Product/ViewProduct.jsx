@@ -24,11 +24,13 @@ function ViewProduct({setDisplay, productIndex, setProductIndex ,ProductsObj}){
       <FontAwesomeIcon icon={faXmark} id="exitViewProductIcon" 
         onClick={exitViewProduct}
       />
-      <h1>{ProductsObj[productIndex].name}</h1>
-      <img src={ProductsObj[productIndex].image} alt="cupcake"/>
-      <h2>{ProductsObj[productIndex].price}</h2>
-      <Button onClick={moveToPrevious}>Prev</Button>
-      <Button onClick={moveToNext}>next</Button>
+      <div id="productDetailsWrapper">
+        <h1>{ProductsObj[productIndex].name}</h1>
+        <img src={ProductsObj[productIndex].image} alt="cupcake" id="productImgView"/>
+        <h2>{ProductsObj[productIndex].price}</h2>
+      </div>
+      {/* <Button onClick={moveToPrevious}>Prev</Button>
+      <Button onClick={moveToNext}>next</Button> */}
     </div>
   </>
 )}

@@ -57,6 +57,17 @@ export const CustomLink = styled(Link)`
   color: ${props => props.theme.fg};
   background-color: ${props => props.theme.bg};
 `;
+export const underlinedLink = styled(Link)`
+  border: none;
+  background-color: transparent;
+  color: 'white';
+  justify-self: center;
+  width: max-content;
+  height: max-content;
+  text-decoration: none;
+  font-size: 14px;
+`
+
 export const Input = styled.input`
   text-decoration : none;
   display: block;

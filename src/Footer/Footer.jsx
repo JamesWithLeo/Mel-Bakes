@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCode } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faLink } from '@fortawesome/free-solid-svg-icons';
 import './Footer.css';
-import { Button, PrimaryThemeOutline, GoldButtonTheme } from '../Styled/Styled';
 
 function FooterComponent(){
   const about = "Your one-stop destination for delectable, handcrafted cupcakes that are as beautiful as they are delicious. At Mel Bakes, we believe in the magic of baking and the joy it brings to every celebration. Our cupcakes are made with the finest ingredients, from rich, creamy butter to fresh, seasonal fruits, ensuring every bite is a burst of flavor. Whether you're looking for classic vanilla, decadent chocolate, or unique seasonal creations, our cupcakes are perfect for any occasion. Join us at Mel Bakes, where every cupcake is a sweet masterpiece baked with love and passion."
@@ -10,44 +9,68 @@ function FooterComponent(){
 
   const handleAbout = () => {
     document.querySelector('#content').innerHTML = about;
+    document.getElementById('aboutButton').style.backgroundColor = '#2b2a35';
+    document.getElementById('ceoButton').style.backgroundColor = 'transparent';
+    document.getElementById('ceoButton').style.color = 'rgb(212, 170, 65)';
+    document.getElementById('aboutButton').style.color = 'goldenrod';
   }
   const handleCeo = () => {
     document.querySelector('#content').innerHTML = ceo;
+    document.getElementById('ceoButton').style.backgroundColor = '#2b2a35';
+    document.getElementById('aboutButton').style.backgroundColor = 'transparent'; 
+    document.getElementById('aboutButton').style.color = 'rgb(212, 170, 65)';
+    document.getElementById('ceoButton').style.color = 'goldenrod';
   }
   return (
     <footer>
       <div className='AboutAndCeoWrapper'>
 
         <div id='aboutWrapper'>
-          <button onClick={handleAbout} className='contentButton'>About Us</button>
-          <button onClick={handleCeo} className='contentButton'>The Ceo</button>
+          <button onClick={handleAbout} className='contentButton' id='aboutButton'>About Us</button>
+          <button onClick={handleCeo} className='contentButton' id='ceoButton'>The Ceo</button>
           <p id='content'>{about}</p>
         </div>
         <div className='contentImg'></div>
       </div>
 
       <div className='customersServiceWrapper'>
-        <div>
+        <div id='contactUsWrapper'>
           <h1>Contact Us</h1>
-          <h3>MelBakes@gmail.com</h3>
-          <h3>www.facebook.com/MelBakes</h3>
+          <a href='/' className='customerServiceLinks'>MelBakes@gmail.com</a>
+          <a href='https://www.facebook.com/MelBakes' className='customerServiceLinks'>
+            www.facebook.com/MelBakes
+          </a>
           <h3>(+63) 091223456789</h3>
-          <h3>Branches</h3>
+          <a href='/' className='customerServiceLinks'>Branches</a>
         </div>
-        <div>
-          <h1>FAQ`S</h1>
-          <h3>Order Process</h3>
-          <h3>Payment Methods</h3>
-          <h3>Returns and Refunds</h3>
-          <h3>Allergy Information</h3>
-          <h3>Privacy Policy</h3>
+        <div id='faqsWrapper'>
+          <h1 id='faqsTitle'>FAQ`S</h1>
+          <a href='/' className='customerServiceLinks'>
+            <FontAwesomeIcon icon={faLink} className='linkIcon' />
+            Order Process
+          </a>
+          <a href='/' className='customerServiceLinks'>
+            <FontAwesomeIcon icon={faLink} className='linkIcon' />
+            Payment Methods
+          </a>
+          <a href='/' className='customerServiceLinks'>
+            <FontAwesomeIcon icon={faLink} className='linkIcon' />
+            Returns and Refund
+          </a>
+          <a href='/' className='customerServiceLinks'>
+            <FontAwesomeIcon icon={faLink} className='linkIcon' />
+            Allergy Information
+          </a>
+          <a href='/' className='customerServiceLinks'>
+            <FontAwesomeIcon icon={faLink} className='linkIcon' />
+            Privacy Policy
+          </a>
         </div>
 
       </div>
         
       <div id='logoutButtonWrapper'>
         <button id='logoutButton'>Log out</button>
-
       </div>
       
       <h1 id='author'>CODED BY JAMES LEO <FontAwesomeIcon icon={faCode} id='endTag'/>

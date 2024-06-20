@@ -1,6 +1,9 @@
 footer {
   height: max-content;
-  padding: 5rem 3rem;
+  padding-top: 5rem;
+  padding-bottom: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
   max-width: 1440px;
   width: 100%;
 
@@ -8,6 +11,7 @@ footer {
 
 footer h1 {
   color: goldenrod;
+
 }
 footer h3 {
   color: white;
@@ -27,7 +31,10 @@ footer h3 {
   font-size: calc(14px + .4vw);
   width: 100%;
   color: white;
-
+  border: 2px solid #2b2a35;
+  background-color: #2b2a35;
+  margin-top: 0em;
+  padding: .6em 1em;
 }
 .contentButton {
   font-size: calc(20px + .4vw);
@@ -36,8 +43,12 @@ footer h3 {
   background-color: transparent;
   font-family: 'Raleway';
   border: 2px solid #2b2a35;
+  border-bottom: none;
   padding: .3em .8em;
   margin-right: .1em;
+}
+#aboutButton {
+  background-color: #2b2a35;
 
 }
 .contentImg {
@@ -62,4 +73,25 @@ footer h3 {
 #author {
   color: #2b2a35;
   font-size: calc(20px + .4vw);
+}
+#faqsWrapper {
+  /* display: grid; */
+  grid-template-columns: .3fr 1fr
+}
+#faqsTitle {
+  grid-column: 1 / 3;
+}
+.customerServiceLinks {
+  grid-column: 2;
+  font-size: calc(14px + .4vw);
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 1em 0em;
+}
+.customerServiceLinks:hover {
+  text-decoration: underline;
+}
+.linkIcon {
+  margin-right: 1em;
 }
