@@ -7,13 +7,13 @@ import FooterComponent from './Footer/Footer.jsx';
 import HeaderComponent from './Header/Header.jsx';
 // components
 import plaidPattern from './assets/images/pattern.svg';
-import ProductCard from './Product/ProductCard.jsx';
-import CartComponent from './Product/CartComponent.jsx';
-import LoginAccount from './Login/LoginAccount.jsx';
 import Gallary from './GallerySlideshow/GallerySlideshow.jsx';
-import ViewProduct from './Product/ViewProduct.jsx';
 
+import cupcakes from './data.js';
+import Product from './Product/Product.jsx';
+import CartComponent from './Product/CartComponent.jsx';
 
+// icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, } from '@fortawesome/free-solid-svg-icons';
 // styled
@@ -21,12 +21,12 @@ import { Button, PrimaryTheme,  } from './Styled/Styled.jsx';
 
 import { AccountContext } from './Context.jsx';
 import Homepage from './Home/Homepage.jsx';
-
-import cupcakes from './data.js';
-import Product from './Product/Product.jsx';
+import LoadingComponents from './loading/LoadingComponent.jsx';
 export const ViewProductContext = createContext(undefined);
 export const ProductIndexContext = createContext(undefined);
 
+const LoginAccount = lazy(()=> import('./Login/LoginAccount.jsx'));
+const ViewProduct = lazy(()=> import('./Product/ViewProduct.jsx'));
 
 function App() {
 
@@ -39,7 +39,7 @@ function App() {
   const [cartModalDisplay, SetCartModalDisplay] = useState(false);
 
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
-  const [productModalDisplay, setProductModalDisplay] = useState(false);
+  // const [productModalDisplay, setProductModalDisplay] = useState(false);
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
   const [productIndex, setProductIndex] = useState(0);
@@ -61,20 +61,19 @@ function App() {
       }
 
       {loginModalDisplay ? (
-        <LoginAccount setDisplay={setLoginModalDisplay} />
+        <Suspense fallback={<LoadingComponents />}>
+          <LoginAccount setDisplay={setLoginModalDisplay} />
+        </Suspense>
           ) : (
         null
       )}
 
-      
-      {productModalDisplay ? (
-        <ViewProduct setDisplay={setProductModalDisplay}/> 
-        ) : ( 
-          null 
-        )
-      }
       {ViewProductDisplay ? (
-        <ViewProduct setDisplay={setViewProductDisplay} productIndex={[productIndex]} setProductIndex={setProductIndex}  ProductsObj={cupcakes}/> ) : null }
+        <Suspense fallback={<LoadingComponents />}>
+          <ViewProduct setDisplay={setViewProductDisplay} productIndex={[productIndex]} setProductIndex={setProductIndex}  ProductsObj={cupcakes}/> 
+        </Suspense> 
+        ) : null }
+        
 
       <div id='mainWrapper'>
         {IsUser ? (
@@ -93,7 +92,7 @@ function App() {
                 }}>Mel Bakes.
               </span>
             </h1>
-            <p>Every bite tells a story of freshness and flavor,<br/> Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth,<br /> our delightful treats promise to bring joy and satisfaction..<br/> Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
+            <p style={{textAlign:'justify', width:'30em'}}>Every bite tells a story of freshness and flavor,<br/> Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth,<br /> our delightful treats promise to bring joy and satisfaction..<br/> Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
             </p>
 
             <ThemeProvider theme={PrimaryTheme}>
