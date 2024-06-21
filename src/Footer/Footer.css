@@ -1,9 +1,9 @@
 footer {
   height: max-content;
-  padding-top: 5rem;
+  padding-top: 1rem;
   padding-bottom: 1rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   max-width: 1440px;
   width: 100%;
 
@@ -24,17 +24,19 @@ footer h3 {
   gap: 5rem;
 }
 #aboutWrapper {
-  width: 60%;
-}
-#content {
-  text-align: justify;
-  font-size: calc(14px + .4vw);
   width: 100%;
+}
+.content {
+  text-align: justify;
+  font-size: calc(12px + .4vw);
   color: white;
-  border: 2px solid #2b2a35;
-  background-color: #2b2a35;
-  margin-top: 0em;
-  padding: .6em 1em;
+  height: auto;
+  overflow-wrap:normal;
+  text-wrap: wrap;
+  margin: 0;
+  /* border: 2px solid #2b2a35; */
+  /* background-color: #2b2a35; */
+  /* padding: .6em 1em; */
 }
 .contentButton {
   font-size: calc(20px + .4vw);
@@ -60,7 +62,9 @@ footer h3 {
 
 .customersServiceWrapper {
   display: flex;
-  gap: 5rem;
+  flex-direction: row;
+  gap: calc(5rem + .4vw);
+  margin-top: 1rem;
 
 }
 #logoutButtonWrapper {
@@ -94,4 +98,13 @@ footer h3 {
 }
 .linkIcon {
   margin-right: 1em;
+}
+
+@media screen and (max-width:540px) {
+  .customersServiceWrapper {
+    display: block;
+  }
+  /* .contentImg {
+    display: none;
+  } */
 }

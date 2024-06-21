@@ -92,7 +92,7 @@ function App() {
                 }}>Mel Bakes.
               </span>
             </h1>
-            <p style={{textAlign:'justify', width:'30em'}}>Every bite tells a story of freshness and flavor,<br/> Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth,<br /> our delightful treats promise to bring joy and satisfaction..<br/> Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
+            <p>Every bite tells a story of freshness and flavor, Our deliciously baked cupcakes, cakes, and bread are crafted with the finest ingredients and a dash of love... Perfect for any occasion, Whether you’re celebrating a birthday wedding, holiday, or just indulging your sweet tooth, our delightful treats promise to bring joy and satisfaction. Discover the perfect blend of taste and quality with every order from Mel Bakes, your go-to destination for freshly baked goodness for all life's special moments.
             </p>
 
             <ThemeProvider theme={PrimaryTheme}>

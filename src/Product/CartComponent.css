@@ -5,6 +5,8 @@
   background-color: var(--darker);
   opacity: .5;
   display: block;
+  z-index: 2;
+
 }
 
 #CartWrapper {
@@ -13,5 +15,6 @@
   width: 90%;
   background-color: white;
   display: block;
+  z-index: 2;
 
 }

@@ -6,10 +6,11 @@
   background-color: var(--darker);
   opacity: .5;
   display: block;
+  z-index: 2;
 }
 
 #loginWrapper {
-  z-index: 4;
+  z-index: 2;
   position: fixed;
   margin-left: auto;
   margin-right: auto;
@@ -18,8 +19,8 @@
   background-color: white;
   height: calc(230px + 30vh);
   width: calc(150px + 25vw);
-  max-width: 500px;
-  max-height: 500px;
+  max-width: 1000px;
+  max-height: 1000px;
   min-height: max-content;
   min-width: max-content;
 

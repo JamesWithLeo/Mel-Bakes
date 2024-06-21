@@ -26,11 +26,11 @@ function FooterComponent(){
       <div className='AboutAndCeoWrapper'>
 
         <div id='aboutWrapper'>
-          <button onClick={handleAbout} className='contentButton' id='aboutButton'>About Us</button>
-          <button onClick={handleCeo} className='contentButton' id='ceoButton'>The Ceo</button>
-          <p id='content'>{about}</p>
+          <h1>About us</h1>
+          <p className='content'>{about}</p>
+          {/* <h1>The Ceo</h1>
+          <p className='content'>{ceo}</p> */}
         </div>
-        <div className='contentImg'></div>
       </div>
 
       <div className='customersServiceWrapper'>
