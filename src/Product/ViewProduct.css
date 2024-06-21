@@ -3,21 +3,21 @@
   width: 100%;
   background-color: var(--darker);
   position: fixed;
-  opacity: .5;
+  opacity: .8;
+  z-index: 2;
 }
 #ViewProduct__wrapper {
-  height: 90%;
-  width: 90%;
+  width: 100%;
   position: fixed;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3%;
-  margin-bottom: 3%;
-  background-color: white;
-  z-index: 2;
-  border-radius: .6em;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  bottom: 0;
+  z-index: 2;
+
 }
 
 
@@ -25,15 +25,121 @@
   color: lightgray;
   font-size: calc(40px + .4vw);
   margin: .2em;
-  align-self: flex-end;
   width: max-content;
+  align-self:flex-end ;
 }
 #productDetailsWrapper {
-  display: block;
+  /* height: max-content; */
   background-color: var(--secondary-color-001);
+  display: flex;
+  flex-direction: column;
+}
+#productProfile {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  /* align-items: center; */
+  padding: 1rem;
+}
+#cupcakeImgWrapper {
+  /* width: 100%; */
+  max-width: max-content;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1rem 0rem;
+
+}
+#productImgView {
+  margin: 0;
+  height: calc(100px + 4vw);
+  width: auto;
+}
+#cartNav {
+  background-color: var(--secondary-color-001);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 1rem;
+}
+#quantityWrapper_outside {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+#quantityWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 1em;
+  padding: .4rem .8rem;
+  height: max-content;
+  width: max-content;
+  background-color: var(--darker);
+}
+#quantityLabel {
+  width: max-content;
+  color:black;
+}
+#minusQuantity {
+  font-size: calc(16px + .4vw);
+  color: white;
+  align-self: center;
+  justify-self: center;
+}
+#quantityIndicator {
+  margin: 0;
+  font-size: calc(14px + .4vw);
+  color: white;
+  text-align: center;
+  align-self: center;
+  
+}
+#plusQuantity {
+  font-size: calc(14px + .4vw);
+  color: white;
+  align-self: center;
+  justify-self: center;
+
+}
+#addToCartButton {
+  font-family: 'Redhat';
+  background-color: var(--primary-color-000);
+  border: none;
+  color: white;
+  font-size: calc(14px + .4vw);
+  padding: .4em 1em;
+  border-radius: 3px;
+  grid-row: 2;
+}
+#chechOutButton {
+  font-family: 'Redhat';
+  font-size: calc(14px + .4vw);
+  background-color: var(--dark-color-000);
+  border: none;
+  color: white;
+  padding: .4em 1em;
+  border-radius: 3px;
+  grid-row: 3;
 }
 
-#productImgView {
-  height: 50%;
-  width: auto;
+@media screen and (min-width:540px) {
+  #ViewProduct__wrapper {
+    max-width: 1440px;
+    top: 5rem;
+    bottom:unset;
+    width: 80%;
+  }
+  #productDetailsWrapper {
+    flex-direction: row;
+  }
+  #productProfile {
+    flex-direction: column;
+  } 
+  #cupcakeImgWrapper {
+    width: max-content;
+  }
+  #productImgView {
+    height: calc(200px + 4vw);
+  }
 }
