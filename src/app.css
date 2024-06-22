@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6, p {
   width: 100%;
   max-width: 1440px;
 }
-#headerWrapper {
+/* #headerWrapper {
   width: 100%;
   display: flex;
   position: sticky;
@@ -40,7 +40,7 @@ h1, h2, h3, h4, h5, h6, p {
   background-color: var(--light-color-002);
   box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
   z-index: 1;
-}
+} */
 #footerWrapper {
   height: max-content;
   /* max-width: 1440px; */
