@@ -2,28 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   @font-face {
-    font-family: 'Advent';
+    font-family: "Advent";
     src: url(./assets/fonts/Advent_Pro/AdventPro-Italic-VariableFont_wdth\,wght.ttf);
   }
 }
 @layer base {
   @font-face {
-    font-family: 'Lobster';
+    font-family: "Lobster";
     src: url(./assets/fonts/Lobster_Two/LobsterTwo-Regular.ttf);
   }
 }
 @layer base {
   @font-face {
-    font-family: 'Raleway';
+    font-family: "Raleway";
     src: url(./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf);
   }
 }
 @layer base {
   @font-face {
-    font-family: 'Redhat';
+    font-family: "Redhat";
     src: url(./assets/fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf);
   }
 }

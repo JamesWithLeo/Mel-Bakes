@@ -1,18 +1,24 @@
 html {
-  --primary-color-000:  #DCD6F7;
-  --secondary-color-001: #A6B1E1;
-  --light-color-002:  #F4EEFF;
+  --primary-color-000: #dcd6f7;
+  --secondary-color-001: #a6b1e1;
+  --light-color-002: #f4eeff;
   --dark-color-000: #424874;
   --dark-color-001: #4e5486;
   --dark-color-002: #565b8d;
 
   --darker: #393646;
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 body {
-  margin: 0
+  margin: 0;
 }
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   color: var(--dark-color-000);
 }
 #bodyWrapper {
@@ -48,7 +54,6 @@ h1, h2, h3, h4, h5, h6, p {
   display: flex;
   justify-content: center;
   background-color: var(--darker);
-
 }
 #mainWrapper {
   max-width: 1440px;
@@ -57,7 +62,6 @@ h1, h2, h3, h4, h5, h6, p {
   display: flex;
   flex-direction: column;
 }
-
 
 main {
   max-width: 1440px;
@@ -77,12 +81,12 @@ main {
   justify-content: center;
   padding-left: 2rem;
 }
-#welcomeContainer h1{
+#welcomeContainer h1 {
   justify-self: center;
   align-self: center;
-  font-family: 'Lobster';
+  font-family: "Lobster";
   margin: 0em;
-  grid-column: 1 ;
+  grid-column: 1;
   grid-row: 2;
   font-size: calc(20px + 2.8vw);
 }
@@ -90,27 +94,25 @@ main {
   text-align: justify;
   justify-self: center;
   align-self: center;
-  font-family: 'Raleway';
-  font-size: calc(11px + .4vw);
+  font-family: "Raleway";
+  font-size: calc(11px + 0.4vw);
   max-width: 35rem;
 }
-
 
 #loginButton {
   width: max-content;
   height: max-content;
-  align-self:center;
+  align-self: center;
 }
 #loginButton:hover {
   transform: scale(1.03);
 }
 
 #gallaryContainer {
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 50%;
-
 }
 
 #productWrapper {
@@ -121,11 +123,11 @@ main {
   display: flex;
   justify-content: center;
 }
-#productWrapper__wrapper{
+#productWrapper__wrapper {
   max-width: 1440px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows:.5fr 9.5fr;
+  grid-template-rows: 0.5fr 9.5fr;
   /* display: flex;
   flex-direction: row;
   flex-wrap: wrap; */
@@ -136,10 +138,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: right;
-  gap: .5em;
+  gap: 0.5em;
 }
 #filterButton {
-  padding: .3em 0em;
+  padding: 0.3em 0em;
   background-color: transparent;
   border: transparent;
   color: var(--dark-color-000);
@@ -153,17 +155,16 @@ main {
   /* background-color: pink; */
   grid-row: 2;
   display: flex;
-  flex-direction:row ;
+  flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.5em;
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   main {
     flex-direction: column-reverse;
-    height:max-content;
-
+    height: max-content;
   }
   #welcomeContainer {
     width: 100%;
@@ -185,24 +186,23 @@ main {
     width: 100%;
     /* height: 50%; */
     height: max-content;
-
   }
 }
 
 @font-face {
-  font-family: 'Advent';
+  font-family: "Advent";
   src: url(./assets/fonts/Advent_Pro/AdventPro-Italic-VariableFont_wdth\,wght.ttf);
 }
 
 @font-face {
-  font-family: 'Lobster';
+  font-family: "Lobster";
   src: url(./assets/fonts/Lobster_Two/LobsterTwo-Regular.ttf);
 }
 @font-face {
-  font-family: 'Raleway';
+  font-family: "Raleway";
   src: url(./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf);
 }
 @font-face {
-  font-family: 'Redhat';
+  font-family: "Redhat";
   src: url(./assets/fonts/Red_Hat_Display/RedHatDisplay-VariableFont_wght.ttf);
 }

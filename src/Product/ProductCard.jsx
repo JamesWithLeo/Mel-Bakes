@@ -1,28 +1,27 @@
-import React, { useContext } from 'react';
-import './ProductCard.css'
-import { ViewProductContext, ProductIndexContext } from '../app';
+import React, { useContext } from "react";
+import "./ProductCard.css";
+import { ViewProductContext, ProductIndexContext } from "../app";
 
-
-function ProductCard({productObj}) {
+function ProductCard({ productObj }) {
   const ViewProduct = useContext(ViewProductContext);
   const ProductIndex = useContext(ProductIndexContext);
 
-  function onOpen(){
+  function onOpen() {
     ViewProduct(true);
     ProductIndex(productObj.id);
-    document.body.style.overflowY = 'hidden';
+    document.body.style.overflowY = "hidden";
   }
 
   return (
-    <div id='card' onClick={onOpen}>
-      <div id='productImgContainer'>
-        <img id='productImg' src={productObj.image} alt='cupcake'/>
+    <div id="card" onClick={onOpen}>
+      <div id="productImgContainer">
+        <img id="productImg" src={productObj.image} alt="cupcake" />
       </div>
-      <div id='productDescription'>
-        <h3 id='productName'>{productObj.name}</h3>
-        <p id='productPrice'>&#8369; {productObj.price}	</p>
+      <div id="productDescription">
+        <h3 id="productName">{productObj.name}</h3>
+        <p id="productPrice">&#8369; {productObj.price} </p>
       </div>
     </div>
   );
 }
-export default ProductCard
+export default ProductCard;

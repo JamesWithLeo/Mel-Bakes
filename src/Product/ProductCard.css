@@ -1,88 +1,88 @@
-
 #card {
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-    border-radius: .5em;
+  background-color: white;
+  box-shadow:
+    rgba(0, 0, 0, 0.09) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px,
+    rgba(0, 0, 0, 0.09) 0px 8px 4px,
+    rgba(0, 0, 0, 0.09) 0px 16px 8px,
+    rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  border-radius: 0.5em;
 
-    height: calc(200px + 10vw);
-    width: calc(80px + 10vw);
-    max-width: 350px;
-    max-height: 500px;
+  height: calc(200px + 10vw);
+  width: calc(80px + 10vw);
+  max-width: 350px;
+  max-height: 500px;
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 8fr 3fr;
-
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 8fr 3fr;
 }
 
 #card:hover {
-    transform: scale(1.01);
+  transform: scale(1.01);
 
-    #productImgContainer {
-        box-shadow: none;
-    }
-    #productImg {
-        transform: scale(1.1);
-    }
-
+  #productImgContainer {
+    box-shadow: none;
+  }
+  #productImg {
+    transform: scale(1.1);
+  }
 }
 #productImgContainer {
-    grid-column: 1;
-    grid-row: 1;
-    padding-top: 1em;
-    box-shadow: 0px 0px 370px 16px rgba(166,177,225,0.15) inset;
-    margin: 1em 1em 1em 1em;
+  grid-column: 1;
+  grid-row: 1;
+  padding-top: 1em;
+  box-shadow: 0px 0px 370px 16px rgba(166, 177, 225, 0.15) inset;
+  margin: 1em 1em 1em 1em;
 }
 
 #productImg {
-    transition: ease-in-out 700ms;
-    height: auto;
-    width: 100%;
-    
+  transition: ease-in-out 700ms;
+  height: auto;
+  width: 100%;
 }
 
 #productDescription {
-    grid-column: 1;
-    grid-row: 2;
-    padding: 0em 1em;
+  grid-column: 1;
+  grid-row: 2;
+  padding: 0em 1em;
 }
 
 #productName {
-    margin: 0em;
-    font-size: calc(14  px + .5vw);
-    font-family: 'Redhat';
-
+  margin: 0em;
+  font-size: calc(14 px + 0.5vw);
+  font-family: "Redhat";
 }
 #productPrice {
-    font-size: calc(14px + .4vw);
-    color: goldenrod;
-    font-weight: 500;
-    margin: .5em 0em 0em 0em;
-    font-family: 'Raleway';
+  font-size: calc(14px + 0.4vw);
+  color: goldenrod;
+  font-weight: 500;
+  margin: 0.5em 0em 0em 0em;
+  font-family: "Raleway";
 }
 
-@media screen and (max-width:540px) {
-    #card {
-        height: calc(150px + 10vw);
-        width: calc(80px + 10vw);
-        flex-direction: column;
-    }
-    #productDescription {
-        padding: 0em .5em;
-    }
-    #productImgContainer {
-        margin: .5em;
-        /* padding: .05em; */
-    }
-    #productName {
-        font-size: calc(10px + .4vw);
-    }
-    #productPrice {
-        font-size: calc(10px + .3vw);
-    }
+@media screen and (max-width: 540px) {
+  #card {
+    height: calc(150px + 10vw);
+    width: calc(80px + 10vw);
+    flex-direction: column;
+  }
+  #productDescription {
+    padding: 0em 0.5em;
+  }
+  #productImgContainer {
+    margin: 0.5em;
+    /* padding: .05em; */
+  }
+  #productName {
+    font-size: calc(10px + 0.4vw);
+  }
+  #productPrice {
+    font-size: calc(10px + 0.3vw);
+  }
 }
 
-@media screen and (max-width:540px) {
+@media screen and (max-width: 540px) {
   #card {
     width: 100%;
     height: max-content;
@@ -99,7 +99,6 @@
   #productImg {
     height: auto;
     width: 50%;
-    
   }
   #productDescription {
     width: 200%;
