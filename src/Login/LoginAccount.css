@@ -3,7 +3,7 @@
   width: 100%;
   position: fixed;
   background-color: var(--darker);
-  opacity: .5;
+  opacity: 0.5;
   display: flex;
   z-index: 2;
 }
@@ -24,28 +24,30 @@
   min-width: max-content;
 
   display: grid;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+  box-shadow:
+    rgba(17, 17, 26, 0.1) 0px 1px 0px,
+    rgba(17, 17, 26, 0.1) 0px 8px 24px,
+    rgba(17, 17, 26, 0.1) 0px 16px 48px;
 
   grid-template-columns: 1fr;
-  grid-template-rows: .5fr 9.5fr;
-
+  grid-template-rows: 0.5fr 9.5fr;
 }
 #exitLogin {
   color: lightgrey;
-  font-size: calc(20px + .4vw);
+  font-size: calc(20px + 0.4vw);
   justify-self: right;
-  padding: .8em;
+  padding: 0.8em;
 }
 #tbLoginContainer {
   display: grid;
-  grid-template-columns: .5fr 2fr .5fr;
-  grid-template-rows: .5fr 1fr .5fr 1fr .5fr 1fr .5fr .5fr .5fr 1fr;
+  grid-template-columns: 0.5fr 2fr 0.5fr;
+  grid-template-rows: 0.5fr 1fr 0.5fr 1fr 0.5fr 1fr 0.5fr 0.5fr 0.5fr 1fr;
 }
-.loginTB{
+.loginTB {
   height: 100%;
 }
 .loginTB:focus {
-  outline: var(--dark-color-000) .1em solid;
+  outline: var(--dark-color-000) 0.1em solid;
 }
 #gmailLoginTB {
   grid-column: 2;
@@ -73,9 +75,8 @@
   grid-row: 7;
   justify-self: right;
   margin: 0;
-  font-size: calc(8px + .4vw);
+  font-size: calc(8px + 0.4vw);
   align-self: center;
-
 }
 #remeberAccountButton {
   width: max-content;
@@ -83,7 +84,7 @@
   grid-column: 2;
   grid-row: 7;
   margin: 0;
-  font-size: calc(8px + .4vw);
+  font-size: calc(8px + 0.4vw);
   align-self: center;
 }
 
@@ -91,13 +92,14 @@
   grid-column: 2;
   grid-row: 9;
 }
-#SignInButton:active, #SignInButton:any-link {
+#SignInButton:active,
+#SignInButton:any-link {
   color: #424874;
 }
 #SignInButton:hover {
   transform: scale(1.05);
 }
-@media screen and (max-width:425px){
+@media screen and (max-width: 425px) {
   #loginWrapper {
     height: 50vh;
     width: 100%;

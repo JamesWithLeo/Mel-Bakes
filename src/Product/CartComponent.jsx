@@ -1,24 +1,15 @@
-import './CartComponent.css';
+import "./CartComponent.css";
 
-
-function CartComponent({setDisplay}){
-
-
+function CartComponent({ setDisplay }) {
   const exitCart = () => {
-    setDisplay(false)
-    document.body.style.overflowY = 'scroll'
-
-  }
+    setDisplay(false);
+    document.body.style.overflowY = "scroll";
+  };
   return (
     <>
-      <div id="CardBackground" onClick={exitCart}>
-
-      </div>
-      <div id="CartWrapper">
-      
-      </div>
+      <div id="CardBackground" onClick={exitCart}></div>
+      <div id="CartWrapper"></div>
     </>
-    
-  )
+  );
 }
-export default CartComponent
+export default CartComponent;

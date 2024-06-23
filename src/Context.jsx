@@ -1,8 +1,6 @@
+import { createContext } from "react";
 
-import { createContext, } from "react";
-
-
-class Account{
+class Account {
   constructor(_username, _gmail, _password) {
     this.Username = _username;
     this.Gmail = _gmail;
@@ -21,11 +19,10 @@ class Account{
 
 //object
 export const AccountContext = createContext({
-  Username : "",
-  Gmail : "",
-  Password : "",
-  IsLogged : false
-  }
-);
+  Username: "",
+  Gmail: "",
+  Password: "",
+  IsLogged: false,
+});
 
 // export const cartDisplayContext = createContext(true)
