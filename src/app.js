@@ -1,7 +1,6 @@
 // import './app.css';
 import { Outlet } from "react-router-dom";
 import { useState, useContext, createContext, lazy, Suspense } from "react";
-import { ThemeProvider } from "styled-components";
 // major components
 import FooterComponent from "./Footer/Footer.jsx";
 import HeaderComponent from "./Header/Header.jsx";
@@ -17,8 +16,6 @@ import CartComponent from "./Product/CartComponent.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 // styled
-import { Button, PrimaryTheme } from "./Styled/Styled.jsx";
-
 import { AccountContext } from "./Context.jsx";
 import Homepage from "./Home/Homepage.jsx";
 import LoadingComponents from "./loading/LoadingComponent.jsx";
@@ -61,7 +58,7 @@ function App() {
         </Suspense>
       ) : null}
 
-      <div className="flex justify-center w-full z-0 bg-[#f4eeff] sticky top-0 drop-shadow-lg">
+      <div className="flex justify-center w-full z-0 bg-secondarylight sticky top-0 drop-shadow-lg">
         <HeaderComponent setCartDisplayProp={SetCartModalDisplay} />
       </div>
 
@@ -126,13 +123,13 @@ function App() {
 
       <div
         id="productWrapper"
-        className="flex justify-center w-full h-max bg-[#a6b1e1]"
+        className="flex justify-center w-full h-max bg-[#a6b1e1] px-4 py-4 sm:px-8 "
       >
         <div
           id="productWrapper__wrapper"
-          className="grid grid-cols-1 grid-rows-[.5fr 9.5fr] max-w-7xl px-4 py-2 gap-6"
+          className="grid grid-cols-1 grid-rows-[.5fr 9.5fr] max-w-7xl gap-6"
         >
-          <div id="filterWrapper" className="flex items-center gap-2">
+          <div id="filterWrapper" className="flex items-center gap-2 text-primary">
             <FontAwesomeIcon
               icon={faFilter}
               fontSize={20}
@@ -140,21 +137,18 @@ function App() {
               id="filterIcon"
             />
             <button id="filterButton">Filter</button>
-            <Button theme={PrimaryTheme}>Hello World</Button>
           </div>
 
-          <div id="productContainerWrapper" className="py-4 px-8">
-            <h1>Cupcakes</h1>
-            <div
-              id="productContainer"
-              className="row-span-2 flex flex-row justify-center flex-wrap gap-6"
-            >
-              <ProductIndexContext.Provider value={setProductIndex}>
-                <ViewProductContext.Provider value={setViewProductDisplay}>
-                  <Product />
-                </ViewProductContext.Provider>
-              </ProductIndexContext.Provider>
-            </div>
+
+          <div
+            id="productContainer"
+            className="row-span-2 flex flex-row justify-center flex-wrap gap-4 sm:gap-5 md:gap-6"
+          >
+            <ProductIndexContext.Provider value={setProductIndex}>
+              <ViewProductContext.Provider value={setViewProductDisplay}>
+                <Product />
+              </ViewProductContext.Provider>
+            </ProductIndexContext.Provider>
           </div>
         </div>
       </div>
