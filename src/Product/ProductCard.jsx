@@ -18,7 +18,7 @@ function ProductCard({ productObj }) {
       onClick={onOpen}
     >
       <div
-        className="col-span-3 flex w-full justify-center rounded-md bg-slate-100"
+        className=": col-span-3 flex w-full justify-center rounded-md bg-slate-100 group-hover:bg-transparent"
         id="productImgContainer"
       >
         <img
