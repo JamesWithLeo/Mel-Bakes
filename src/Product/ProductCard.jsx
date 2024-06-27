@@ -13,16 +13,16 @@ function ProductCard({ productObj }) {
 
   return (
     <div
-      className="grid h-max w-full grid-cols-10 grid-rows-1 flex-col items-center gap-4 rounded-xl bg-white p-2 shadow-[0px_5px_14px_0px_#0000004d] delay-150 duration-200 ease-in hover:scale-[1.03] sm:flex sm:w-1/4 sm:p-4 sm:pb-8 md:w-1/5 lg:w-1/6"
+      className="group grid h-max w-full grid-cols-10 grid-rows-1 flex-col items-center gap-4 rounded-xl bg-white p-2 shadow-[0px_5px_14px_0px_#0000004d] delay-150 duration-200 ease-in sm:flex sm:w-1/4 sm:p-4 sm:pb-8 md:w-1/5 lg:w-1/6"
       id="card"
       onClick={onOpen}
     >
       <div
-        className="col-span-3 flex w-full justify-center rounded-md bg-gray-100"
+        className="col-span-3 flex w-full justify-center rounded-md bg-slate-100"
         id="productImgContainer"
       >
         <img
-          className="h-auto w-24 sm:w-28 md:w-36 lg:w-96"
+          className="h-auto w-24 delay-150 duration-200 ease-in-out group-hover:scale-[1.05] sm:w-28 md:w-36 lg:w-96"
           id="productImg"
           src={productObj.image}
           alt="cupcake"
