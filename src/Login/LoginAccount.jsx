@@ -1,5 +1,5 @@
 // system
-import { React } from "react";
+import { React, useState } from "react";
 // design assets
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -7,25 +7,32 @@ import { Link } from "react-router-dom";
 // design assets
 
 function LoginAccount({ setDisplay }) {
+  const [urlTarget, setUrlTarget] = useState("/");
   const exitLogin = () => {
     setDisplay(false);
     document.body.style.overflowY = "scroll";
   };
-
+  const checkAccount = (event) => {
+    if (document.getElementById("gmailLoginTB").value === "admin") {
+      setUrlTarget("Admin");
+    } else {
+      event.preventDefault();
+    }
+  };
   return (
     <>
       <div
-        className="w-full h-svh z-10 fixed bg-[#393664] opacity-50 flex justify-center items-center"
+        className="fixed z-10 flex h-svh w-full items-center justify-center bg-[#393664] opacity-50"
         id="loginWrapper__outsideWrapper"
         onClick={exitLogin}
       ></div>
 
       <div
-        className="fixed bg-white w-screen sm:w-[500px] sm:h-max z-10 inset-x-0 mx-auto mt-36 rounded-md flex flex-col py-4 lg:py-12"
+        className="fixed inset-x-0 z-10 mx-auto mt-36 flex w-screen flex-col rounded-md bg-white py-4 sm:h-max sm:w-[500px] lg:py-12"
         id="loginWrapper"
       >
         <button
-          className="text-gray-300 align-middle mr-4 mb-4 self-end "
+          className="mb-4 mr-4 self-end align-middle text-gray-300"
           onClick={exitLogin}
           id="exitLogin"
         >
@@ -36,30 +43,32 @@ function LoginAccount({ setDisplay }) {
         </button>
 
         <div
-          className="flex flex-col gap-4 w-3/4 self-center"
+          className="flex w-3/4 flex-col gap-4 self-center"
           id="tbLoginContainer"
         >
           <input
-            className="h-4 outline-primary py-4 px-2 bg-gray-100 self-center w-full md:h-10 md:pl-2 text-xs md:text-sm lg:text-base"
+            className="h-4 w-full self-center bg-gray-100 px-2 py-4 text-xs outline-primary md:h-10 md:pl-2 md:text-sm lg:text-base"
             type="text"
             placeholder="Enter gmail"
             id="gmailLoginTB"
           />
 
           <input
-            className="h-4 outline-primary py-4 px-2 bg-gray-100 self-center w-full  md:h-10 md:pl-2 text-xs md:text-sm lg:text-base"
+            className="h-4 w-full self-center bg-gray-100 px-2 py-4 text-xs outline-primary md:h-10 md:pl-2 md:text-sm lg:text-base"
             type="password"
             placeholder="Enter password"
             id="passwordLoginTB"
           />
 
-          <button
+          <Link
+            onClick={checkAccount}
+            to={urlTarget}
             id="LoginAccountButton"
-            className="bg-primary text-white rounded-sm text-xs md:text-sm h-max w-full self-center py-2 md:py-3 lg:px-4 align-middle text-center"
+            className="h-max w-full self-center rounded-sm bg-primary py-2 text-center align-middle text-xs text-white md:py-3 md:text-sm lg:px-4"
           >
             Login
-          </button>
-          <div className="flex justify-between self-center w-full h-max">
+          </Link>
+          <div className="flex h-max w-full justify-between self-center">
             <p className="h-4 text-xs" id="remeberAccountButton">
               Remember me
             </p>
@@ -68,7 +77,7 @@ function LoginAccount({ setDisplay }) {
             </p>
           </div>
           <Link
-            className="bg-white text-primary rounded-sm text-xs md:text-sm py-1 h-max  px-2 border-2 border-primary text-center w-max align-middle self-center"
+            className="h-max w-max self-center rounded-sm border-2 border-primary bg-white px-2 py-1 text-center align-middle text-xs text-primary md:text-sm"
             to={"Signin"}
             id="SignInButton"
             onClick={exitLogin}
