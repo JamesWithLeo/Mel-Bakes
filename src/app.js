@@ -1,6 +1,6 @@
 // import './app.css';
 import { Outlet } from "react-router-dom";
-import { useState, useContext, createContext, lazy, Suspense } from "react";
+import { useState, useContext, createContext, lazy, Suspense, useEffect } from "react";
 // major components
 import FooterComponent from "./Footer/Footer.jsx";
 import HeaderComponent from "./Header/Header.jsx";
@@ -8,7 +8,7 @@ import HeaderComponent from "./Header/Header.jsx";
 import plaidPattern from "./assets/images/pattern.svg";
 import Gallary from "./GallerySlideshow/GallerySlideshow.jsx";
 
-import cupcakes from "./data.js";
+// import cupcakes from "./data.js";
 import Product from "./Product/Product.jsx";
 import CartComponent from "./Product/CartComponent.jsx";
 
@@ -19,16 +19,18 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { AccountContext } from "./Context.jsx";
 import Homepage from "./Home/Homepage.jsx";
 import LoadingComponents from "./loading/LoadingComponent.jsx";
+
 export const ViewProductContext = createContext(undefined);
-export const ProductIndexContext = createContext(undefined);
+export const ProductIdContext = createContext(0);
 
 const LoginAccount = lazy(() => import("./Login/LoginAccount.jsx"));
 const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
 
 function App() {
+
+
   const Account = useContext(AccountContext);
   const [IsUser, setIsUser] = useState(Account.IsLogged);
-  // const [IsUser, setIsUser] = useState(true);
 
   const [cartModalDisplay, SetCartModalDisplay] = useState(false);
 
@@ -36,7 +38,11 @@ function App() {
   // const [productModalDisplay, setProductModalDisplay] = useState(false);
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
-  const [productIndex, setProductIndex] = useState(0);
+  // const [productIndex, setProductIndex] = useState(0);
+  const [productId, SetProductId] = useState(0);
+  // useEffect(() => {
+  //   console.log(productId)
+  // }, [productId])
   // const viewProductContext = useContext(ViewProductContext)
 
   return (
@@ -49,12 +55,11 @@ function App() {
 
       {ViewProductDisplay ? (
         <Suspense fallback={<LoadingComponents />}>
-          <ViewProduct
-            setDisplay={setViewProductDisplay}
-            productIndex={[productIndex]}
-            setProductIndex={setProductIndex}
-            ProductsObj={cupcakes}
-          />
+          <ProductIdContext.Provider value={productId}>
+            <ViewProduct
+              setDisplay={setViewProductDisplay}
+            />
+          </ProductIdContext.Provider>
         </Suspense>
       ) : null}
 
@@ -144,11 +149,11 @@ function App() {
             id="productContainer"
             className="row-span-2 flex flex-row justify-center flex-wrap gap-4 sm:gap-5 md:gap-6"
           >
-            <ProductIndexContext.Provider value={setProductIndex}>
+            <ProductIdContext.Provider value={SetProductId}>
               <ViewProductContext.Provider value={setViewProductDisplay}>
                 <Product />
               </ViewProductContext.Provider>
-            </ProductIndexContext.Provider>
+            </ProductIdContext.Provider>
           </div>
         </div>
       </div>
