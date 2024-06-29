@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -7,24 +7,39 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { ProductIdContext } from "../app";
 
-function ViewProduct({
-  setDisplay,
-  productIndex,
-  setProductIndex,
-  ProductsObj,
-}) {
+function ViewProduct({ setDisplay }) {
+  const id = useContext(ProductIdContext);
+  // useEffect(() => {
+  //   console.log(productId);
+  // }, [productId]);
+  const [cupcakeObj, setCupcakeObj] = useState({});
+  useEffect(() => {
+    async function fetchCupcake() {
+      const destinationUrl = "melbake/cupcake/" + id;
+      const response = await fetch(destinationUrl);
+      await response.json().then((value) => {
+        setCupcakeObj(value);
+      });
+    }
+    fetchCupcake();
+  }, [id]);
+
   const exitViewProduct = () => {
     setDisplay(false);
     document.body.style.overflowY = "scroll";
   };
-  const flavors = ProductsObj[productIndex].flavors.map((flavor) => {
-    return (
-      <h1 className="w-max rounded bg-gray-400 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3">
-        {flavor}
-      </h1>
-    );
-  });
+  // const flavors = ProductsObj[productIndex].Flavors.map((flavor) => {
+  //   return (
+  //     <h1
+  //       className="w-max rounded bg-gray-400 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3"
+  //       key={crypto.randomUUID()}
+  //     >
+  //       {flavor}
+  //     </h1>
+  //   );
+  // });
   return (
     <>
       <div
@@ -65,18 +80,18 @@ function ViewProduct({
                 id="productProfile"
               >
                 <div className="ml-4 flex h-max w-max justify-center gap-4 rounded-md px-2 py-2 md:flex-col">
-                  {flavors}
+                  {/* {flavors} */}
                 </div>
                 <div
                   className="flex h-full w-full flex-col items-center"
                   id="cupcakeImgWrapper"
                 >
-                  <img
+                  {/* <img
                     className="h-auto w-40 sm:w-64 md:w-80 lg:w-96"
                     src={ProductsObj[productIndex].image}
                     alt="cupcake"
                     id="productImgView"
-                  />
+                  /> */}
                 </div>
               </div>
 
@@ -89,13 +104,15 @@ function ViewProduct({
                     className="text-center font-[Raleway] text-xl font-medium text-primary md:text-2xl lg:text-3xl"
                     id="ProductName"
                   >
-                    {ProductsObj[productIndex].name}
+                    {cupcakeObj.Name}
+                    {/* {ProductsObj[productIndex].Name} */}
                   </h1>
                   <p
                     className="items-center text-center font-[Raleway] text-sm text-[Goldenrod] md:text-2xl"
                     id="ProductPrice"
                   >
-                    {ProductsObj[productIndex].price}
+                    {cupcakeObj.Price}
+                    {/* {ProductsObj[productIndex].Price} */}
                   </p>
                 </div>
                 <div className="flex w-full justify-center rounded bg-white px-2">
@@ -145,7 +162,7 @@ function ViewProduct({
 
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
                   <button
-                    className="bg-secondarylight h-8 w-full text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                    className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
                     id="addToCartButton"
                   >
                     Add to Cart

@@ -1,4 +1,4 @@
-import { React, useContext } from "react";
+import { React, useContext, useEffect } from "react";
 import plaidPattern from "../assets/images/pattern.svg";
 import FooterComponent from "../Footer/Footer.jsx";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { AccountContext } from "../Context.jsx";
 
 function SignIn() {
+  // useEffect(async () => {});
   const Account = useContext(AccountContext);
 
   let locationHref = "/";

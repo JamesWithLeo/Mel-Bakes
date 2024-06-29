@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
-import { ViewProductContext, ProductIndexContext } from "../app";
+import React, { useContext, useState } from "react";
+import { ViewProductContext, ProductIdContext } from "../app";
 
 function ProductCard({ productObj }) {
   const ViewProduct = useContext(ViewProductContext);
-  const ProductIndex = useContext(ProductIndexContext);
-
+  const productId = useContext(ProductIdContext);
+  // const [cupcakeImg, setCupcakeImg] = useState();
+  // const imgSource = "./assets/images/" + productObj.Url + ".png";
+  // console.log(imgSource);
   function onOpen() {
     ViewProduct(true);
-    ProductIndex(productObj.id);
+    // console.log(productObj._id);
+    productId(productObj._id);
     document.body.style.overflowY = "hidden";
   }
 
@@ -21,12 +24,12 @@ function ProductCard({ productObj }) {
         className=": col-span-3 flex w-full justify-center rounded-md bg-slate-100 group-hover:bg-transparent"
         id="productImgContainer"
       >
-        <img
+        {/* <img
           className="h-auto w-24 delay-150 duration-200 ease-in-out group-hover:scale-[1.05] sm:w-28 md:w-36 lg:w-96"
           id="productImg"
-          src={productObj.image}
+          src={cupcakeImg}
           alt="cupcake"
-        />
+        /> */}
       </div>
       <div
         className="col-span-7 flex h-full w-full flex-col"
@@ -36,13 +39,13 @@ function ProductCard({ productObj }) {
           className="text-left font-[Raleway] text-base text-primary lg:text-xl"
           id="productName"
         >
-          {productObj.name}
+          {productObj.Name}
         </h1>
         <p
           className="text-left font-[Raleway] text-xs text-[Goldenrod] sm:text-sm lg:text-lg"
           id="productPrice"
         >
-          &#8369; {productObj.price}
+          &#8369; {productObj.Price}
         </p>
       </div>
     </div>

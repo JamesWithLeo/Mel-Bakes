@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 //object
 export const AccountContext = createContext({
-  Username: "",
+  _Id: "",
   Gmail: "",
   Password: "",
   IsLogged: false,

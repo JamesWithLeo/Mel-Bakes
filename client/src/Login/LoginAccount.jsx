@@ -1,5 +1,6 @@
 // system
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
+import { AccountContext } from "../Context";
 // design assets
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -7,14 +8,24 @@ import { Link } from "react-router-dom";
 // design assets
 
 function LoginAccount({ setDisplay }) {
+  const Account = useContext(AccountContext);
   const [urlTarget, setUrlTarget] = useState("/");
+
   const exitLogin = () => {
     setDisplay(false);
     document.body.style.overflowY = "scroll";
   };
-  const checkAccount = (event) => {
-    if (document.getElementById("gmailLoginTB").value === "admin") {
-      setUrlTarget("Admin");
+  const checkAccount = async (event) => {
+    const gmail = document.getElementById("gmailLoginTB").value;
+    if (gmail) {
+      const urlDestination = "melbake/login/" + gmail;
+      const response = await fetch(urlDestination);
+      const res = await response.json();
+      console.log(typeof res);
+      console.log(res);
+      Account._Id = res._Id;
+      Account.IsLogged = true;
+      Account.Gmail = gmail;
     } else {
       event.preventDefault();
     }
