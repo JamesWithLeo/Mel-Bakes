@@ -14,6 +14,8 @@ function LoginAccount({ setDisplay }) {
   const exitLogin = () => {
     setDisplay(false);
     document.body.style.overflowY = "scroll";
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome,
   };
   const checkAccount = async (event) => {
     const gmail = document.getElementById("gmailLoginTB").value;
@@ -26,6 +28,7 @@ function LoginAccount({ setDisplay }) {
       Account._Id = res._Id;
       Account.IsLogged = true;
       Account.Gmail = gmail;
+      setUrlTarget("admin");
     } else {
       event.preventDefault();
     }
