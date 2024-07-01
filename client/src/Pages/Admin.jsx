@@ -1,13 +1,17 @@
 // import HeaderComponent from "../Header/Header";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import AddAcount from "./AddAccount";
-import AddProduct from "./AddProduct";
-import DbConfig from "./DbConfig";
+import AddAcount from "../admin.components/AddAccount";
+import AddProduct from "../admin.components/AddProduct";
+import DbConfig from "../admin.components/DbConfig";
 
 function Admin() {
+  document.body.style.overflowY = "scroll";
+
   const [productFormVisibility, SetProductFromVisibility] = useState(false);
   const [accountFormVisibility, SetAccountFromVisibility] = useState(false);
+  const [dbConfigVisibility, SetDbConfigVisibility] = useState(false);
+
   return (
     <main className="flex h-svh w-full flex-col bg-darker">
       <div className="max-h-7xl h-max w-full border-b-2 border-solid border-white bg-darker">
@@ -42,7 +46,9 @@ function Admin() {
         {accountFormVisibility ? (
           <AddAcount setVisibility={SetAccountFromVisibility} />
         ) : null}
-        {<DbConfig />}
+        {dbConfigVisibility ? (
+          <DbConfig setVisibility={SetDbConfigVisibility} />
+        ) : null}
       </div>
       <div></div>
     </main>

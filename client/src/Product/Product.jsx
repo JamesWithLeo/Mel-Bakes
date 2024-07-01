@@ -1,21 +1,37 @@
 // import cupcakes from "../data";
 import ProductCard from "./ProductCard";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 function Product() {
-  // // const [cupcakes, setCupcakes] = useState([]);
-  // // const ref = useRef();
   const [cupcakesElement, setCupcakesElement] = useState([]);
+
+  async function fetchImage(id) {
+    let obj;
+    const destinationUrl = "melbake/cupcake/" + id;
+    const response = await fetch(destinationUrl);
+    return await response.json().then((cupcakeJsonObj) => {
+      obj = JSON.parse(cupcakeJsonObj);
+      // console.log(obj.Url);
+      return obj;
+    });
+  }
+
   useEffect(() => {
     async function fetchCupcakes() {
       const response = await fetch("melbake");
       await response
         .json()
         .then((value) => {
-          console.log(value, "here");
           const element = value.map((cupcake) => {
+            // fetchImage(cupcake._id).then((val) => {
+            //   // console.log(val);
+            //   // cupcake.Url = val;
+            //   console.log(cupcake);
+            // });
             return (
-              <ProductCard productObj={cupcake} key={crypto.randomUUID()} />
+              <>
+                <ProductCard productObj={cupcake} key={crypto.randomUUID()} />
+              </>
             );
           });
           setCupcakesElement(element);

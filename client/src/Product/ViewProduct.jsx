@@ -5,6 +5,7 @@ import {
   faPlus,
   faMinus,
   faHeart,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
@@ -20,7 +21,9 @@ function ViewProduct({ setDisplay }) {
       const destinationUrl = "melbake/cupcake/" + id;
       const response = await fetch(destinationUrl);
       await response.json().then((value) => {
-        setCupcakeObj(value);
+        setCupcakeObj(JSON.parse(value));
+
+        // console.log(value.Url);
       });
     }
     fetchCupcake();
@@ -86,12 +89,16 @@ function ViewProduct({ setDisplay }) {
                   className="flex h-full w-full flex-col items-center"
                   id="cupcakeImgWrapper"
                 >
-                  {/* <img
-                    className="h-auto w-40 sm:w-64 md:w-80 lg:w-96"
-                    src={ProductsObj[productIndex].image}
-                    alt="cupcake"
-                    id="productImgView"
-                  /> */}
+                  {cupcakeObj.Url ? (
+                    <img
+                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-96"
+                      src={cupcakeObj.Url}
+                      alt="cupcake"
+                      id="productImgView"
+                    />
+                  ) : (
+                    <div className="flex h-40 w-40 animate-pulse items-center justify-center rounded-lg bg-gray-100 sm:h-64 sm:w-64 md:h-80 md:w-80 lg:h-96 lg:w-96"></div>
+                  )}
                 </div>
               </div>
 
@@ -100,20 +107,27 @@ function ViewProduct({ setDisplay }) {
                 id="cartNav"
               >
                 <div className="flex flex-col items-center rounded bg-white px-2">
-                  <h1
-                    className="text-center font-[Raleway] text-xl font-medium text-primary md:text-2xl lg:text-3xl"
-                    id="ProductName"
-                  >
-                    {cupcakeObj.Name}
-                    {/* {ProductsObj[productIndex].Name} */}
-                  </h1>
-                  <p
-                    className="items-center text-center font-[Raleway] text-sm text-[Goldenrod] md:text-2xl"
-                    id="ProductPrice"
-                  >
-                    {cupcakeObj.Price}
-                    {/* {ProductsObj[productIndex].Price} */}
-                  </p>
+                  {cupcakeObj.Name ? (
+                    <h1
+                      className="text-center font-[Raleway] text-xl font-medium text-primary md:text-2xl lg:text-3xl"
+                      id="ProductName"
+                    >
+                      {cupcakeObj.Name}
+                      {/* {ProductsObj[productIndex].Name} */}
+                    </h1>
+                  ) : (
+                    <div className="mb-4 h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-16 lg:w-96" />
+                  )}
+                  {cupcakeObj.Price ? (
+                    <p
+                      className="items-center text-center font-[Raleway] text-sm text-[Goldenrod] md:text-2xl"
+                      id="ProductPrice"
+                    >
+                      {cupcakeObj.Price}
+                    </p>
+                  ) : (
+                    <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
+                  )}
                 </div>
                 <div className="flex w-full justify-center rounded bg-white px-2">
                   <p className="text-justify text-xs">

@@ -4,7 +4,7 @@ import { AccountContext } from "../Context";
 // design assets
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, Form } from "react-router-dom";
 // design assets
 
 function LoginAccount({ setDisplay }) {
@@ -22,12 +22,13 @@ function LoginAccount({ setDisplay }) {
     if (gmail) {
       const urlDestination = "melbake/login/" + gmail;
       const response = await fetch(urlDestination);
-      const res = await response.json();
-      console.log(typeof res);
-      console.log(res);
-      Account._Id = res._Id;
-      Account.IsLogged = true;
-      Account.Gmail = gmail;
+      await response.json().then((res) => {
+        console.log(typeof res);
+        console.log(res);
+        Account._Id = res._Id;
+        Account.IsLogged = true;
+        Account.Gmail = gmail;
+      });
       setUrlTarget("admin");
     } else {
       event.preventDefault();
@@ -56,7 +57,9 @@ function LoginAccount({ setDisplay }) {
           />
         </button>
 
-        <div
+        <Form
+          method="get"
+          action={urlTarget}
           className="flex w-3/4 flex-col gap-4 self-center"
           id="tbLoginContainer"
         >
@@ -74,14 +77,14 @@ function LoginAccount({ setDisplay }) {
             id="passwordLoginTB"
           />
 
-          <Link
+          <button
+            type="submit"
             onClick={checkAccount}
-            to={urlTarget}
             id="LoginAccountButton"
             className="h-max w-full self-center rounded-sm bg-primary py-2 text-center align-middle text-xs text-white md:py-3 md:text-sm lg:px-4"
           >
             Login
-          </Link>
+          </button>
           <div className="flex h-max w-full justify-between self-center">
             <p className="h-4 text-xs" id="remeberAccountButton">
               Remember me
@@ -98,7 +101,7 @@ function LoginAccount({ setDisplay }) {
           >
             Create Account
           </Link>
-        </div>
+        </Form>
       </div>
     </>
   );

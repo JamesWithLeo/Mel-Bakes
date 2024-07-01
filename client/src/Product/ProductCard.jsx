@@ -4,12 +4,10 @@ import { ViewProductContext, ProductIdContext } from "../app";
 function ProductCard({ productObj }) {
   const ViewProduct = useContext(ViewProductContext);
   const productId = useContext(ProductIdContext);
-  // const [cupcakeImg, setCupcakeImg] = useState();
-  // const imgSource = "./assets/images/" + productObj.Url + ".png";
-  // console.log(imgSource);
   function onOpen() {
     ViewProduct(true);
-    // console.log(productObj._id);
+    // once the card is click, Save the Id of that product to
+    // context then if can be use later on the View product;
     productId(productObj._id);
     document.body.style.overflowY = "hidden";
   }
@@ -24,12 +22,12 @@ function ProductCard({ productObj }) {
         className=": col-span-3 flex w-full justify-center rounded-md bg-slate-100 group-hover:bg-transparent"
         id="productImgContainer"
       >
-        {/* <img
+        <img
           className="h-auto w-24 delay-150 duration-200 ease-in-out group-hover:scale-[1.05] sm:w-28 md:w-36 lg:w-96"
           id="productImg"
-          src={cupcakeImg}
+          src={productObj.Url}
           alt="cupcake"
-        /> */}
+        />
       </div>
       <div
         className="col-span-7 flex h-full w-full flex-col"

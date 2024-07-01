@@ -1,8 +1,8 @@
 function LoadingComponents() {
   return (
     <>
-      <div className="fixed z-50 h-svh w-full bg-purple-900">
-        <h1 className="text-base md:text-2xl">LOADING..</h1>
+      <div className="fixed z-50 flex h-svh w-full items-center justify-center bg-purple-100 opacity-70">
+        <h1 className="text-base text-white md:text-2xl">LOADING..</h1>
       </div>
     </>
   );

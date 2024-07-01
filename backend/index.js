@@ -2,9 +2,31 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ debug: true });
 // API
-import express, { } from 'express';
+import express, { json } from 'express';
 import { MongoClient, ServerApiVersion, ObjectId, } from 'mongodb';
+import { v2 as cloudinary } from 'cloudinary'
 
+cloudinary.config({
+  cloud_name: 'dupzzryrz',
+  api_key: '267777685656854',
+  api_secret: 'Veky4CcT0jwKbpDLF2APg9EATRg'
+})
+
+const getAssetInfo = async (publicId) => {
+  // Return colors in the response
+  const options = {
+    colors: true,
+  };
+
+  try {
+    // Get details about the asset
+    const result = await cloudinary.api.resource(publicId, options);
+
+    return result.url;
+  } catch (error) {
+    console.error(error);
+  }
+};
 // database
 const password = process.env.DB_PASSWORD;
 const user = process.env.DB_USER;
@@ -77,14 +99,24 @@ app.get('/melbake', async (req, res) => {
   const cupcakes = await fetchCupcakes();
   res.status(200).json(cupcakes);
 });
+
 app.get('/melbake/cupcake/:id', async (req, res) => {
-  const cupcake = await fetchCupcake(req.params.id);
+  let cupcake = await fetchCupcake(req.params.id);
+  // convert the document to json then to object
+  cupcake = JSON.stringify(cupcake);
+  cupcake = JSON.parse(cupcake);
+  await getAssetInfo(cupcake.PublicId).then((value) => {
+    // reference the Url to the cupcake object
+    cupcake.Url = value
+    cupcake = JSON.stringify(cupcake)
+  })
   if (cupcake) {
     res.status(200).json(cupcake);
   } else {
     throw new Error('Cant find fetch document')
   }
 })
+
 app.get('/melbake/login/:gmail', async (req, res) => {
   const account = await findUser(req.params.gmail);
   if (account) {
