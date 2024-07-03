@@ -67,11 +67,15 @@ function ViewProduct({ setDisplay }) {
               className="m-1 w-max self-end text-gray-300"
               onClick={exitViewProduct}
             >
-              <FontAwesomeIcon icon={faXmark} id="exitViewProductIcon" />
+              <FontAwesomeIcon
+                icon={faXmark}
+                id="exitViewProductIcon"
+                className="sm:text-xl md:text-2xl lg:text-3xl"
+              />
             </button>
           </div>
           <div
-            className="inset-x-0 z-10 mx-auto flex h-full max-w-7xl flex-col justify-end overflow-y-scroll md:justify-center lg:rounded"
+            className="inset-x-0 z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-end overflow-y-scroll md:justify-center lg:rounded"
             id="ViewProduct__wrapper"
           >
             <div
@@ -91,7 +95,7 @@ function ViewProduct({ setDisplay }) {
                 >
                   {cupcakeObj.Url ? (
                     <img
-                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-96"
+                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-[26em]"
                       src={cupcakeObj.Url}
                       alt="cupcake"
                       id="productImgView"
@@ -131,10 +135,7 @@ function ViewProduct({ setDisplay }) {
                 </div>
                 <div className="flex w-full justify-center rounded bg-white px-2">
                   <p className="text-justify text-xs">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Tenetur placeat iusto harum odit ipsam fugiat! Voluptatum
-                    corrupti provident commodi. Vel, facilis officia? Mollitia
-                    ratione in repellendus quisquam dolor vero veritatis?
+                    {cupcakeObj.Description}
                   </p>
                 </div>
                 <div className="flex w-full justify-center gap-4 px-2 align-middle">

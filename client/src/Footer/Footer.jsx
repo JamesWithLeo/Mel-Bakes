@@ -25,7 +25,7 @@ function FooterComponent() {
   //   document.getElementById("ceoButton").style.color = "goldenrod";
   // };
   return (
-    <footer className="h-max w-full max-w-7xl px-4 py-4 sm:px-8">
+    <footer className="h-max w-full max-w-7xl px-4 py-4 sm:px-8" id="footer">
       <div className="flex flex-col gap-2 sm:flex-row sm:gap-4 md:gap-8">
         <div className="mb-8 flex w-full flex-col gap-2 sm:w-1/3 md:w-1/2">
           <h1 className="text-[goldenrod]">About us</h1>

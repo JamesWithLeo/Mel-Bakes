@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { AccountContext } from "../Context.jsx";
 
 function SignIn() {
-  // useEffect(async () => {});
   const Account = useContext(AccountContext);
 
   let locationHref = "/";

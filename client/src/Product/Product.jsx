@@ -22,35 +22,23 @@ function Product() {
       await response
         .json()
         .then((value) => {
+          // console.log(typeof value);
           const element = value.map((cupcake) => {
-            // fetchImage(cupcake._id).then((val) => {
-            //   // console.log(val);
-            //   // cupcake.Url = val;
-            //   console.log(cupcake);
-            // });
             return (
               <>
-                <ProductCard productObj={cupcake} key={crypto.randomUUID()} />
+                <ProductCard key={crypto.randomUUID()} productObj={cupcake} />
               </>
             );
           });
           setCupcakesElement(element);
         })
         .catch((value) => {
-          console.log(value, "error");
+          console.log("error", value);
         });
     }
     fetchCupcakes();
   }, []);
 
-  // const cupcakesElement = cupcakes.map((cupcake) => {
-  //   if (cupcake.isAvailable === true) {
-  //     return <ProductCard productObj={cupcake} key={crypto.randomUUID()} />;
-  //   } else {
-  //     return null;
-  //   }
-  // });
-
-  return <>{cupcakesElement}</>;
+  return <>{cupcakesElement ? cupcakesElement : null}</>;
 }
 export default Product;

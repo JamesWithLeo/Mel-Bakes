@@ -12,17 +12,26 @@ function HeaderComponent({ setCartDisplayProp }) {
     document.body.style.overflowY = "hidden";
   };
   return (
-    <header className="flex justify-between items-center w-full h-14 max-h-max max-w-7xl px-4">
-      <h1 className="text-3xl font-[Lobster] text-[#424874]">Mel Bakes</h1>
-      <div id="headerButton">
+    <header className="flex h-16 max-h-max w-full max-w-7xl items-center justify-between px-4">
+      <h1 className="font-[Lobster] text-3xl text-[#424874]">Mel Bakes</h1>
+      <div
+        id="headerButton"
+        className="flex items-center justify-center gap-2 sm:gap-4"
+      >
         {Account.IsLogged ? (
-          <FontAwesomeIcon icon={faShoppingCart} id="cart" onClick={openCart} />
+          <FontAwesomeIcon
+            icon={faShoppingCart}
+            id="cart"
+            onClick={openCart}
+            className="text-primary sm:text-xl lg:text-2xl"
+          />
         ) : null}
         <button
           id="contactUsButton"
-          className="border-solid border border-black px-3 py-1"
+          className="border border-solid border-black px-3 py-1"
+          onClick={() => {}}
         >
-          Contact Us
+          <a href="#footer">Contact Us</a>
         </button>
       </div>
     </header>

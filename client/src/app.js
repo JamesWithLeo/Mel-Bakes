@@ -31,6 +31,8 @@ function App() {
 
   const Account = useContext(AccountContext);
   const [IsUser, setIsUser] = useState(Account.IsLogged);
+  // const [IsUser, setIsUser] = useState(true);
+
 
   const [cartModalDisplay, SetCartModalDisplay] = useState(false);
 
@@ -71,17 +73,17 @@ function App() {
         <CartComponent setDisplay={SetCartModalDisplay} />
       ) : null}
 
-      <div
-        id="mainWrapper"
-        className="flex justify-center items-center w-full h-screen max-h-screen-lg max-h-[1000px]"
-      >
-        {IsUser ? (
-          <>
-            {/* <Gallary /> */}
-            <Homepage />
-          </>
-        ) : (
-          <main className="flex flex-col-reverse justify-between items-center max-w-7xl md:flex-row ">
+
+      {IsUser ? (
+        <>
+          <Homepage />
+        </>
+      ) : (
+        <div
+          id="mainWrapper"
+          className="flex justify-center items-center w-full h-screen max-h-screen-lg max-h-[1000px]"
+        >
+          <main className="flex flex-col-reverse justify-between items-center max-w-7xl md:flex-row gap-4">
             <div
               id="welcomeContainer"
               className="flex flex-col justify-between  text-justify p-4 md:w-1/2 lg:p-0 lg:pl-8"
@@ -123,8 +125,9 @@ function App() {
               <Gallary />
             </div>
           </main>
-        )}
-      </div>
+        </div>
+
+      )}
 
       <div
         id="productWrapper"
