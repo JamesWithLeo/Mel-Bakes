@@ -1,6 +1,6 @@
 // import './app.css';
 import { Outlet } from "react-router-dom";
-import { useState, useContext, createContext, lazy, Suspense, useEffect } from "react";
+import { useState, useContext, createContext, lazy, Suspense, useEffect, useRef } from "react";
 // major components
 import FooterComponent from "./Footer/Footer.jsx";
 import HeaderComponent from "./Header/Header.jsx";
@@ -14,7 +14,7 @@ import CartComponent from "./Product/CartComponent.jsx";
 
 // icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faL } from "@fortawesome/free-solid-svg-icons";
 // styled
 import { AccountContext } from "./Context.jsx";
 import Homepage from "./Home/Homepage.jsx";
@@ -25,33 +25,21 @@ export const ProductIdContext = createContext(0);
 
 const LoginAccount = lazy(() => import("./Login/LoginAccount.jsx"));
 const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
-
 function App() {
 
-
   const Account = useContext(AccountContext);
-  const [IsUser, setIsUser] = useState(Account.IsLogged);
-  // const [IsUser, setIsUser] = useState(true);
 
-
+  const [IsUser, setIsUser] = useState(false);
   const [cartModalDisplay, SetCartModalDisplay] = useState(false);
-
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
-  // const [productModalDisplay, setProductModalDisplay] = useState(false);
-
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
-  // const [productIndex, setProductIndex] = useState(0);
   const [productId, SetProductId] = useState(0);
-  // useEffect(() => {
-  //   console.log(productId)
-  // }, [productId])
-  // const viewProductContext = useContext(ViewProductContext)
 
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
       {loginModalDisplay ? (
         <Suspense fallback={<LoadingComponents />}>
-          <LoginAccount setDisplay={setLoginModalDisplay} />
+          <LoginAccount setDisplay={setLoginModalDisplay} islogProperty={setIsUser} />
         </Suspense>
       ) : null}
 

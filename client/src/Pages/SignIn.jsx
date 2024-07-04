@@ -1,4 +1,4 @@
-import { React, useContext, useEffect } from "react";
+import { React, useContext } from "react";
 import plaidPattern from "../assets/images/pattern.svg";
 import FooterComponent from "../Footer/Footer.jsx";
 import { Link } from "react-router-dom";
@@ -7,23 +7,32 @@ import { AccountContext } from "../Context.jsx";
 
 function SignIn() {
   const Account = useContext(AccountContext);
-
   let locationHref = "/";
-  const handleCreateAccount = (event) => {
-    // fetch the gmail value from element
-    const username = document.getElementById("usernameSigninTB").value;
 
-    // fetch the gmail value from element
+  async function writeUser(userAccount) {
+    await fetch("/melbake/signin/create/", {
+      method: "POST",
+      body: userAccount,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      console.log(response);
+    });
+  }
+  const handleCreateAccount = (event) => {
+    // fetch the value from input fields
+    const firstname = document.getElementById("firstnameSigninTB").value;
+    const lastname = document.getElementById("lastnameSigninTB").value;
     const gmail = document.getElementById("gmailSigninTB").value;
 
-    // fetch the password value from element
     const passwordConfirm = document.getElementById(
       "passwordSigninTBConfirm",
     ).value;
     const password = document.getElementById("passwordSigninTB").value;
 
-    // confirm if gmail doesn't exist
-    if (!username) {
+    // required the value in the inputs
+    if (!firstname && !lastname) {
       event.preventDefault();
       return;
     } else if (!gmail) {
@@ -33,10 +42,15 @@ function SignIn() {
       event.preventDefault();
       return;
     }
-    Account.Username = username;
-    Account.Gmail = gmail;
-    Account.Password = password;
-    Account.IsLogged = true;
+
+    const body = JSON.stringify({
+      FirstName: firstname,
+      LastName: lastname,
+      Gmail: gmail,
+      Password: password,
+    });
+    writeUser(body);
+    console.log(body);
   };
 
   return (
@@ -62,8 +76,14 @@ function SignIn() {
             <input
               className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
               type="text"
-              placeholder="Enter username"
-              id="usernameSigninTB"
+              placeholder="Enter First name"
+              id="firstnameSigninTB"
+            />
+            <input
+              className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+              type="text"
+              placeholder="Enter Last name"
+              id="lastnameSigninTB"
             />
             <input
               className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
@@ -86,7 +106,6 @@ function SignIn() {
             <Link
               className="w-full rounded bg-primary py-2 text-center text-white active:ring sm:w-1/3"
               onClick={handleCreateAccount}
-              to={locationHref}
             >
               Sign in
             </Link>

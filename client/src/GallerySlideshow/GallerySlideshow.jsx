@@ -21,7 +21,7 @@ function Gallary() {
         console.log("working here", index.current);
       }
       setImage(images[index.current]);
-    }, 4000);
+    }, 10000);
   }, [image, index]);
   return (
     <div id="gallery" className="w-11/12 bg-white p-8 shadow-2xl">

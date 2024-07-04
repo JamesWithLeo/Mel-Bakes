@@ -4,7 +4,7 @@ function AddProduct({ setVisibility }) {
   const [result, setResult] = useState("Pending");
 
   // send document to the Api
-  async function AppendProduct(objBody) {
+  async function writeProduct(objBody) {
     await fetch("/melbake/admin/product/append/", {
       method: "POST",
       body: objBody,
@@ -42,7 +42,7 @@ function AddProduct({ setVisibility }) {
       Url: "",
     });
     console.log(body.Price);
-    AppendProduct(body);
+    writeProduct(body);
   };
 
   const handleClear = (event) => {

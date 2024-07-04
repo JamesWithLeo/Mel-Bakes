@@ -51,22 +51,10 @@ export async function fetchCupcakes(coll) {
   }
 }
 
-// export function rawAccount(firstName, lastName, gmail, password) {
-//   this.FirstName = firstName;
-//   this.LastName = lastName
-//   this.Gmail = gmail;
-//   this.Password = password;
-// }
-// let createdAccount = new rawAccount('Emma', 'Alma', 'Eagmail.com', 'boom')
-
-export async function createUser(coll, accountData) {
+export async function insertDocument(coll, documentObject) {
   try {
-    await coll.insertOne(accountData);
+    return await coll.insertOne(documentObject);
   } catch (error) {
     console.log(error);
   }
-}
-
-export async function insertDocument(coll, documentObject) {
-  coll.insertOne(documentObject);
 }

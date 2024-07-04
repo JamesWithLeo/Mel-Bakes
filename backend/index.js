@@ -24,7 +24,6 @@ const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const port = process.env.PORT || 2024;
 const app = express();
 
-
 // app.use(home);
 app.use(express.json())
 app.get('/melbake', async (req, res) => {
@@ -62,10 +61,10 @@ app.post('/melbake/admin/product/append', async (req, res) => {
     res.status(200).json({ result: "Document Added to the Database!" })
   )
 })
-
-
-app.get('/signin/create', (req, res) => {
-  res.status(200).json({ mssg: "GET REQUEST TO /melbake" });
+app.post('/melbake/signin/create', async (req, res) => {
+  insertDocument(ACCOUNT_COLLECTION, req.body).finally(
+    res.status(200).json({ result: "Document Added to the Database" })
+  )
 })
 
 app.listen(port, () => {

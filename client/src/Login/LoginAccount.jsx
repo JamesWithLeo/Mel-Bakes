@@ -7,7 +7,7 @@ import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link, Form } from "react-router-dom";
 // design assets
 
-function LoginAccount({ setDisplay }) {
+function LoginAccount({ setDisplay, islogProperty }) {
   const Account = useContext(AccountContext);
   const [urlTarget, setUrlTarget] = useState("/");
 
@@ -25,11 +25,12 @@ function LoginAccount({ setDisplay }) {
       await response.json().then((res) => {
         console.log(typeof res);
         console.log(res);
-        Account._Id = res._Id;
-        Account.IsLogged = true;
-        Account.Gmail = gmail;
+        // Account._Id = res._Id;
+        // Account.IsLogged = true;
+        // Account.Gmail = gmail;
+        islogProperty(true);
+        exitLogin();
       });
-      setUrlTarget("admin");
     } else {
       event.preventDefault();
     }
