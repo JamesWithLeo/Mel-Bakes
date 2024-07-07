@@ -16,7 +16,7 @@ const route = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     loader: () => {
-      return { isAuth: true, gmail: 'exampleGmail' }
+      return { isAuth: false, gmail: 'exampleGmail' }
 
     },
     children: [{ path: "/melbake/mycart", element: <CartComponent /> }]

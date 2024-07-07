@@ -27,6 +27,17 @@ function Product() {
     fetchCupcakes();
   }, []);
 
-  return <>{cupcakesElement ? cupcakesElement : null}</>;
+  return (
+    <>
+      {cupcakesElement ? (
+        <div
+          id="productContainer"
+          className="row-span-2 flex flex-row flex-wrap justify-center gap-4 sm:gap-5 md:gap-6"
+        >
+          {cupcakesElement}
+        </div>
+      ) : null}
+    </>
+  );
 }
 export default Product;
