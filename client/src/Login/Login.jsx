@@ -1,7 +1,8 @@
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Login({ setDisplay }) {
-  const navigate = useNavigate();
+  const [account, seAccount] = useState();
   const checkAccount = async (event) => {
     const gmail = document.getElementById("gmailLoginTB").value;
     if (gmail) {
@@ -33,7 +34,7 @@ function Login({ setDisplay }) {
         id="passwordLoginTB"
       />
       <div className="mt-2 flex w-1/3 flex-col">
-        <Link className="text-warning self-end text-xs">Forget Password</Link>
+        <Link className="self-end text-xs text-warning">Forget Password</Link>
       </div>
       <button
         className="mt-4 h-8 w-full self-center rounded bg-primary py-2 text-center align-middle text-xs text-white sm:w-1/3 md:text-sm lg:px-4"

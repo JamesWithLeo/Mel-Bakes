@@ -1,5 +1,5 @@
 // import './app.css';
-import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
+import { Link, Outlet, useLoaderData } from "react-router-dom";
 import { useState, useContext, createContext, lazy, Suspense, useRef, useEffect } from "react";
 // major components
 import FooterComponent from "./Footer/Footer.jsx";
@@ -24,9 +24,10 @@ export const AccountContext = createContext(undefined);
 
 const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
 function App() {
-  // useEffect(() => {
-  // }, [])
   const loader = useLoaderData()
+  useEffect(() => {
+    console.log(loader)
+  }, [loader])
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
   const [productId, SetProductId] = useState(0);
@@ -49,7 +50,7 @@ function App() {
         </AccountContext.Provider>
       </div>
 
-      {loader.isAuth ? (
+      {loader.isAuth === true ? (
         <>
           <Homepage />
         </>

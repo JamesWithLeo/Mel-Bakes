@@ -12,7 +12,6 @@ function Product() {
         .json()
         .then((value) => {
           const element = value.map((cupcake) => {
-            console.log(cupcake.Url);
             return (
               <>
                 <ProductCard key={crypto.randomUUID()} productObj={cupcake} />

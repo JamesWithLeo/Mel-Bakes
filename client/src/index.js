@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, BrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./app.js";
 import "./index.css";
@@ -16,17 +16,19 @@ const route = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     loader: () => {
-      return { isAuth: true }
+      return { isAuth: true, gmail: 'exampleGmail' }
+
     },
     children: [{ path: "/melbake/mycart", element: <CartComponent /> }]
   },
+
   { path: "Admin/", element: <Admin /> },
   {
     path: "Signin/",
     element:
       <SignIn />,
   },
-]);
+],);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
