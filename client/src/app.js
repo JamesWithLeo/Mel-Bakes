@@ -1,6 +1,6 @@
 // import './app.css';
-import { Outlet } from "react-router-dom";
-import { useState, useContext, createContext, lazy, Suspense, useEffect, useRef } from "react";
+import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
+import { useState, useContext, createContext, lazy, Suspense, useRef, useEffect } from "react";
 // major components
 import FooterComponent from "./Footer/Footer.jsx";
 import HeaderComponent from "./Header/Header.jsx";
@@ -10,39 +10,29 @@ import Gallary from "./GallerySlideshow/GallerySlideshow.jsx";
 
 // import cupcakes from "./data.js";
 import Product from "./Product/Product.jsx";
-import CartComponent from "./Product/CartComponent.jsx";
 
 // icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faL } from "@fortawesome/free-solid-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 // styled
-import { AccountContext } from "./Context.jsx";
 import Homepage from "./Home/Homepage.jsx";
 import LoadingComponents from "./loading/LoadingComponent.jsx";
 
 export const ViewProductContext = createContext(undefined);
 export const ProductIdContext = createContext(0);
+export const AccountContext = createContext(undefined);
 
-const LoginAccount = lazy(() => import("./Login/LoginAccount.jsx"));
 const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
 function App() {
+  // useEffect(() => {
+  // }, [])
+  const loader = useLoaderData()
 
-  const Account = useContext(AccountContext);
-
-  const [IsUser, setIsUser] = useState(false);
-  const [cartModalDisplay, SetCartModalDisplay] = useState(false);
-  const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
   const [productId, SetProductId] = useState(0);
 
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
-      {loginModalDisplay ? (
-        <Suspense fallback={<LoadingComponents />}>
-          <LoginAccount setDisplay={setLoginModalDisplay} islogProperty={setIsUser} />
-        </Suspense>
-      ) : null}
-
       {ViewProductDisplay ? (
         <Suspense fallback={<LoadingComponents />}>
           <ProductIdContext.Provider value={productId}>
@@ -54,15 +44,12 @@ function App() {
       ) : null}
 
       <div className="flex justify-center w-full z-0 bg-secondarylight sticky top-0 drop-shadow-lg">
-        <HeaderComponent setCartDisplayProp={SetCartModalDisplay} />
+        <AccountContext.Provider value={loader}>
+          <HeaderComponent />
+        </AccountContext.Provider>
       </div>
 
-      {cartModalDisplay ? (
-        <CartComponent setDisplay={SetCartModalDisplay} />
-      ) : null}
-
-
-      {IsUser ? (
+      {loader.isAuth ? (
         <>
           <Homepage />
         </>
@@ -94,22 +81,18 @@ function App() {
                 life's special moments.
               </p>
 
-              <button
+              <Link
                 className="w-max h-max self-center bg-[#424874] text-white px-4 py-2 rounded-sm"
-                onClick={() => {
-                  setLoginModalDisplay(true);
-                  document.body.style.overflowY = "hidden";
-                }}
+                to={'signin'}
                 id="loginButton"
               >
                 Taste Now!
-              </button>
+              </Link>
             </div>
             <div
               id="gallaryContainer"
               className="flex flex-col justify-between  items-center md:w-1/2"
             >
-              <h1>{Account.Username}</h1>
               <Gallary />
             </div>
           </main>

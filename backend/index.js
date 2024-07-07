@@ -26,9 +26,33 @@ const app = express();
 
 // app.use(home);
 app.use(express.json())
+
+app.get("/", async (req, res) => {
+  console.log("Hello World");
+  res.status(200).json({ result: "hello from backend" });
+})
+
 app.get('/melbake', async (req, res) => {
-  const cupcakes = await fetchCupcakes(CUPCAKE_COLLECTION);
-  res.status(200).json(cupcakes);
+  async function destribute(array) {
+    let i;
+    let cups = []
+    for (i = 0; i <= array.length; i++) {
+      if (i === array.length) {
+        // console.log(cups)
+        return cups
+      }
+      await getAssetInfo(array[i].PublicId).then((url) => {
+        array[i].Url = url
+        cups.push(array[i])
+      })
+    }
+  }
+  await fetchCupcakes(CUPCAKE_COLLECTION).then(async (cupcakes) => {
+    destribute(cupcakes).then((value) => {
+      // console.log(value)
+      res.status(200).json(value);
+    })
+  })
 });
 
 app.get('/melbake/cupcake/:id', async (req, res) => {
