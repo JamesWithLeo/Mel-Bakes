@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { AuthProvider } from "../authProvider";
 
 function Login({ setDisplay }) {
   const [account, seAccount] = useState();

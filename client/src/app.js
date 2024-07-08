@@ -1,6 +1,6 @@
 // import './app.css';
 import { Outlet, useLoaderData } from "react-router-dom";
-import { useState, useContext, createContext, lazy, Suspense, useRef, useEffect } from "react";
+import { useState, createContext, lazy, Suspense, useEffect } from "react";
 // major components
 import GuestHome from "./Home/GuestHome.jsx";
 import FooterComponent from "./Footer/Footer.jsx";
@@ -33,6 +33,7 @@ function App() {
   const [productId, SetProductId] = useState(0);
 
   return (
+
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
       {ViewProductDisplay ? (
         <Suspense fallback={<LoadingComponents />}>

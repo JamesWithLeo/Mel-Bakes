@@ -9,14 +9,15 @@ import SignIn from "./Pages/SignIn.jsx";
 import Admin from "./Pages/Admin.jsx";
 import CartComponent from "./Product/CartComponent.jsx";
 
-
+import { AuthConsumer, AuthProvider } from "./authProvider.js";
 const route = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
     loader: () => {
-      return { isAuth: false, gmail: 'exampleGmail' }
+      let auth = AuthConsumer();
+      return { isAuth: auth, gmail: 'exampleGmail' }
 
     },
     children: [{ path: "/melbake/mycart", element: <CartComponent /> }]
