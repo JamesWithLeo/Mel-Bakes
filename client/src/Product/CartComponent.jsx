@@ -1,9 +1,11 @@
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 function CartComponent() {
+  let _id = sessionStorage.getItem("id");
   useEffect(() => {
     async function fetchCartData() {
-      // await fetch("melbake/mycart/");
+      const urlDestination = "melbake/mycart/" + _id;
+      await fetch("melbake/mycart/");
       console.log("Cart is Open");
     }
     fetchCartData();
@@ -27,6 +29,7 @@ function CartComponent() {
         className="fixed left-1/2 top-0 z-50 mx-auto flex h-2/3 w-full -translate-x-1/2 flex-col gap-4 rounded-b-lg bg-white p-2 sm:w-11/12 md:p-4"
       >
         <h1 className="text-3xl font-bold text-primary">Order</h1>
+        <h1 className="text-3xl font-bold text-primary">{_id}</h1>
         <div className="flex h-full w-full flex-col gap-2 md:flex-row md:gap-4">
           <ul className="flex flex-row gap-4 bg-white md:flex-col">
             <li>

@@ -13,9 +13,9 @@ function Login({ setDisplay }) {
       const urlDestination = "melbake/login/" + gmail;
       const response = await fetch(urlDestination);
       await response.json().then(async (value) => {
-        // console.log(typeof value);
-        // console.log(Auth);
-        Auth.Login();
+        console.log(typeof value);
+        console.log(value);
+        Auth.Login(value._id);
         navigate("/");
       });
     } else {
