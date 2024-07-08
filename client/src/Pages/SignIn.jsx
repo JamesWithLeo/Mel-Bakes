@@ -6,7 +6,7 @@ import Login from "../Login/Login.jsx";
 import Sign from "../Login/sign.jsx";
 
 function SignIn() {
-  const [log, setLog] = useState(true);
+  const [log, setLog] = useState(false);
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
       <div className="sticky top-0 z-0 flex w-full justify-center bg-secondarylight drop-shadow-lg">

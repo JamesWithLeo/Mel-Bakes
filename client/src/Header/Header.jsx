@@ -1,14 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart, faCode } from "@fortawesome/free-solid-svg-icons";
 
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AccountContext } from "../app";
+import { AuthConsumer } from "../authProvider";
 
 function HeaderComponent() {
-  const AccountData = useContext(AccountContext);
-
-  // const Account = useContext(AccountContext);
+  const Auth = AuthConsumer();
 
   const openCart = () => {
     document.body.style.overflowY = "hidden";
@@ -21,25 +18,26 @@ function HeaderComponent() {
           id="headerButton"
           className="flex items-center justify-center gap-2 sm:gap-4"
         >
-          {AccountData.isAuth ? (
-            <Link to={"melbake/mycart"}>
-              <FontAwesomeIcon
-                icon={faShoppingCart}
-                id="cart"
-                onClick={openCart}
-                className="text-primary sm:text-xl lg:text-2xl"
-              />
-            </Link>
-          ) : null}
-          {/* <Link to={"melbake/mycart"}>
-          <FontAwesomeIcon
-            icon={faShoppingCart}
-            id="cart"
-            onClick={openCart}
-            className="text-primary sm:text-xl lg:text-2xl"
-          />
-        </Link> */}
+          {Auth.user ? (
+            <>
+              <Link to={"Admin"}>
+                <FontAwesomeIcon
+                  icon={faCode}
+                  id="Admin"
+                  className="text-primary sm:text-base lg:text-xl"
+                />
+              </Link>
 
+              <Link to={"melbake/mycart"}>
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  id="cart"
+                  onClick={openCart}
+                  className="text-primary sm:text-base lg:text-xl"
+                />
+              </Link>
+            </>
+          ) : null}
           <button
             id="contactUsButton"
             className="border border-solid border-black px-3 py-1"

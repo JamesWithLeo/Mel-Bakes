@@ -17,21 +17,26 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 // styled
 import Homepage from "./Home/Homepage.jsx";
 import LoadingComponents from "./loading/LoadingComponent.jsx";
-
+import { AuthConsumer } from "./authProvider.js";
+import LoginModal from "./Login/LoginModal.jsx";
+import FilterComponent from './Product/FilterComponent.jsx'
 export const ViewProductContext = createContext(undefined);
 export const ProductIdContext = createContext(0);
-export const AccountContext = createContext(undefined);
+// export const AccountContext = createContext(undefined);
 
 const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
+
+
 function App() {
-  const loader = useLoaderData()
+  const Auth = AuthConsumer();
   useEffect(() => {
-    console.log(loader)
-  }, [loader])
+    console.log(Auth)
+  }, [Auth])
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
+  const [LoginModalDisplay, setLoginModalDisplay] = useState(false);
+  const [filterModalDisplay, setFilterModalDisplay] = useState(false);
   const [productId, SetProductId] = useState(0);
-
   return (
 
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
@@ -39,23 +44,27 @@ function App() {
         <Suspense fallback={<LoadingComponents />}>
           <ProductIdContext.Provider value={productId}>
             <ViewProduct
-              setDisplay={setViewProductDisplay}
+              setDisplay={setViewProductDisplay} setLoginModal={setLoginModalDisplay}
             />
           </ProductIdContext.Provider>
         </Suspense>
       ) : null}
+      {filterModalDisplay ?
+        <FilterComponent setModalDisplay={setFilterModalDisplay} />
+        : null}
 
-      <AccountContext.Provider value={loader}>
-        <HeaderComponent />
-      </AccountContext.Provider>
+      {LoginModalDisplay ?
+        <LoginModal setDisplay={setLoginModalDisplay} />
+        : null}
 
-      {loader.isAuth === true ? (
+      <HeaderComponent />
+      {Auth.user ? (
         <>
           <Homepage />
         </>
       ) : (
         <>
-          <GuestHome />
+          <GuestHome setLoginModal={setLoginModalDisplay} />
         </>
       )}
 
@@ -68,13 +77,18 @@ function App() {
           className="grid grid-cols-1 grid-rows-[.5fr 9.5fr] max-w-7xl gap-6"
         >
           <div id="filterWrapper" className="flex items-center gap-2 text-primary">
-            <FontAwesomeIcon
-              icon={faFilter}
-              fontSize={20}
-              className="icon"
-              id="filterIcon"
-            />
-            <button id="filterButton">Filter</button>
+
+            <button id="filterButton" onClick={() => {
+              setFilterModalDisplay(true)
+              document.body.style.overflowY = "hidden";
+
+            }}>
+              <FontAwesomeIcon
+                icon={faFilter}
+                fontSize={20}
+                className="text-base"
+                id="filterIcon"
+              /> Filter</button>
           </div>
 
 

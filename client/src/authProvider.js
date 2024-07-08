@@ -1,41 +1,40 @@
-import { useContext, createContext, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
+export const AuthContext = React.createContext();
 
-export const AuthContext = createContext();
-
-export const Auth = () => {
-  const [user, setUser] = useState(true);
-  // const navigate = useNavigate();
-
-  // call this function when you want to authenticate the user
-  const login = async () => {
+export const useAuth = () => {
+  // the state will be true if, user already login. else false
+  const [user, setUser] = React.useState(localStorage.getItem("authed") ?? false);
+  const [userType, setUserType] = React.useState("admin");
+  async function Login(req, res) {
+    localStorage.setItem("authed", "true");
     setUser(true);
-    // navigate("/profile");
   };
 
   // call this function to sign out logged in user
-  const logout = () => {
+  async function Logout() {
+    localStorage.removeItem("authed")
     setUser(false);
-    // navigate("/", { replace: true });
   };
 
-  // const value = useMemo(
-  //   () => ({
-  //     user,
-  //     login,
-  //     logout,
-  //   }),
-  //   [user]
-  // )
-  return { user, login, logout }
+  return { user, userType, Login, Logout }
 };
 
 export function AuthProvider({ children }) {
-  let auth = Auth()
+  const auth = useAuth()
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
+export function ProtectedRoute({ children }) {
+  let Auth = useAuth()
+  if (Auth.user && (Auth.userType === "admin")) {
+    return children
+  } else {
+    return <Navigate to={"/"} />
+  }
+}
+
 
 export const AuthConsumer = () => {
-  return useContext(AuthContext);
+  return React.useContext(AuthContext);
 };

@@ -1,21 +1,23 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { AuthProvider } from "../authProvider";
+import { Link, useNavigate } from "react-router-dom";
+// import { useState } from "react";
+import { AuthConsumer } from "../authProvider";
 
 function Login({ setDisplay }) {
-  const [account, seAccount] = useState();
+  const Auth = AuthConsumer();
+  const navigate = useNavigate();
+  // const [account, seAccount] = useState();
+
   const checkAccount = async (event) => {
     const gmail = document.getElementById("gmailLoginTB").value;
     if (gmail) {
       const urlDestination = "melbake/login/" + gmail;
-      <h1 className="my-8 text-3xl font-bold text-primary">Create Account</h1>;
       const response = await fetch(urlDestination);
       await response.json().then(async (value) => {
-        console.log(typeof value);
-        console.log(value);
-        // navigate("/", { state: { account: res } }, { replace: true });
+        // console.log(typeof value);
+        // console.log(Auth);
+        Auth.Login();
+        navigate("/");
       });
-      // redirect("/");
     } else {
       event.preventDefault();
     }

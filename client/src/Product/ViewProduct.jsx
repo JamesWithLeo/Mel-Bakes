@@ -9,12 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
+import { AuthConsumer } from "../authProvider";
 
-function ViewProduct({ setDisplay }) {
+function ViewProduct({ setDisplay, setLoginModal }) {
+  const Auth = AuthConsumer();
   const id = useContext(ProductIdContext);
-  // useEffect(() => {
-  //   console.log(productId);
-  // }, [productId]);
   const [cupcakeObj, setCupcakeObj] = useState({});
   useEffect(() => {
     async function fetchCupcake() {
@@ -182,12 +181,26 @@ function ViewProduct({ setDisplay }) {
                   >
                     Add to Cart
                   </button>
-                  <button
-                    className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
-                    id="chechOutButton"
-                  >
-                    Buy Now
-                  </button>
+                  {Auth.user ? (
+                    <button
+                      className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
+                      id="chechOutButton"
+                    >
+                      Buy Now
+                    </button>
+                  ) : (
+                    <button
+                      className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
+                      id="chechOutButton"
+                      onClick={() => {
+                        exitViewProduct();
+                        document.body.style.overflowY = "hidden";
+                        setLoginModal(true);
+                      }}
+                    >
+                      Buy Now
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

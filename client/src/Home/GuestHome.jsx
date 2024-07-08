@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Gallary from "../GallerySlideshow/GallerySlideshow";
-export default function GuestHome() {
+export default function GuestHome({ setLoginModal }) {
   return (
     <div
       id="mainWrapper"
@@ -28,13 +28,16 @@ export default function GuestHome() {
             goodness for all life's special moments.
           </p>
 
-          <Link
+          <button
             className="h-max w-max self-center rounded-sm bg-[#424874] px-4 py-2 text-white"
-            to={"signin"}
             id="loginButton"
+            onClick={() => {
+              setLoginModal(true);
+              document.body.style.overflowY = "hidden";
+            }}
           >
             Taste Now!
-          </Link>
+          </button>
         </div>
         <div
           id="gallaryContainer"
