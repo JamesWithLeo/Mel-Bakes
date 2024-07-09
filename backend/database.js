@@ -21,10 +21,16 @@ const mongoDB = (uri) => {
 export default mongoDB;
 
 
-export async function findUser(coll, gmail) {
+export async function findUser(coll, value) {
   try {
-    const accountData = { Gmail: gmail }
-    return await coll.findOne(accountData);
+    return await coll.findOne({ "Gmail": value });
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function findUserById(coll, value) {
+  try {
+    return await coll.findOne({ "_id": new ObjectId(value) });
   } catch (error) {
     console.log(error);
   }

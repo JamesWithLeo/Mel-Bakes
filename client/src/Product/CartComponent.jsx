@@ -1,15 +1,40 @@
-import { useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import OrderComponent from "./OrderComponent";
+
 function CartComponent() {
-  let _id = sessionStorage.getItem("id");
+  let id = sessionStorage.getItem("id");
+  const [orderElements, SetOrderElements] = useState([]);
   useEffect(() => {
+    async function fetchCupcake(cupcakeId) {
+      const destinationUrl = "melbake/cupcake/" + cupcakeId;
+      const response = await fetch(destinationUrl);
+      await response.json().then((value) => {
+        // setCupcakeObj(JSON.parse(value));
+        console.log(value.Url);
+      });
+    }
     async function fetchCartData() {
-      const urlDestination = "melbake/mycart/" + _id;
-      await fetch("melbake/mycart/");
-      console.log("Cart is Open");
+      const url = "mycart/" + id;
+      // console.log(url);
+
+      const response = await fetch(url);
+      await response.json().then((orders) => {
+        // console.log(typeof orders.Cart, orders.Cart);
+
+        let ordersEl = orders.Cart.map((order) => {
+          // console.log(order.C_id);
+          return (
+            <>
+              <OrderComponent OrderObj={order} key={crypto.randomUUID()} />
+            </>
+          );
+        });
+        SetOrderElements(ordersEl);
+      });
     }
     fetchCartData();
-  }, []);
+  }, [id]);
 
   const exitCart = () => {
     document.body.style.overflowY = "scroll";
@@ -29,34 +54,14 @@ function CartComponent() {
         className="fixed left-1/2 top-0 z-50 mx-auto flex h-2/3 w-full -translate-x-1/2 flex-col gap-4 rounded-b-lg bg-white p-2 sm:w-11/12 md:p-4"
       >
         <h1 className="text-3xl font-bold text-primary">Order</h1>
-        <h1 className="text-3xl font-bold text-primary">{_id}</h1>
+        {/* <h1 className="text-3xl font-bold text-primary">{id}</h1> */}
         <div className="flex h-full w-full flex-col gap-2 md:flex-row md:gap-4">
-          <ul className="flex flex-row gap-4 bg-white md:flex-col">
-            <li>
-              <Link className="text-primary">All</Link>
-            </li>
-            <li>
-              <Link className="text-primary">Recieved</Link>
-            </li>
-            <li>
-              <Link className="text-primary">Cancelled</Link>
-            </li>
-          </ul>
-          <div className="h-full w-full bg-gray-50 px-2">
-            <div className="flex justify-between bg-secondarylight p-2 md:px-4">
-              <h1>Cappucino Lick</h1>
-              <div>
-                <h1 className="text-xs">Order by : July 5 2024</h1>
-                <h1 className="text-xs">Recieve by : July 6 2024</h1>
-              </div>
-              <div>
-                <h1 className="text-end text-sm">
-                  Quantity : 1 dozen / 12 pieces
-                </h1>
-                <h1 className="text-end text-sm">Price : 130.00</h1>
-              </div>
+          {orderElements.length ? (
+            <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
+              {orderElements}
             </div>
-          </div>
+          ) : null}
+
           <div className="flex flex-col gap-2 md:gap-4">
             <button className="rounded border border-slate-50 px-3 py-1 text-primary shadow">
               Order

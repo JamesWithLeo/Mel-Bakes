@@ -74,9 +74,9 @@ function App() {
       >
         <div
           id="productWrapper__wrapper"
-          className="grid grid-cols-1 grid-rows-[.5fr 9.5fr] max-w-7xl gap-6"
+          className="grid grid-cols-1 grid-rows-[.5fr 9.5fr] max-w-7xl gap-6 w-full"
         >
-          <div id="filterWrapper" className="flex items-center gap-2 text-primary">
+          <div id="filterWrapper" className="flex items-center gap-2 w-full text-primary">
 
             <button id="filterButton" onClick={() => {
               setFilterModalDisplay(true)

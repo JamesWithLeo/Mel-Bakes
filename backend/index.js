@@ -13,7 +13,7 @@ const password = process.env.DB_PASSWORD;
 const user = process.env.DB_USER;
 const DB_URI = `mongodb+srv://${user}:${password}@clusterleo.wadd7q8.mongodb.net/?authMechanism=SCRAM-SHA-1`;
 
-import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument } from './database.js';
+import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById } from './database.js';
 const CLIENT = mongoDB(DB_URI);
 // reference access to the database and collection
 const DATABASE = CLIENT.db("MelBake");
@@ -24,14 +24,13 @@ const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const port = process.env.PORT || 2024;
 const app = express();
 
-// app.use(home);
 app.use(express.json())
 
-app.get("/", async (req, res) => {
-  console.log("Hello World");
-  res.status(200).json({ result: "hello from backend" });
-})
-
+// app.get("/", async (req, res) => {
+//   console.log("Hello World");
+//   res.status(200).json({ result: "hello from backend" });
+// })
+// get all cupcakes in the db
 app.get('/melbake', async (req, res) => {
   async function destribute(array) {
     let i;
@@ -54,7 +53,7 @@ app.get('/melbake', async (req, res) => {
     })
   })
 });
-
+// get single cupcake
 app.get('/melbake/cupcake/:id', async (req, res) => {
   let cupcake = await fetchCupcake(CUPCAKE_COLLECTION, req.params.id);
   // convert the document to json then to object
@@ -73,13 +72,20 @@ app.get('/melbake/cupcake/:id', async (req, res) => {
 })
 
 app.get('/melbake/login/:gmail', async (req, res) => {
-  const account = await findUser(ACCOUNT_COLLECTION, req.params.gmail);
+  const account = await findUser(ACCOUNT_COLLECTION, req.params.gmail,);
   if (account) {
     res.status(200).json(account);
   } else {
     throw new Error('Cant find fetch document')
   }
 })
+app.get('/melbake/mycart/:id', async (req, res) => {
+  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json({ "Cart": value.Cart })
+  })
+})
+
+
 app.post('/melbake/admin/product/append', async (req, res) => {
   insertDocument(CUPCAKE_COLLECTION, req.body).finally(
     res.status(200).json({ result: "Document Added to the Database!" })
