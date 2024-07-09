@@ -53,43 +53,43 @@ function Sign({ setDisplay }) {
     <div className="flex h-full w-full max-w-7xl flex-col items-center gap-4 self-center px-4 py-4">
       <h1 className="my-8 text-3xl font-bold text-primary">Create Account</h1>
       <input
-        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         type="text"
         placeholder="Enter First name"
         id="firstnameSigninTB"
       />
       <input
-        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         type="text"
         placeholder="Enter Last name"
         id="lastnameSigninTB"
       />
       <input
-        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         type="text"
         placeholder="Enter gmail"
         id="gmailSigninTB"
       />
       <input
-        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         type="password"
         placeholder="Create password"
         id="passwordSigninTB"
       />
       <input
-        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:w-1/3"
+        className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         type="password"
         placeholder="Confirm password"
         id="passwordSigninTBConfirm"
       />
       <Link
-        className="w-full rounded bg-primary py-2 text-center text-white active:ring sm:w-1/3"
+        className="w-full rounded bg-primary py-2 text-center text-white active:ring sm:max-w-sm"
         onClick={handleCreateAccount}
       >
         Sign in
       </Link>
       <button
-        className="h-8 w-full self-center rounded bg-secondarylight py-1 text-center align-middle text-xs text-primary sm:w-1/3 md:text-sm"
+        className="h-auto w-full self-center rounded bg-secondarylight py-2 text-center align-middle text-xs text-primary sm:max-w-sm md:text-sm"
         onClick={() => {
           setDisplay(true);
         }}
