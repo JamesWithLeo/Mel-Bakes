@@ -13,7 +13,7 @@ const password = process.env.DB_PASSWORD;
 const user = process.env.DB_USER;
 const DB_URI = `mongodb+srv://${user}:${password}@clusterleo.wadd7q8.mongodb.net/?authMechanism=SCRAM-SHA-1`;
 
-import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById } from './database.js';
+import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById, insertToCart, removeFromCart } from './database.js';
 const CLIENT = mongoDB(DB_URI);
 // reference access to the database and collection
 const DATABASE = CLIENT.db("MelBake");
@@ -26,10 +26,8 @@ const app = express();
 
 app.use(express.json())
 
-// app.get("/", async (req, res) => {
-//   console.log("Hello World");
-//   res.status(200).json({ result: "hello from backend" });
-// })
+
+
 // get all cupcakes in the db
 app.get('/melbake', async (req, res) => {
   async function destribute(array) {
@@ -70,7 +68,7 @@ app.get('/melbake/cupcake/:id', async (req, res) => {
     throw new Error('Cant find fetch document')
   }
 })
-
+// fetch user 
 app.get('/melbake/login/:gmail', async (req, res) => {
   const account = await findUser(ACCOUNT_COLLECTION, req.params.gmail,);
   if (account) {
@@ -79,18 +77,32 @@ app.get('/melbake/login/:gmail', async (req, res) => {
     throw new Error('Cant find fetch document')
   }
 })
+// fetch cart
 app.get('/melbake/mycart/:id', async (req, res) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
     res.status(200).json({ "Cart": value.Cart })
   })
 })
+// add product to cart
+app.post('/melbake/mycart/Add/:id', async (req, res) => {
+  insertToCart(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+    res.status(200).json({ result: "Product Added to the Cart!" })
+  )
+})
+// remover product to cart
+app.post('/melbake/mycart/remove/:id', async (req, res) => {
+  removeFromCart(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+    res.status(200).json({ result: "Product Removed to the Cart!" })
+  )
+})
 
-
+// add product to database
 app.post('/melbake/admin/product/append', async (req, res) => {
   insertDocument(CUPCAKE_COLLECTION, req.body).finally(
     res.status(200).json({ result: "Document Added to the Database!" })
   )
 })
+// add account to database
 app.post('/melbake/signin/create', async (req, res) => {
   insertDocument(ACCOUNT_COLLECTION, req.body).finally(
     res.status(200).json({ result: "Document Added to the Database" })

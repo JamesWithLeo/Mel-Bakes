@@ -7,15 +7,16 @@ export const useAuth = () => {
   // the state will be true if, user already login. else false
   const [user, setUser] = React.useState(localStorage.getItem("authed") ?? false);
   const [userType, setUserType] = React.useState("admin");
+
   async function Login(id) {
-    sessionStorage.setItem("id", id)
+    localStorage.setItem("id", id)
     localStorage.setItem("authed", "true");
     setUser(true);
   };
 
   // call this function to sign out logged in user
   async function Logout() {
-    sessionStorage.removeItem("id")
+    localStorage.removeItem("id")
     localStorage.removeItem("authed")
     setUser(false);
   };

@@ -12,10 +12,12 @@ function Product() {
       await response
         .json()
         .then((value) => {
+          let indexId;
           const element = value.map((cupcake) => {
+            indexId++;
             return (
               <>
-                <ProductCard key={crypto.randomUUID()} productObj={cupcake} />
+                <ProductCard key={indexId} productObj={cupcake} />
               </>
             );
           });

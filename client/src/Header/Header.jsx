@@ -28,7 +28,7 @@ function HeaderComponent() {
               <FontAwesomeIcon
                 icon={faCode}
                 id="Admin"
-                className="text-primary sm:text-base lg:text-xl"
+                className="lg:base text-primary sm:text-base"
               />
               <h1 className="px-3 py-1 text-primary">Admin</h1>
             </Link>
@@ -41,7 +41,7 @@ function HeaderComponent() {
                 icon={faShoppingCart}
                 id="cart"
                 onClick={openCart}
-                className="text-primary sm:text-base lg:text-xl"
+                className="lg:base text-primary sm:text-base"
               />
               <h1 className="px-3 py-1 text-primary">Cart</h1>
             </Link>
@@ -52,7 +52,7 @@ function HeaderComponent() {
             >
               <FontAwesomeIcon
                 icon={faUser}
-                className="text-primary sm:text-base lg:text-xl"
+                className="text-primary sm:text-base lg:text-base"
               />
               <h1 className="px-3 py-1 text-primary">Account</h1>
             </Link>

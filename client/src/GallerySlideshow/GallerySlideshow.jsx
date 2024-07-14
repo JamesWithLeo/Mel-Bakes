@@ -23,7 +23,7 @@ function Gallary() {
         }
         setImage(images[index.current]);
       }
-    }, 5000);
+    }, 20000);
   }, [image, index, isVisible]);
   return (
     <div id="gallery" className="w-11/12 bg-white p-8 shadow-2xl">

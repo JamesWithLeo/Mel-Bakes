@@ -64,3 +64,22 @@ export async function insertDocument(coll, documentObject) {
     console.log(error);
   }
 }
+
+export async function insertToCart(coll, UserId, documentObject) {
+  try {
+    coll.updateOne({ "_id": new ObjectId(UserId) }, { $push: { Cart: documentObject } })
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+export async function removeFromCart(coll, UserId, documentObject) {
+  try {
+    coll.updateOne({ "_id": new ObjectId(UserId) }, {
+      $pull: { Cart: documentObject }
+    })
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}

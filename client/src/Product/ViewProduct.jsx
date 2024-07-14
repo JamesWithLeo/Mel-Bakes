@@ -5,7 +5,6 @@ import {
   faPlus,
   faMinus,
   faHeart,
-  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
@@ -14,9 +13,38 @@ import { AuthConsumer } from "../authProvider";
 function ViewProduct({ setDisplay, setLoginModal }) {
   const Auth = AuthConsumer();
   const id = useContext(ProductIdContext);
+
   const [cupcakeObj, setCupcakeObj] = useState({});
   const [flavors, setFlavors] = useState([]);
   const [quantity, setQuantity] = useState(1);
+
+  const [status, setStatus] = useState(null);
+
+  async function AddToCart() {
+    let usersId = localStorage.getItem("id");
+    let Cupcake = cupcakeObj.Name;
+    let Quantity = quantity;
+    let C_id = cupcakeObj._id;
+    let Price = cupcakeObj.Price;
+    let orderObj = JSON.stringify({ Cupcake, Quantity, C_id, Price });
+    await fetch("/melbake/mycart/Add/" + usersId, {
+      method: "POST",
+      body: orderObj,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.ok) {
+        setStatus("Added");
+        setTimeout(() => {
+          setStatus(false);
+        }, 3000);
+      } else {
+        setStatus("Can't Add to Cart");
+      }
+    });
+  }
+
   useEffect(() => {
     async function fetchCupcake() {
       const destinationUrl = "melbake/cupcake/" + id;
@@ -78,7 +106,15 @@ function ViewProduct({ setDisplay, setLoginModal }) {
           className="h-full bg-transparent"
           onClick={exitViewProduct}
           defaultSize={25}
-        ></Panel>
+        >
+          {status ? (
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
+              <h1 className="font-[Raleway] text-xs font-bold text-white">
+                {status}
+              </h1>
+            </div>
+          ) : null}
+        </Panel>
         <PanelResizeHandle className="h-4 w-full self-center rounded bg-gray-100" />
 
         <Panel
@@ -161,94 +197,116 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                     {cupcakeObj.Description}
                   </p>
                 </div>
-                <div className="flex w-full justify-center gap-4 px-2 align-middle">
-                  <button>
-                    <FontAwesomeIcon
-                      id="hearIcon"
-                      icon={faHeart}
-                      className="text-gray-400 first-letter:text-sm"
-                    />
-                  </button>
-                  <label
-                    className="items-center text-center text-sm"
-                    id="quantityLabel"
-                  >
-                    Quantity
-                  </label>
-                  <div
-                    className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center gap-2 rounded border-2 border-gray-400 px-4 align-middle"
-                    id="quantityWrapper"
-                  >
-                    <button
-                      onClick={() => {
-                        setQuantity(quantity - 1);
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        className="text-gray-400 first-letter:text-sm"
-                        icon={faMinus}
-                        id="minusQuantity"
-                      />
-                    </button>
-                    <p
-                      className="text-center text-xs text-gray-400"
-                      id="quantityIndicator"
-                    >
-                      {quantity}
-                    </p>
-                    <button
-                      onClick={() => {
-                        setQuantity(quantity + 1);
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        className="text-sm text-gray-400"
-                        icon={faPlus}
-                        id="plusQuantity"
-                      />
-                    </button>
-                  </div>
+
+                <div className="flex w-full items-center justify-center gap-4 px-2">
+                  {cupcakeObj.Quantity ? (
+                    <>
+                      <button>
+                        <FontAwesomeIcon
+                          id="hearIcon"
+                          icon={faHeart}
+                          className="text-base text-gray-400"
+                        />
+                      </button>
+                      <label
+                        className="text-sm font-bold text-gray-400"
+                        id="quantityLabel"
+                      >
+                        Quantity
+                      </label>
+                      <div
+                        className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center rounded border-2 border-gray-400 align-middle"
+                        id="quantityWrapper"
+                      >
+                        <button
+                          className="px-2"
+                          onClick={() => {
+                            if (quantity !== 1) {
+                              setQuantity(quantity - 1);
+                            }
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            className="text-sm text-gray-400"
+                            icon={faMinus}
+                            id="minusQuantity"
+                          />
+                        </button>
+                        <p
+                          className="text-center text-xs font-bold text-gray-400"
+                          id="quantityIndicator"
+                        >
+                          {quantity}
+                        </p>
+                        <button
+                          className="px-2"
+                          onClick={() => {
+                            setQuantity(quantity + 1);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            className="text-sm text-gray-400"
+                            icon={faPlus}
+                            id="plusQuantity"
+                          />
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
+                  )}
                 </div>
 
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
-                  {Auth.user ? (
-                    <button
-                      className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
-                      id="addToCartButton"
-                    >
-                      Add to Cart
-                    </button>
-                  ) : (
-                    <button
-                      className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
-                      onClick={() => {
-                        exitViewProduct();
-                        document.body.style.overflowY = "hidden";
-                        setLoginModal(true);
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  )}
+                  {cupcakeObj.Url ? (
+                    <>
+                      {Auth.user ? (
+                        <>
+                          <button
+                            className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                            id="addToCartButton"
+                            onClick={AddToCart}
+                          >
+                            Add to Cart
+                          </button>
 
-                  {Auth.user ? (
-                    <button
-                      className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
-                      id="chechOutButton"
-                    >
-                      Buy Now
-                    </button>
+                          <button
+                            className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
+                            id="chechOutButton"
+                          >
+                            Buy Now
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                            onClick={() => {
+                              exitViewProduct();
+                              document.body.style.overflowY = "hidden";
+                              setLoginModal(true);
+                            }}
+                          >
+                            Add to Cart
+                          </button>
+                          <button
+                            className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
+                            onClick={() => {
+                              exitViewProduct();
+                              document.body.style.overflowY = "hidden";
+                              setLoginModal(true);
+                            }}
+                          >
+                            Buy Now
+                          </button>
+                        </>
+                      )}
+                    </>
                   ) : (
-                    <button
-                      className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
-                      onClick={() => {
-                        exitViewProduct();
-                        document.body.style.overflowY = "hidden";
-                        setLoginModal(true);
-                      }}
-                    >
-                      Buy Now
-                    </button>
+                    <>
+                      <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
+                      <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
+                    </>
                   )}
                 </div>
               </div>
