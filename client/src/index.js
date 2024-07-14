@@ -9,7 +9,8 @@ import SignIn from "./Pages/SignIn.jsx";
 import Admin from "./Pages/Admin.jsx";
 import CartComponent from "./Product/CartComponent.jsx";
 import { AuthProvider, ProtectedRoute } from "./authProvider.js";
-
+import Faqs from "./faqsComponents/Faqs.jsx";
+import Account from "./Account/Account.jsx";
 const route = createBrowserRouter([
   {
     path: "/", element: <App />,
@@ -20,12 +21,16 @@ const route = createBrowserRouter([
     },
     children: [{ path: "/melbake/mycart", element: <CartComponent /> }]
   },
+  { path: "Account", element: <Account /> },
   {
     path: "Admin", element: <ProtectedRoute><Admin /></ProtectedRoute>
   },
   {
     path: "Signin", element: <SignIn />,
   },
+  {
+    path: "Faqs", element: <Faqs />,
+  }
 ],
 );
 

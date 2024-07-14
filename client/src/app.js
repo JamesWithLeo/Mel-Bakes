@@ -1,5 +1,5 @@
 // import './app.css';
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useState, createContext, lazy, Suspense, useEffect } from "react";
 // major components
 import GuestHome from "./Home/GuestHome.jsx";

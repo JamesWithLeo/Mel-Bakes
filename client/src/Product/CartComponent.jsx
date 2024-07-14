@@ -6,32 +6,27 @@ function CartComponent() {
   let id = sessionStorage.getItem("id");
   const [orderElements, SetOrderElements] = useState([]);
   useEffect(() => {
-    async function fetchCupcake(cupcakeId) {
-      const destinationUrl = "melbake/cupcake/" + cupcakeId;
-      const response = await fetch(destinationUrl);
-      await response.json().then((value) => {
-        // setCupcakeObj(JSON.parse(value));
-        console.log(value.Url);
-      });
-    }
     async function fetchCartData() {
       const url = "mycart/" + id;
-      // console.log(url);
 
       const response = await fetch(url);
-      await response.json().then((orders) => {
-        // console.log(typeof orders.Cart, orders.Cart);
-
-        let ordersEl = orders.Cart.map((order) => {
-          // console.log(order.C_id);
-          return (
-            <>
-              <OrderComponent OrderObj={order} key={crypto.randomUUID()} />
-            </>
-          );
+      await response
+        .json()
+        .then((orders) => {
+          if (orders.length) {
+            let ordersEl = orders.Cart.map((order) => {
+              return (
+                <>
+                  <OrderComponent OrderObj={order} key={crypto.randomUUID()} />
+                </>
+              );
+            });
+            SetOrderElements(ordersEl);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        SetOrderElements(ordersEl);
-      });
     }
     fetchCartData();
   }, [id]);

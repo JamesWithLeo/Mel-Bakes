@@ -15,14 +15,48 @@ function ViewProduct({ setDisplay, setLoginModal }) {
   const Auth = AuthConsumer();
   const id = useContext(ProductIdContext);
   const [cupcakeObj, setCupcakeObj] = useState({});
+  const [flavors, setFlavors] = useState([]);
+  const [quantity, setQuantity] = useState(1);
   useEffect(() => {
     async function fetchCupcake() {
       const destinationUrl = "melbake/cupcake/" + id;
       const response = await fetch(destinationUrl);
-      await response.json().then((value) => {
-        setCupcakeObj(JSON.parse(value));
 
-        // console.log(value.Url);
+      await response.json().then((value) => {
+        const cupcake = JSON.parse(value);
+        setCupcakeObj(cupcake);
+
+        const arrayFlavors = cupcake.Flavor.split(" ");
+        const flavorElements = arrayFlavors.map((flavor) => {
+          let cname;
+          switch (flavor) {
+            case "Strawberry":
+              cname =
+                "w-max rounded bg-pink-400 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3";
+              break;
+            case "Cherry":
+              cname =
+                "w-max rounded bg-red-500 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3";
+              break;
+            case "Chocolate":
+              cname =
+                "w-max rounded bg-stone-500 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3";
+              break;
+            case "Coffee":
+              cname =
+                "w-max rounded bg-stone-700 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3";
+              break;
+            default:
+              cname =
+                "w-max rounded bg-gray-400 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3";
+          }
+          return (
+            <h1 className={cname} key={crypto.randomUUID()}>
+              {flavor}
+            </h1>
+          );
+        });
+        setFlavors(flavorElements);
       });
     }
     fetchCupcake();
@@ -32,16 +66,6 @@ function ViewProduct({ setDisplay, setLoginModal }) {
     setDisplay(false);
     document.body.style.overflowY = "scroll";
   };
-  // const flavors = ProductsObj[productIndex].Flavors.map((flavor) => {
-  //   return (
-  //     <h1
-  //       className="w-max rounded bg-gray-400 px-1 py-0 text-xs text-white sm:px-2 sm:py-1 sm:text-sm md:px-3"
-  //       key={crypto.randomUUID()}
-  //     >
-  //       {flavor}
-  //     </h1>
-  //   );
-  // });
   return (
     <>
       <div
@@ -87,6 +111,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
               >
                 <div className="ml-4 flex h-max w-max justify-center gap-4 rounded-md px-2 py-2 md:flex-col">
                   {/* {flavors} */}
+                  {flavors ? flavors : null}
                 </div>
                 <div
                   className="flex h-full w-full flex-col items-center"
@@ -116,7 +141,6 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                       id="ProductName"
                     >
                       {cupcakeObj.Name}
-                      {/* {ProductsObj[productIndex].Name} */}
                     </h1>
                   ) : (
                     <div className="mb-4 h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-16 lg:w-96" />
@@ -152,35 +176,61 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                     Quantity
                   </label>
                   <div
-                    className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center gap-1 rounded border-2 border-gray-400 px-2 align-middle"
+                    className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center gap-2 rounded border-2 border-gray-400 px-4 align-middle"
                     id="quantityWrapper"
                   >
-                    <FontAwesomeIcon
-                      className="text-gray-400 first-letter:text-sm"
-                      icon={faMinus}
-                      id="minusQuantity"
-                    />
+                    <button
+                      onClick={() => {
+                        setQuantity(quantity - 1);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        className="text-gray-400 first-letter:text-sm"
+                        icon={faMinus}
+                        id="minusQuantity"
+                      />
+                    </button>
                     <p
                       className="text-center text-xs text-gray-400"
                       id="quantityIndicator"
                     >
-                      3
+                      {quantity}
                     </p>
-                    <FontAwesomeIcon
-                      className="text-sm text-gray-400"
-                      icon={faPlus}
-                      id="plusQuantity"
-                    />
+                    <button
+                      onClick={() => {
+                        setQuantity(quantity + 1);
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        className="text-sm text-gray-400"
+                        icon={faPlus}
+                        id="plusQuantity"
+                      />
+                    </button>
                   </div>
                 </div>
 
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
-                  <button
-                    className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
-                    id="addToCartButton"
-                  >
-                    Add to Cart
-                  </button>
+                  {Auth.user ? (
+                    <button
+                      className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                      id="addToCartButton"
+                    >
+                      Add to Cart
+                    </button>
+                  ) : (
+                    <button
+                      className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                      onClick={() => {
+                        exitViewProduct();
+                        document.body.style.overflowY = "hidden";
+                        setLoginModal(true);
+                      }}
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+
                   {Auth.user ? (
                     <button
                       className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
@@ -191,7 +241,6 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                   ) : (
                     <button
                       className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
-                      id="chechOutButton"
                       onClick={() => {
                         exitViewProduct();
                         document.body.style.overflowY = "hidden";

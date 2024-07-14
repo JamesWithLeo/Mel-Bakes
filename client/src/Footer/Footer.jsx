@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faLink } from "@fortawesome/free-solid-svg-icons";
 import { AuthConsumer } from "../authProvider";
-// import "./Footer.css";
+import { Link } from "react-router-dom";
 
 function FooterComponent() {
   const Auth = AuthConsumer();
@@ -58,27 +58,32 @@ function FooterComponent() {
               </a>
             </div>
             <div className="flex flex-col gap-2 font-[Redhat] text-sm text-white md:gap-3">
-              <h1 className="text-xl text-[goldenrod]">FAQ`S</h1>
-              <a href="/" className="">
+              <Link
+                className="text-xl text-[goldenrod] hover:underline"
+                to={"Faqs"}
+              >
+                FAQ`S
+              </Link>
+              <Link to={"Faqs"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Order Process
-              </a>
-              <a href="/" className="">
+              </Link>
+              <Link to={"Faqs"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Payment Methods
-              </a>
-              <a href="/" className="">
+              </Link>
+              <Link to={"Faqs"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Returns and Refund
-              </a>
-              <a href="/" className="">
+              </Link>
+              <Link to={"Faqs"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Allergy Information
-              </a>
-              <a href="/" className="">
+              </Link>
+              <Link to={"Faqs"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Privacy Policy
-              </a>
+              </Link>
             </div>
           </div>
         </div>
