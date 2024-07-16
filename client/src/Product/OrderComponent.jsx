@@ -1,15 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { orderContext } from "./CartComponent";
 
 export default function OrderComponent({ OrderObj }) {
   const SetSelectedOrder = useContext(orderContext);
-  const [style, setStyle] = useState(
-    "md:px-412 group flex h-max w-full justify-between bg-gray-200 p-2",
-  );
   function selectSelf() {
-    setStyle(
-      "md:px-412 group flex h-max w-full justify-between p-2 bg-secondarylight",
-    );
     SetSelectedOrder(OrderObj);
   }
 

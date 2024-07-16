@@ -29,9 +29,6 @@ const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
 
 function App() {
   const Auth = AuthConsumer();
-  useEffect(() => {
-    console.log(Auth)
-  }, [Auth])
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
   const [LoginModalDisplay, setLoginModalDisplay] = useState(false);
