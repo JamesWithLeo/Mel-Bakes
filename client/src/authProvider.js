@@ -6,18 +6,22 @@ export const AuthContext = React.createContext();
 export const useAuth = () => {
   // the state will be true if, user already login. else false
   const [user, setUser] = React.useState(localStorage.getItem("authed") ?? false);
-  const [userType, setUserType] = React.useState("admin");
+  const [userType, setUserType] = React.useState(sessionStorage.getItem("userType" ?? "Quest"));
 
-  async function Login(id) {
-    localStorage.setItem("id", id)
+  async function Login(id, userType) {
+    localStorage.setItem("id", id);
+    sessionStorage.setItem("userType", userType)
     localStorage.setItem("authed", "true");
+    setUserType(userType)
     setUser(true);
   };
 
   // call this function to sign out logged in user
   async function Logout() {
-    localStorage.removeItem("id")
-    localStorage.removeItem("authed")
+    localStorage.removeItem("id");
+    sessionStorage.removeItem("userType");
+    localStorage.removeItem("authed");
+    setUserType(null);
     setUser(false);
   };
 
@@ -30,7 +34,7 @@ export function AuthProvider({ children }) {
 }
 export function ProtectedRoute({ children }) {
   let Auth = useAuth()
-  if (Auth.user && (Auth.userType === "admin")) {
+  if (Auth.user && (Auth.userType === "Admin")) {
     return children
   } else {
     return <Navigate to={"/"} />

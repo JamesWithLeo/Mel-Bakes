@@ -21,17 +21,21 @@ function HeaderComponent() {
 
         {Auth.user ? (
           <div className="flex gap-8">
-            <Link
-              to={"Admin"}
-              className="flex items-center justify-center gap-1"
-            >
-              <FontAwesomeIcon
-                icon={faCode}
-                id="Admin"
-                className="lg:base text-primary sm:text-base"
-              />
-              <h1 className="px-3 py-1 text-primary">Admin</h1>
-            </Link>
+            <>
+              {Auth.userType === "Admin" ? (
+                <Link
+                  to={"Admin"}
+                  className="flex items-center justify-center gap-1"
+                >
+                  <FontAwesomeIcon
+                    icon={faCode}
+                    id="Admin"
+                    className="lg:base text-primary sm:text-base"
+                  />
+                  <h1 className="px-3 py-1 text-primary">Admin</h1>
+                </Link>
+              ) : null}
+            </>
 
             <Link
               to={"melbake/mycart"}

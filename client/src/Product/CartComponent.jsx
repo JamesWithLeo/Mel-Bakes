@@ -18,36 +18,47 @@ function CartComponent() {
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
-    }).then(() => {
-      SetSelectedOrder(null);
-      console.log("Remove in the Cart :", selectedOrder);
-    });
+    })
+      .then(() => {
+        SetSelectedOrder(null);
+        console.log("Remove in the Cart :", selectedOrder);
+      })
+      .catch((RejectReason) => {
+        console.log(RejectReason);
+      });
   }
 
   useEffect(() => {
     async function fetchCartData() {
       // add the id to the params so server can fetch corresponding data in the cart .
       const url = "mycart/" + id;
-      const response = await fetch(url);
-      await response
-        .json()
-        .then((orders) => {
-          // if successful, render the data in the UI .
-          if (orders) {
-            let ordersEl = orders.Cart.map((order) => {
-              // order.index = selectedOrder;
-              return (
-                <>
-                  <OrderComponent OrderObj={order} key={crypto.randomUUID()} />
-                </>
-              );
-            });
-            // set the Rendered elements in the state which will be display .
-            SetOrderElements(ordersEl);
-          }
+      await fetch(url)
+        .then((response) => {
+          response.json().then((orders) => {
+            // if successful, render the data in the UI .
+            if (orders) {
+              let ordersEl = orders.Cart.map((order) => {
+                // order.index = selectedOrder;
+                return (
+                  <>
+                    <OrderComponent
+                      OrderObj={order}
+                      key={crypto.randomUUID()}
+                    />
+                  </>
+                );
+              });
+              // set the Rendered elements in the state which will be display .
+              SetOrderElements(ordersEl);
+            }
+          });
         })
         .catch((err) => {
-          console.log(err);
+          SetOrderElements([
+            <h1 className="text-xl font-bold text-primary">
+              Can't fetch Cupcakes
+            </h1>,
+          ]);
         });
     }
     fetchCartData();
@@ -70,7 +81,7 @@ function CartComponent() {
         id="CartWrapper"
         className="fixed left-1/2 top-0 z-50 mx-auto flex h-2/3 w-full -translate-x-1/2 flex-col gap-4 rounded-b-lg bg-white p-2 sm:w-11/12 md:p-4"
       >
-        <h1 className="text-3xl font-bold text-primary">Order {id}</h1>
+        <h1 className="text-3xl font-bold text-primary">Order</h1>
         <div className="flex h-full w-full flex-col gap-2 md:flex-row md:gap-4">
           {orderElements.length ? (
             <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
