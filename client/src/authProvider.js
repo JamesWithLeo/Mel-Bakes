@@ -6,11 +6,11 @@ export const AuthContext = React.createContext();
 export const useAuth = () => {
   // the state will be true if, user already login. else false
   const [user, setUser] = React.useState(localStorage.getItem("authed") ?? false);
-  const [userType, setUserType] = React.useState(sessionStorage.getItem("userType" ?? "Quest"));
+  const [userType, setUserType] = React.useState(localStorage.getItem("userType" ?? "User"));
 
   async function Login(id, userType) {
     localStorage.setItem("id", id);
-    sessionStorage.setItem("userType", userType)
+    localStorage.setItem("userType", userType)
     localStorage.setItem("authed", "true");
     setUserType(userType)
     setUser(true);
@@ -19,7 +19,7 @@ export const useAuth = () => {
   // call this function to sign out logged in user
   async function Logout() {
     localStorage.removeItem("id");
-    sessionStorage.removeItem("userType");
+    localStorage.removeItem("userType");
     localStorage.removeItem("authed");
     setUserType(null);
     setUser(false);

@@ -73,6 +73,21 @@ export async function insertToCart(coll, UserId, documentObject) {
     throw error;
   }
 }
+export async function insertToOrder(coll, UserId, documentObject) {
+  try {
+    coll.updateOne({ "_id": new ObjectId(UserId) }, { $push: { Orders: documentObject } })
+  } catch (err) {
+    console.log(err)
+  }
+}
+export async function removeFromOrder(coll, userId, documentObject) {
+  try {
+    coll.updateOne({ "_id": new ObjectId(userId) }, { $pull: { Orders: documentObject } })
+  } catch (err) {
+    console.log(err)
+    throw err;
+  }
+}
 export async function removeFromCart(coll, UserId, documentObject) {
   try {
     coll.updateOne({ "_id": new ObjectId(UserId) }, {

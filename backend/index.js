@@ -13,11 +13,10 @@ const password = process.env.DB_PASSWORD;
 const user = process.env.DB_USER;
 const DB_URI = `mongodb+srv://${user}:${password}@clusterleo.wadd7q8.mongodb.net/?authMechanism=SCRAM-SHA-1`;
 
-import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById, insertToCart, removeFromCart } from './database.js';
+import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById, insertToCart, removeFromCart, insertToOrder, removeFromOrder } from './database.js';
 const CLIENT = mongoDB(DB_URI);
 // reference access to the database and collection
 const DATABASE = CLIENT.db("MelBake");
-const ORDER_COLLECTION = DATABASE.collection("ORDER");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 
@@ -30,12 +29,11 @@ app.use(express.json())
 
 // get all cupcakes in the db
 app.get('/melbake', async (req, res) => {
-  async function destribute(array) {
+  async function destribute(array) {// destribute img from cloudinary
     let i;
     let cups = []
     for (i = 0; i <= array.length; i++) {
       if (i === array.length) {
-        // console.log(cups)
         return cups
       }
       await getAssetInfo(array[i].PublicId).then((url) => {
@@ -46,7 +44,6 @@ app.get('/melbake', async (req, res) => {
   }
   await fetchCupcakes(CUPCAKE_COLLECTION).then(async (cupcakes) => {
     destribute(cupcakes).then((value) => {
-      // console.log(value)
       res.status(200).json(value);
     })
   })
@@ -77,6 +74,8 @@ app.get('/melbake/login/:gmail', async (req, res) => {
     throw new Error('Cant find fetch document')
   }
 })
+
+
 // fetch cart
 app.get('/melbake/mycart/:id', async (req, res) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
@@ -96,6 +95,32 @@ app.post('/melbake/mycart/remove/:id', async (req, res) => {
   )
 })
 
+
+// fetch orders of user
+app.get('/melbake/orders/:id', async (req, res) => {
+  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json({ Order: value.Orders })
+  })
+})
+// checkOut order
+app.post('/melbake/order/:id', async (req, res) => {
+  insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+    res.status(200).json({ result: "Product is Checked out!" })
+  )
+})
+// cancel order
+app.post('/melbake/order/remove/:id', async (req, res) => {
+  removeFromOrder(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+    res.status(200).json({ result: "Order was cancelled!" })
+  )
+})
+
+/// account middleware
+app.get('/melbake/profile/:id', async (req, res) => {
+  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {
+    res.status(200).json(account)
+  })
+})
 // add product to database
 app.post('/melbake/admin/product/append', async (req, res) => {
   insertDocument(CUPCAKE_COLLECTION, req.body).finally(

@@ -12,8 +12,8 @@ function Login({ setDisplay }) {
     if (gmail) {
       const urlDestination = "melbake/login/" + gmail;
       const response = await fetch(urlDestination);
-      await response.json().then(async (value) => {
-        Auth.Login(value._id);
+      await response.json().then(async (account) => {
+        Auth.Login(account._id, account.Type);
         navigate("/");
       });
     } else {

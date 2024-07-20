@@ -44,6 +44,41 @@ function ViewProduct({ setDisplay, setLoginModal }) {
       }
     });
   }
+  async function AddToOrder() {
+    let usersId = localStorage.getItem("id");
+    let Cupcake = cupcakeObj.Name;
+    let Quantity = quantity;
+    let C_id = cupcakeObj._id;
+    let Price = cupcakeObj.Price;
+    let IsCancel = false;
+    let IsDelivered = false;
+    let DateOrdered = new Date().toLocaleString();
+    let orderObj = JSON.stringify({
+      Cupcake,
+      DateOrdered,
+      Quantity,
+      C_id,
+      Price,
+      IsCancel,
+      IsDelivered,
+    });
+    await fetch("/melbake/order/" + usersId, {
+      method: "POST",
+      body: orderObj,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => {
+      if (response.ok) {
+        setStatus("Checked out!");
+        setTimeout(() => {
+          setStatus(false);
+        }, 3000);
+      } else {
+        setStatus("Cant check out : ( ");
+      }
+    });
+  }
 
   useEffect(() => {
     async function fetchCupcake() {
@@ -155,7 +190,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                 >
                   {cupcakeObj.Url ? (
                     <img
-                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-[26em]"
+                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-[24em]"
                       src={cupcakeObj.Url}
                       alt="cupcake"
                       id="productImgView"
@@ -272,6 +307,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
 
                           <button
                             className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
+                            onClick={AddToOrder}
                             id="chechOutButton"
                           >
                             Buy Now

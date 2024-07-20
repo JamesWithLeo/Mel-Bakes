@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { orderContext } from "./CartComponent";
 
 export default function OrderComponent({ OrderObj }) {
@@ -6,19 +6,15 @@ export default function OrderComponent({ OrderObj }) {
   function selectSelf() {
     SetSelectedOrder(OrderObj);
   }
-
   return (
-    <button
-      className="md:px-412 group flex h-max w-full items-center justify-between bg-gray-200 p-2 after:bg-secondarylight hover:bg-secondarylight focus:bg-secondarylight"
+    <div
+      className="group grid h-max w-full grid-cols-6 items-center justify-between bg-gray-50 p-2 hover:border hover:bg-gray-100 md:px-4"
       onClick={selectSelf}
     >
-      <h1 className="font-[Raleway] text-xs text-gray-700 sm:text-sm">
+      <div className="h-16 w-16 bg-slate-400"></div>
+      <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">
         {OrderObj.Cupcake}
       </h1>
-      {/* <div> */}
-      {/* <h1 className="text-xs text-gray-700">Cupcake id : {OrderObj.C_id}</h1> */}
-      {/* <h1 className="text-xs">Order id : {OrderObj.OrderId}</h1> */}
-      {/* </div> */}
       <div className="">
         <h1 className="text-end font-[Raleway] text-xs text-gray-700">
           Quantity : {OrderObj.Quantity}
@@ -33,6 +29,6 @@ export default function OrderComponent({ OrderObj }) {
           </h1>
         )}
       </div>
-    </button>
+    </div>
   );
 }

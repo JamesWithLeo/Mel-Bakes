@@ -5,11 +5,14 @@ import OrderComponent from "./OrderComponent";
 export const orderContext = createContext();
 
 function CartComponent() {
+  document.body.style.overflowY = "hidden";
+
   let id = localStorage.getItem("id");
   const [orderElements, SetOrderElements] = useState([]);
   const [selectedOrder, SetSelectedOrder] = useState(null);
 
   async function removeProduct() {
+    // remove product in the cart
     let usersId = localStorage.getItem("id");
     const orderbody = JSON.stringify(selectedOrder);
     await fetch("/melbake/mycart/remove/" + usersId, {
@@ -26,6 +29,28 @@ function CartComponent() {
       .catch((RejectReason) => {
         console.log(RejectReason);
       });
+  }
+  async function checkOut() {
+    // removes the product in the cart then it checks out that product/ moves to Orders
+    const id = localStorage.getItem("id");
+    removeProduct();
+    // SetSelectedOrder()
+    selectedOrder.IsCancel = false;
+    selectedOrder.IsDelivered = false;
+    selectedOrder.DateOrdered = new Date().toLocaleString();
+    console.log(selectedOrder);
+    const orderbody = JSON.stringify(selectedOrder);
+    await fetch("/melbake/order/" + id, {
+      method: "POST",
+      body: orderbody,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then(async (response) => {
+      await response.json().then((value) => {
+        console.log(value);
+      });
+    });
   }
 
   useEffect(() => {
@@ -81,8 +106,16 @@ function CartComponent() {
         id="CartWrapper"
         className="fixed left-1/2 top-0 z-50 mx-auto flex h-2/3 w-full -translate-x-1/2 flex-col gap-4 rounded-b-lg bg-white p-2 sm:w-11/12 md:p-4"
       >
-        <h1 className="text-3xl font-bold text-primary">Order</h1>
-        <div className="flex h-full w-full flex-col gap-2 md:flex-row md:gap-4">
+        <div className="flex w-full justify-between">
+          <h1 className="text-3xl font-bold text-primary">Cart</h1>
+          <Link
+            to="/Orders"
+            className="rounded border border-slate-50 px-3 py-1 text-center text-primary shadow"
+          >
+            Orders
+          </Link>
+        </div>
+        <div className="flex h-full w-full flex-col gap-2 overflow-auto md:flex-row md:gap-4">
           {orderElements.length ? (
             <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
               <orderContext.Provider value={SetSelectedOrder}>
@@ -92,23 +125,24 @@ function CartComponent() {
           ) : (
             <div className="flex h-full w-full animate-pulse flex-col gap-2 bg-gray-200 px-2"></div>
           )}
-
-          <div className="flex flex-col gap-2 md:gap-4">
-            <button className="rounded border border-slate-50 px-3 py-1 text-primary shadow">
-              Order
-            </button>
-            <button className="rounded border border-slate-50 px-3 py-1 text-primary shadow">
-              Payment
-            </button>
-            {selectedOrder ? (
+        </div>
+        <div className="flex flex-col gap-2 md:gap-4">
+          {selectedOrder ? (
+            <>
+              <button
+                onClick={checkOut}
+                className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow"
+              >
+                Check Out
+              </button>
               <button
                 onClick={removeProduct}
                 className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow"
               >
                 Remove
               </button>
-            ) : null}
-          </div>
+            </>
+          ) : null}
         </div>
       </div>
     </>

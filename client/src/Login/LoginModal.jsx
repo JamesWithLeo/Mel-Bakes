@@ -14,9 +14,9 @@ export default function LoginModal({ setDisplay }) {
     if (gmail) {
       const urlDestination = "melbake/login/" + gmail;
       const response = await fetch(urlDestination);
-      await response.json().then(async (value) => {
-        console.log(value.Type);
-        Auth.Login(value._id, value.Type);
+      await response.json().then(async (account) => {
+        console.log(account.Type);
+        Auth.Login(account._id, account.Type);
         navigate("/");
         exitModal();
       });

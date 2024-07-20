@@ -11,6 +11,7 @@ import CartComponent from "./Product/CartComponent.jsx";
 import { AuthProvider, ProtectedRoute } from "./authProvider.js";
 import Faqs from "./faqsComponents/Faqs.jsx";
 import Account from "./Account/Account.jsx";
+import Orders from "./orders.component/Orders.jsx";
 const route = createBrowserRouter([
   {
     path: "/", element: <App />,
@@ -30,7 +31,7 @@ const route = createBrowserRouter([
   },
   {
     path: "Faqs", element: <Faqs />,
-  }
+  }, { path: "Orders", element: <Orders /> }
 ],
 );
 

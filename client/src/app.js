@@ -13,7 +13,6 @@ import Product from "./Product/Product.jsx";
 
 // icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 // styled
 import Homepage from "./Home/Homepage.jsx";
 import LoadingComponents from "./loading/LoadingComponent.jsx";
@@ -30,6 +29,8 @@ const ViewProduct = lazy(() => import("./Product/ViewProduct.jsx"));
 function App() {
   const Auth = AuthConsumer();
   console.log(Auth)
+  // document.cookie = 
+  // console.log(document.cookie)
 
   const [ViewProductDisplay, setViewProductDisplay] = useState(false);
   const [LoginModalDisplay, setLoginModalDisplay] = useState(false);
@@ -47,6 +48,7 @@ function App() {
           </ProductIdContext.Provider>
         </Suspense>
       ) : null}
+
       {filterModalDisplay ?
         <FilterComponent setModalDisplay={setFilterModalDisplay} />
         : null}
@@ -76,7 +78,7 @@ function App() {
         >
           <div id="filterWrapper" className="flex items-center gap-2 w-full text-primary">
 
-            <button id="filterButton" onClick={() => {
+            {/* <button id="filterButton" onClick={() => {
               setFilterModalDisplay(true)
               document.body.style.overflowY = "hidden";
 
@@ -86,7 +88,7 @@ function App() {
                 fontSize={20}
                 className="text-base"
                 id="filterIcon"
-              /> Filter</button>
+              /> Filter</button> */}
           </div>
 
 

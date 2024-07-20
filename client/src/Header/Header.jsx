@@ -44,7 +44,6 @@ function HeaderComponent() {
               <FontAwesomeIcon
                 icon={faShoppingCart}
                 id="cart"
-                onClick={openCart}
                 className="lg:base text-primary sm:text-base"
               />
               <h1 className="px-3 py-1 text-primary">Cart</h1>
