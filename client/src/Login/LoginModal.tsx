@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
@@ -10,9 +11,9 @@ export default function LoginModal({ setDisplay }) {
   // const [account, seAccount] = useState();
 
   const checkAccount = async (event) => {
-    const gmail = document.getElementById("gmailLoginTB").value;
-    if (gmail) {
-      const urlDestination = "melbake/login/" + gmail;
+    const gmail = document.getElementById("gmailLoginTB") as HTMLInputElement;
+    if (gmail.value) {
+      const urlDestination = "melbake/login/" + gmail.value;
       const response = await fetch(urlDestination);
       await response.json().then(async (account) => {
         console.log(account.Type);
@@ -61,7 +62,7 @@ export default function LoginModal({ setDisplay }) {
             type="password"
           />
           <div className="mt-2 flex w-full flex-col">
-            <Link className="self-end text-xs text-warning">
+            <Link className="self-end text-xs text-warning" to={"/forget"}>
               Forget Password
             </Link>
           </div>

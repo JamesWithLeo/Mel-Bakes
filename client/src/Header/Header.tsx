@@ -7,7 +7,7 @@ import {
 
 import { Link } from "react-router-dom";
 import { AuthConsumer } from "../authProvider";
-
+import * as React from "react";
 function HeaderComponent() {
   const Auth = AuthConsumer();
 

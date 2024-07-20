@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Gallary from "../GallerySlideshow/GallerySlideshow";
 
 function Homepage() {

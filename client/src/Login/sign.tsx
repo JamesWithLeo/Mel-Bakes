@@ -1,11 +1,7 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
-import { AccountContext } from "../Context.jsx";
-import { React, useContext } from "react";
 
 function Sign({ setDisplay }) {
-  const Account = useContext(AccountContext);
-  let locationHref = "/";
-
   async function writeUser(userAccount) {
     await fetch("/melbake/signin/create/", {
       method: "POST",
@@ -19,32 +15,37 @@ function Sign({ setDisplay }) {
   }
   const handleCreateAccount = (event) => {
     // fetch the value from input fields
-    const firstname = document.getElementById("firstnameSigninTB").value;
-    const lastname = document.getElementById("lastnameSigninTB").value;
-    const gmail = document.getElementById("gmailSigninTB").value;
-
+    const firstname = document.getElementById(
+      "firstnameSigninTB",
+    ) as HTMLInputElement;
+    const lastname = document.getElementById(
+      "lastnameSigninTB",
+    ) as HTMLInputElement;
+    const gmail = document.getElementById("gmailSigninTB") as HTMLInputElement;
     const passwordConfirm = document.getElementById(
       "passwordSigninTBConfirm",
-    ).value;
-    const password = document.getElementById("passwordSigninTB").value;
+    ) as HTMLInputElement;
+    const password = document.getElementById(
+      "passwordSigninTB",
+    ) as HTMLInputElement;
 
     // required the value in the inputs
-    if (!firstname && !lastname) {
+    if (!firstname.value && !lastname.value) {
       event.preventDefault();
       return;
-    } else if (!gmail) {
+    } else if (!gmail.value) {
       event.preventDefault();
       return;
-    } else if (password !== passwordConfirm) {
+    } else if (password.value !== passwordConfirm.value) {
       event.preventDefault();
       return;
     }
 
     const body = JSON.stringify({
-      FirstName: firstname,
-      LastName: lastname,
-      Gmail: gmail,
-      Password: password,
+      FirstName: firstname.value,
+      LastName: lastname.value,
+      Gmail: gmail.value,
+      Password: password.value,
     });
     writeUser(body);
     console.log(body);
@@ -83,6 +84,7 @@ function Sign({ setDisplay }) {
         id="passwordSigninTBConfirm"
       />
       <Link
+        to={"/"}
         className="w-full rounded bg-primary py-2 text-center text-white active:ring sm:max-w-sm"
         onClick={handleCreateAccount}
       >

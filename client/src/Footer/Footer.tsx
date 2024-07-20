@@ -2,10 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faLink } from "@fortawesome/free-solid-svg-icons";
 import { AuthConsumer } from "../authProvider";
 import { Link } from "react-router-dom";
+import * as React from "react";
 
 function FooterComponent() {
   const Auth = AuthConsumer();
-  const about =
+  const about: string =
     "Your one-stop destination for delectable, handcrafted cupcakes that are as beautiful as they are delicious. At Mel Bakes, we believe in the magic of baking and the joy it brings to every celebration. Our cupcakes are made with the finest ingredients, from rich, creamy butter to fresh, seasonal fruits, ensuring every bite is a burst of flavor. Whether you're looking for classic vanilla, decadent chocolate, or unique seasonal creations, our cupcakes are perfect for any occasion. Join us at Mel Bakes, where every cupcake is a sweet masterpiece baked with love and passion.";
 
   // const ceo =

@@ -1,3 +1,4 @@
+import * as React from "react";
 function DbConfig({ setVisibility }) {
   return (
     <div className="flex h-full max-h-full w-full flex-col gap-4 bg-white">
