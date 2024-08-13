@@ -1,6 +1,9 @@
-export default function FilterComponent({ setModalDisplay }) {
+export default function FilterComponent({
+  setVisibility,
+}: {
+  setVisibility: () => void;
+}) {
   function exitModal() {
-    setModalDisplay(false);
     document.body.style.overflowY = "scroll";
   }
   return (

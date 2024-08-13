@@ -8,76 +8,137 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
-import { AuthConsumer } from "../authProvider";
-
-function ViewProduct({ setDisplay, setLoginModal }) {
-  const Auth = AuthConsumer();
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
+import { ICart, IOrder } from "../slice/orderSlice";
+import axios from "axios";
+import { response } from "express";
+function ViewProduct({
+  setDisplay,
+  setLoginModalVisibility,
+}: {
+  setDisplay: () => void;
+  setLoginModalVisibility: () => void;
+}) {
+  const auth = useSelector((state: AppState) => state.auth);
   const id = useContext(ProductIdContext);
 
-  const [cupcakeObj, setCupcakeObj] = useState({});
-  const [flavors, setFlavors] = useState([]);
+  const [cupcakeObj, setCupcakeObj] = useState<null | ICart>(null);
+  const [flavors, setFlavors] = useState<JSX.Element[]>([]);
   const [quantity, setQuantity] = useState(1);
-
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState<string | null>(null);
 
   async function AddToCart() {
-    let usersId = localStorage.getItem("id");
-    let Cupcake = cupcakeObj.Name;
-    let Quantity = quantity;
-    let C_id = cupcakeObj._id;
-    let Price = cupcakeObj.Price;
-    let orderObj = JSON.stringify({ Cupcake, Quantity, C_id, Price });
-    await fetch("/melbake/mycart/Add/" + usersId, {
-      method: "POST",
-      body: orderObj,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        setStatus("Added");
-        setTimeout(() => {
-          setStatus(false);
-        }, 3000);
-      } else {
-        setStatus("Can't Add to Cart");
-      }
-    });
+    if (cupcakeObj && auth.User) {
+      let Name = cupcakeObj.Name;
+      let C_id = cupcakeObj._id;
+      let Url = cupcakeObj.Url;
+      let PublicId = cupcakeObj.PublicId;
+      let Description = cupcakeObj.Description;
+      let Flavor = cupcakeObj.Flavor;
+      let Price = cupcakeObj.Price;
+      let Quantity = quantity;
+      let orderObj = JSON.stringify({
+        Name,
+        Url,
+        PublicId,
+        Description,
+        Flavor,
+        Quantity,
+        C_id,
+        Price,
+      });
+      axios
+        .post("/melbake/mycart/add/" + auth.User._id, {
+          Name,
+          Url,
+          Description,
+          Flavor,
+          Quantity,
+          C_id,
+          Price,
+        })
+        .then((response) => {
+          if (response.status) {
+            setStatus("Added");
+            setTimeout(() => {
+              setStatus(null);
+            }, 3000);
+          } else {
+            setStatus("Can't Add to Cart");
+            setTimeout(() => {
+              setStatus(null);
+            }, 3000);
+          }
+        })
+        .catch((response) => {
+          console.log(response);
+        });
+      // await fetch("/cart/add/" + auth.User._id, {
+      //   method: "POST",
+      //   body: orderObj,
+      //   headers: {
+      //     "Content-type": "application/json; charset=UTF-8",
+      //   },
+      // }).then((response) => {
+
+      // });
+    }
   }
   async function AddToOrder() {
-    let usersId = localStorage.getItem("id");
-    let Cupcake = cupcakeObj.Name;
-    let Quantity = quantity;
-    let C_id = cupcakeObj._id;
-    let Price = cupcakeObj.Price;
-    let IsCancel = false;
-    let IsDelivered = false;
-    let DateOrdered = new Date().toLocaleString();
-    let orderObj = JSON.stringify({
-      Cupcake,
-      DateOrdered,
-      Quantity,
-      C_id,
-      Price,
-      IsCancel,
-      IsDelivered,
-    });
-    await fetch("/melbake/order/" + usersId, {
-      method: "POST",
-      body: orderObj,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        setStatus("Checked out!");
-        setTimeout(() => {
-          setStatus(false);
-        }, 3000);
-      } else {
-        setStatus("Cant check out : ( ");
-      }
-    });
+    if (cupcakeObj) {
+      let Name = cupcakeObj.Name;
+      let Quantity = quantity;
+      let Uid = auth.User?._id;
+      let Cupcake_id = cupcakeObj._id;
+      let Price = cupcakeObj.Price;
+      let Url = cupcakeObj.Url;
+      let IsCancel = false;
+      let IsDelivered = false;
+      let DateOrdered = new Date().toLocaleString();
+      let orderObj = JSON.stringify({
+        Name,
+        DateOrdered,
+        Quantity,
+        Url,
+        Cupcake_id,
+        Price,
+        IsCancel,
+        IsDelivered,
+      });
+      await fetch("/melbake/myorder/" + auth.User?._id, {
+        method: "POST",
+        body: orderObj,
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          setStatus("Checked out!");
+          setTimeout(() => {
+            setStatus(null);
+          }, 3000);
+        } else {
+          setStatus("Cant check out : ( ");
+        }
+      });
+
+      axios
+        .post("/orders", {
+          Name,
+          Quantity,
+          Uid,
+          Cupcake_id,
+          Url,
+          Price,
+          DateOrdered,
+          IsCancel,
+          IsDelivered,
+        })
+        .then((response) => {
+          console.log(response);
+        });
+    }
   }
 
   useEffect(() => {
@@ -86,7 +147,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
       const response = await fetch(destinationUrl);
 
       await response.json().then((value) => {
-        const cupcake = JSON.parse(value);
+        const cupcake: IOrder = JSON.parse(value);
         setCupcakeObj(cupcake);
 
         const arrayFlavors = cupcake.Flavor.split(" ");
@@ -126,7 +187,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
   }, [id]);
 
   const exitViewProduct = () => {
-    setDisplay(false);
+    setDisplay();
     document.body.style.overflowY = "scroll";
   };
   return (
@@ -136,7 +197,10 @@ function ViewProduct({ setDisplay, setLoginModal }) {
         id="ViewProduct__OutsideWrapper"
       ></div>
 
-      <PanelGroup className="fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto">
+      <PanelGroup
+        className="fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto"
+        direction="vertical"
+      >
         <Panel
           className="h-full bg-transparent"
           onClick={exitViewProduct}
@@ -181,23 +245,26 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                 id="productProfile"
               >
                 <div className="ml-4 flex h-max w-max justify-center gap-4 rounded-md px-2 py-2 md:flex-col">
-                  {/* {flavors} */}
                   {flavors ? flavors : null}
                 </div>
                 <div
                   className="flex h-full w-full flex-col items-center"
                   id="cupcakeImgWrapper"
                 >
-                  {cupcakeObj.Url ? (
-                    <img
-                      className="h-auto w-40 sm:w-64 md:w-80 lg:w-[24em]"
-                      src={cupcakeObj.Url}
-                      alt="cupcake"
-                      id="productImgView"
-                    />
-                  ) : (
-                    <div className="flex h-40 w-40 animate-pulse items-center justify-center rounded-lg bg-gray-100 sm:h-64 sm:w-64 md:h-80 md:w-80 lg:h-96 lg:w-96"></div>
-                  )}
+                  {cupcakeObj ? (
+                    <>
+                      {cupcakeObj.Url ? (
+                        <img
+                          className="h-auto w-40 sm:w-64 md:w-80 lg:w-[24em]"
+                          src={cupcakeObj.Url}
+                          alt="cupcake"
+                          id="productImgView"
+                        />
+                      ) : (
+                        <div className="flex h-40 w-40 animate-pulse items-center justify-center rounded-lg bg-gray-100 sm:h-64 sm:w-64 md:h-80 md:w-80 lg:h-96 lg:w-96"></div>
+                      )}
+                    </>
+                  ) : null}
                 </div>
               </div>
 
@@ -206,7 +273,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                 id="cartNav"
               >
                 <div className="flex flex-col items-center rounded bg-white px-2">
-                  {cupcakeObj.Name ? (
+                  {cupcakeObj?.Name ? (
                     <h1
                       className="text-center font-[Raleway] text-xl font-medium text-primary md:text-2xl lg:text-3xl"
                       id="ProductName"
@@ -216,7 +283,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                   ) : (
                     <div className="mb-4 h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-16 lg:w-96" />
                   )}
-                  {cupcakeObj.Price ? (
+                  {cupcakeObj?.Name ? (
                     <p
                       className="items-center text-center font-[Raleway] text-sm text-[Goldenrod] md:text-2xl"
                       id="ProductPrice"
@@ -228,13 +295,15 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                   )}
                 </div>
                 <div className="flex w-full justify-center rounded bg-white px-2">
-                  <p className="text-justify text-xs">
-                    {cupcakeObj.Description}
-                  </p>
+                  {cupcakeObj?.Description ? (
+                    <p className="text-justify text-xs">
+                      {cupcakeObj.Description}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="flex w-full items-center justify-center gap-4 px-2">
-                  {cupcakeObj.Quantity ? (
+                  {cupcakeObj?.Quantity ? (
                     <>
                       <button>
                         <FontAwesomeIcon
@@ -293,9 +362,9 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                 </div>
 
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
-                  {cupcakeObj.Url ? (
+                  {cupcakeObj?.Name ? (
                     <>
-                      {Auth.user ? (
+                      {auth.User ? (
                         <>
                           <button
                             className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
@@ -320,7 +389,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                             onClick={() => {
                               exitViewProduct();
                               document.body.style.overflowY = "hidden";
-                              setLoginModal(true);
+                              setLoginModalVisibility();
                             }}
                           >
                             Add to Cart
@@ -330,7 +399,7 @@ function ViewProduct({ setDisplay, setLoginModal }) {
                             onClick={() => {
                               exitViewProduct();
                               document.body.style.overflowY = "hidden";
-                              setLoginModal(true);
+                              setLoginModalVisibility();
                             }}
                           >
                             Buy Now

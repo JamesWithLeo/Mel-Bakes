@@ -1,5 +1,8 @@
 import * as React from "react";
-function DbConfig({ setVisibility }) {
+interface IDbConfig {
+  setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function DbConfig({ setVisibility }: IDbConfig) {
   return (
     <div className="flex h-full max-h-full w-full flex-col gap-4 bg-white">
       <div className="flex justify-between p-4">

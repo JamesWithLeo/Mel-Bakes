@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import Gallary from "../GallerySlideshow/GallerySlideshow";
-export default function GuestHome({ setLoginModal }) {
+interface IGuestHome {
+  setLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export default function GuestHome({ setLoginModal }: IGuestHome) {
   return (
     <div
       id="mainWrapper"

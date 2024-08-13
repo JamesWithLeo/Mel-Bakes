@@ -2,31 +2,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { IOrder } from "../slice/orderSlice";
 
 function Product() {
   const [cupcakesElement, setCupcakesElement] = useState([]);
+  async function fetchCupcakes() {
+    await axios.get("melbake").then((value) => {
+      if (value.data) {
+        const cupcakes = value.data.map((cupcake: IOrder) => {
+          return (
+            <>
+              <ProductCard key={cupcake._id} productObj={cupcake} />
+            </>
+          );
+        });
+        setCupcakesElement(cupcakes);
+      }
+    });
+  }
 
   useEffect(() => {
-    async function fetchCupcakes() {
-      const response = await fetch("melbake");
-      await response
-        .json()
-        .then((value) => {
-          let indexId;
-          const element = value.map((cupcake) => {
-            indexId++;
-            return (
-              <>
-                <ProductCard key={indexId} productObj={cupcake} />
-              </>
-            );
-          });
-          setCupcakesElement(element);
-        })
-        .catch((value) => {
-          console.log("error, can't fetch cupcakes", value);
-        });
-    }
     fetchCupcakes();
   }, []);
 

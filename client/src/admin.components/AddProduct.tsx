@@ -1,11 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
-
-function AddProduct({ setVisibility }) {
+interface IAddProduct {
+  setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function AddProduct({ setVisibility }: IAddProduct) {
   const [result, setResult] = useState("Pending");
 
   // send document to the Api
-  async function writeProduct(objBody) {
+  async function writeProduct(objBody: BodyInit) {
     await fetch("/melbake/admin/product/append/", {
       method: "POST",
       body: objBody,
@@ -23,37 +25,40 @@ function AddProduct({ setVisibility }) {
     });
   }
 
-  const handleAddProduct = (event) => {
+  const handleAddProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
     // get the values,
     // then create object, keys will match in the database;
-    const name = document.getElementById("nameTB").value;
-    const price = document.getElementById("priceTB").value;
-    const flavor = document.getElementById("flavorTB").value;
-    const description = document.getElementById("descriptionTB").value;
-    const itemQuantity = document.getElementById("itemQuantityTB").value;
-    const publicId = document.getElementById("publicIdTB").value;
+    const name = document.getElementById("nameTB") as HTMLInputElement;
+    const price = document.getElementById("priceTB") as HTMLInputElement;
+    const flavor = document.getElementById("flavorTB") as HTMLInputElement;
+    const description = document.getElementById(
+      "descriptionTB",
+    ) as HTMLInputElement;
+    const itemQuantity = document.getElementById(
+      "itemQuantityTB",
+    ) as HTMLInputElement;
+    const publicId = document.getElementById("publicIdTB") as HTMLInputElement;
 
     const body = JSON.stringify({
-      Name: name,
-      Price: price,
-      Flavor: flavor,
-      Description: description,
-      Quantity: itemQuantity,
-      PublicId: publicId,
+      Name: name.value,
+      Price: price.value,
+      Flavor: flavor.value,
+      Description: description.value,
+      Quantity: itemQuantity.value,
+      PublicId: publicId.value,
       Url: "",
     });
-    console.log(body.Price);
     writeProduct(body);
   };
 
-  const handleClear = (event) => {
+  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
     // clear the input box for later use .
-    document.getElementById("nameTB").value = null;
-    document.getElementById("priceTB").value = null;
-    document.getElementById("flavorTB").value = null;
-    document.getElementById("descriptionTB").value = null;
-    document.getElementById("itemQuantityTB").value = null;
-    document.getElementById("publicIdTB").value = null;
+    document.getElementById("nameTB") as HTMLInputElement;
+    document.getElementById("priceTB") as HTMLInputElement;
+    document.getElementById("flavorTB") as HTMLInputElement;
+    document.getElementById("descriptionTB") as HTMLInputElement;
+    document.getElementById("itemQuantityTB") as HTMLInputElement;
+    document.getElementById("publicIdTB") as HTMLInputElement;
   };
 
   return (

@@ -1,22 +1,29 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { useState } from "react";
-import { AuthConsumer } from "../authProvider";
-
-function Login({ setDisplay }) {
-  const Auth = AuthConsumer();
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
+import { Login } from "../slice/authSlice";
+interface ILogin {
+  setVisibility: React.Dispatch<React.SetStateAction<Boolean>>;
+}
+function LoginPage({ setVisibility }: ILogin) {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   // const [account, seAccount] = useState();
 
-  const checkAccount = async (event) => {
-    const gmail = document.getElementById("gmailLoginTB") as HTMLInputElement;
-    if (gmail.value) {
-      const urlDestination = "melbake/login/" + gmail.value;
-      const response = await fetch(urlDestination);
-      await response.json().then(async (account) => {
-        Auth.Login(account._id, account.Type);
-        navigate("/");
-      });
+  const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const gmailElement = document.getElementById(
+      "gmailLoginTB",
+    ) as HTMLInputElement;
+    const passwordElement = document.getElementById(
+      "passwordLoginTB",
+    ) as HTMLInputElement;
+    const gmail: string = gmailElement.value;
+    const password: string = passwordElement.value;
+    if (gmail) {
+      dispatch(Login({ Gmail: gmail, Password: password }));
+      navigate("/", { replace: true });
     } else {
       event.preventDefault();
     }
@@ -49,7 +56,7 @@ function Login({ setDisplay }) {
       <button
         className="mt-4 h-auto w-full self-center rounded bg-secondarylight py-2 text-center align-middle text-xs text-primary sm:max-w-sm md:text-sm"
         onClick={() => {
-          setDisplay(false);
+          setVisibility(false);
         }}
       >
         Doesn't have account?
@@ -57,4 +64,4 @@ function Login({ setDisplay }) {
     </div>
   );
 }
-export default Login;
+export default LoginPage;

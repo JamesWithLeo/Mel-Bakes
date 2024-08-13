@@ -1,15 +1,25 @@
 import { createContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import OrderComponent from "./OrderComponent";
+import CartCardComponent from "./cartCardComponent";
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
+export type CartTypeface = {
+  Cupcake: string;
+  Quantity: number;
+  C_id: string;
+  Price: string;
+  IsCancel: boolean;
+  IsDelivered: boolean;
+  DateOrdered: string;
+};
+// export const orderContext = createContext<null>(null);
 
-export const orderContext = createContext();
-
-function CartComponent() {
+export default function CartComponent() {
   document.body.style.overflowY = "hidden";
-
+  const auth = useSelector((state: AppState) => state.auth.User);
   let id = localStorage.getItem("id");
-  const [orderElements, SetOrderElements] = useState([]);
-  const [selectedOrder, SetSelectedOrder] = useState(null);
+  const [orderElements, SetOrderElements] = useState<JSX.Element[]>([]);
+  const [selectedOrder, SetSelectedOrder] = useState<CartTypeface | null>(null);
 
   async function removeProduct() {
     // remove product in the cart
@@ -32,13 +42,16 @@ function CartComponent() {
   }
   async function checkOut() {
     // removes the product in the cart then it checks out that product/ moves to Orders
-    const id = localStorage.getItem("id");
+    if (auth) {
+      const id = auth._id;
+    }
+
     removeProduct();
-    // SetSelectedOrder()
-    selectedOrder.IsCancel = false;
-    selectedOrder.IsDelivered = false;
-    selectedOrder.DateOrdered = new Date().toLocaleString();
-    console.log(selectedOrder);
+    if (selectedOrder) {
+      selectedOrder.IsCancel = false;
+      selectedOrder.IsDelivered = false;
+      selectedOrder.DateOrdered = new Date().toLocaleString();
+    }
     const orderbody = JSON.stringify(selectedOrder);
     await fetch("/melbake/order/" + id, {
       method: "POST",
@@ -56,20 +69,17 @@ function CartComponent() {
   useEffect(() => {
     async function fetchCartData() {
       // add the id to the params so server can fetch corresponding data in the cart .
-      const url = "mycart/" + id;
+      const url = "cart/" + auth?._id;
       await fetch(url)
         .then((response) => {
           response.json().then((orders) => {
             // if successful, render the data in the UI .
             if (orders) {
-              let ordersEl = orders.Cart.map((order) => {
+              let ordersEl = orders.Cart.map((order: CartTypeface) => {
                 // order.index = selectedOrder;
                 return (
                   <>
-                    <OrderComponent
-                      OrderObj={order}
-                      key={crypto.randomUUID()}
-                    />
+                    <CartCardComponent OrderObj={order} key={order.C_id} />
                   </>
                 );
               });
@@ -110,6 +120,7 @@ function CartComponent() {
           <h1 className="text-3xl font-bold text-primary">Cart</h1>
           <Link
             to="/Orders"
+            replace={true}
             className="rounded border border-slate-50 px-3 py-1 text-center text-primary shadow"
           >
             Orders
@@ -118,9 +129,9 @@ function CartComponent() {
         <div className="flex h-full w-full flex-col gap-2 overflow-auto md:flex-row md:gap-4">
           {orderElements.length ? (
             <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
-              <orderContext.Provider value={SetSelectedOrder}>
-                {orderElements}
-              </orderContext.Provider>
+              {/* <orderContext.Provider value={SetSelectedOrder}> */}
+              {orderElements}
+              {/* </orderContext.Provider> */}
             </div>
           ) : (
             <div className="flex h-full w-full animate-pulse flex-col gap-2 bg-gray-200 px-2"></div>
@@ -148,4 +159,3 @@ function CartComponent() {
     </>
   );
 }
-export default CartComponent;

@@ -4,29 +4,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { AuthConsumer } from "../authProvider";
 import { useNavigate } from "react-router-dom";
+import { Login } from "../slice/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
 
-export default function LoginModal({ setDisplay }) {
+export default function LoginModal({ onClose }: { onClose: () => void }) {
   const Auth = AuthConsumer();
   const navigate = useNavigate();
-  // const [account, seAccount] = useState();
-
-  const checkAccount = async (event) => {
-    const gmail = document.getElementById("gmailLoginTB") as HTMLInputElement;
-    if (gmail.value) {
-      const urlDestination = "melbake/login/" + gmail.value;
-      const response = await fetch(urlDestination);
-      await response.json().then(async (account) => {
-        console.log(account.Type);
-        Auth.Login(account._id, account.Type);
-        navigate("/");
-        exitModal();
-      });
+  const dispatch = useDispatch<AppDispatch>();
+  const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const gmailElement = document.getElementById(
+      "gmailLoginTB",
+    ) as HTMLInputElement;
+    const passwordElement = document.getElementById(
+      "passwordLoginTB",
+    ) as HTMLInputElement;
+    const gmail: string = gmailElement.value;
+    const password: string = passwordElement.value;
+    if (gmail) {
+      dispatch(Login({ Gmail: gmail, Password: password }));
+      exitModal();
+      navigate("/", { replace: true });
     } else {
       event.preventDefault();
     }
   };
   function exitModal() {
-    setDisplay(false);
+    onClose();
     document.body.style.overflowY = "scroll";
   }
   return (

@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-
-function Sign({ setDisplay }) {
-  async function writeUser(userAccount) {
+import { Navigate, useNavigate } from "react-router-dom";
+interface ISign {
+  setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function Sign({ setVisibility }: ISign) {
+  const navigate = useNavigate();
+  async function writeUser(userAccount: BodyInit) {
     await fetch("/melbake/signin/create/", {
       method: "POST",
       body: userAccount,
@@ -13,7 +16,7 @@ function Sign({ setDisplay }) {
       console.log(response);
     });
   }
-  const handleCreateAccount = (event) => {
+  const handleCreateAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
     // fetch the value from input fields
     const firstname = document.getElementById(
       "firstnameSigninTB",
@@ -48,6 +51,7 @@ function Sign({ setDisplay }) {
       Password: password.value,
     });
     writeUser(body);
+    navigate("/", { replace: true });
     console.log(body);
   };
   return (
@@ -83,17 +87,16 @@ function Sign({ setDisplay }) {
         placeholder="Confirm password"
         id="passwordSigninTBConfirm"
       />
-      <Link
-        to={"/"}
+      <button
         className="w-full rounded bg-primary py-2 text-center text-white active:ring sm:max-w-sm"
         onClick={handleCreateAccount}
       >
         Sign in
-      </Link>
+      </button>
       <button
         className="h-auto w-full self-center rounded bg-secondarylight py-2 text-center align-middle text-xs text-primary sm:max-w-sm md:text-sm"
         onClick={() => {
-          setDisplay(true);
+          setVisibility(true);
         }}
       >
         Already have account?

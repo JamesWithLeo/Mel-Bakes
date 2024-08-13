@@ -6,23 +6,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Link } from "react-router-dom";
-import { AuthConsumer } from "../authProvider";
 import * as React from "react";
-function HeaderComponent() {
-  const Auth = AuthConsumer();
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
 
+function HeaderComponent() {
+  const auth = useSelector((state: AppState) => state.auth);
   const openCart = () => {
     document.body.style.overflowY = "hidden";
   };
+
   return (
     <div className="sticky top-0 z-0 flex w-full justify-center bg-secondarylight drop-shadow-lg">
       <header className="flex h-16 max-h-max w-full max-w-7xl items-center justify-between px-4">
         <h1 className="font-[Lobster] text-3xl text-[#424874]">Mel Bakes</h1>
 
-        {Auth.user ? (
+        {auth.User ? (
           <div className="flex gap-8">
             <>
-              {Auth.userType === "Admin" ? (
+              {auth.User.Type === "admin" ? (
                 <Link
                   to={"Admin"}
                   className="flex items-center justify-center gap-1"
@@ -38,7 +40,8 @@ function HeaderComponent() {
             </>
 
             <Link
-              to={"melbake/mycart"}
+              to={"/cart"}
+              onClick={openCart}
               className="flex items-center justify-center gap-1"
             >
               <FontAwesomeIcon

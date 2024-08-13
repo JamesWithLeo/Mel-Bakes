@@ -14,12 +14,13 @@ const user = process.env.DB_USER;
 const DB_URI = `mongodb+srv://${user}:${password}@clusterleo.wadd7q8.mongodb.net/?authMechanism=SCRAM-SHA-1`;
 
 import mongoDB, { findUser, fetchCupcake, fetchCupcakes, insertDocument, findUserById, insertToCart, removeFromCart, insertToOrder, removeFromOrder } from './database.js';
+import { ObjectId } from 'mongodb';
 const CLIENT = mongoDB(DB_URI);
 // reference access to the database and collection
 const DATABASE = CLIENT.db("MelBake");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
-
+const ORDER_COLLECTION = DATABASE.collection("ORDER")
 const port = process.env.PORT || 2024;
 const app = express();
 
@@ -67,49 +68,59 @@ app.get('/melbake/cupcake/:id', async (req, res) => {
 })
 // fetch user 
 app.get('/melbake/login/:gmail', async (req, res) => {
-  const account = await findUser(ACCOUNT_COLLECTION, req.params.gmail,);
-  if (account) {
-    res.status(200).json(account);
-  } else {
-    throw new Error('Cant find fetch document')
-  }
-})
-
+  await findUser(ACCOUNT_COLLECTION, req.params.gmail,).then((value) => {
+    res.status(200).json(value);
+  })
+}
+)
 
 // fetch cart
-app.get('/melbake/mycart/:id', async (req, res) => {
+app.get('/cart/:id', async (req, res) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
-    res.status(200).json({ "Cart": value.Cart })
+    res.status(200).json(value)
   })
 })
+
 // add product to cart
-app.post('/melbake/mycart/Add/:id', async (req, res) => {
-  insertToCart(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+app.post('/melbake/mycart/add/:id', async (req, res) => {
+  req.body._id = new ObjectId()
+  await insertToCart(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
     res.status(200).json({ result: "Product Added to the Cart!" })
   )
 })
-// remover product to cart
+
+// remove product from cart
 app.post('/melbake/mycart/remove/:id', async (req, res) => {
-  removeFromCart(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
-    res.status(200).json({ result: "Product Removed to the Cart!" })
+  await removeFromCart(ACCOUNT_COLLECTION, req.params.id, req.body).then((result) => {
+    res.status(200).json(result)
+  }
   )
 })
 
-
 // fetch orders of user
-app.get('/melbake/orders/:id', async (req, res) => {
-  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
-    res.status(200).json({ Order: value.Orders })
+app.get('/orders/:id', async (req, res) => {
+  await findUserById(ACCOUNT_COLLECTION, req.params.id)
+    .then((value) => {
+      res.status(200).json(value.Orders)
+    })
+})
+app.post('/orders', async (req, res) => {
+  req.body._id = new ObjectId(req.body._id)
+  insertDocument(ORDER_COLLECTION, req.body).then((result) => {
+    res.status(200).json(result)
   })
 })
 // checkOut order
-app.post('/melbake/order/:id', async (req, res) => {
-  insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
+app.post('/melbake/myorder/:id', async (req, res) => {
+  req.body._id = new ObjectId()
+  insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).then((result) => {
     res.status(200).json({ result: "Product is Checked out!" })
+  }
   )
 })
 // cancel order
 app.post('/melbake/order/remove/:id', async (req, res) => {
+
   removeFromOrder(ACCOUNT_COLLECTION, req.params.id, req.body).finally(
     res.status(200).json({ result: "Order was cancelled!" })
   )

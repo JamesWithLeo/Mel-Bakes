@@ -1,14 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faLink } from "@fortawesome/free-solid-svg-icons";
-import { AuthConsumer } from "../authProvider";
 import { Link } from "react-router-dom";
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../store";
+import { Logout } from "../slice/authSlice";
 
 function FooterComponent() {
-  const Auth = AuthConsumer();
+  const Auth = useSelector((state: AppState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const about: string =
     "Your one-stop destination for delectable, handcrafted cupcakes that are as beautiful as they are delicious. At Mel Bakes, we believe in the magic of baking and the joy it brings to every celebration. Our cupcakes are made with the finest ingredients, from rich, creamy butter to fresh, seasonal fruits, ensuring every bite is a burst of flavor. Whether you're looking for classic vanilla, decadent chocolate, or unique seasonal creations, our cupcakes are perfect for any occasion. Join us at Mel Bakes, where every cupcake is a sweet masterpiece baked with love and passion.";
 
+  const handleLogout = async () => {
+    dispatch(Logout());
+  };
   // const ceo =
   //   "Melia, the inspiring CEO of Mel Bakes, has turned a small local cupcake store into a renowned international cupcake producer. With a blend of business savvy and a deep love for baking, she skillfully manages every part of the business. Melia ensures every cupcake meets the highest quality standards, overseeing everything from product development to marketing and customer service. Her creative strategies include expanding the product range, adopting eco-friendly practices, and using social media to reach a global audience. Thanks to Melia's passionate and innovative leadership, Mel Bakes has grown from a favorite local bakery into a leading name in the cupcake world, bringing joy to customers worldwide with delicious, beautifully crafted treats.";
 
@@ -40,8 +46,6 @@ function FooterComponent() {
           <div className="mb-8 flex w-full flex-col gap-2 font-[Redhat] sm:w-1/3 md:w-1/2">
             <h1 className="text-xl text-[goldenrod]">About us</h1>
             <p className="h-auto text-justify text-sm text-white">{about}</p>
-            {/* <h1>The Ceo</h1>
-          <p className='content'>{ceo}</p> */}
           </div>
 
           <div className="mb-8 flex h-max w-auto flex-col gap-4 sm:flex-row sm:gap-8">
@@ -88,14 +92,12 @@ function FooterComponent() {
             </div>
           </div>
         </div>
-        {Auth.user ? (
+        {Auth.User ? (
           <div className="flex flex-col">
             <button
               className="w-max self-end rounded-md bg-primary px-3 py-1 align-middle text-sm text-gray-300 hover:text-white hover:shadow-lg hover:shadow-primary"
               id="logoutButton"
-              onClick={() => {
-                Auth.Logout();
-              }}
+              onClick={handleLogout}
             >
               Log out
             </button>

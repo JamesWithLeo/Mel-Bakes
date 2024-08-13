@@ -15,7 +15,6 @@ function Gallary() {
         if (index.current === images.length) {
           index.current = 0;
           setImage(images[index.current]);
-          // console.log("RESET", index.current);
         } else {
           setImage(images[index.current]);
           index.current++;
@@ -23,7 +22,7 @@ function Gallary() {
         }
         setImage(images[index.current]);
       }
-    }, 20000);
+    }, 3000);
   }, [image, index, isVisible]);
   return (
     <div id="gallery" className="w-11/12 bg-white p-8 shadow-2xl">

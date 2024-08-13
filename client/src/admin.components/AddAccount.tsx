@@ -1,5 +1,8 @@
 import * as React from "react";
-function AddAcount({ setVisibility }) {
+interface IAddAcount {
+  setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function AddAcount({ setVisibility }: IAddAcount) {
   return (
     <div className="flex h-full max-h-full w-full flex-col bg-white">
       <div className="flex justify-between p-4">

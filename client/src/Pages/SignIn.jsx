@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import plaidPattern from "../assets/images/pattern.svg";
-import FooterComponent from "../Footer/Footer.jsx";
+import FooterComponent from "../Footer/Footer";
 import { Link } from "react-router-dom";
-import Login from "../Login/Login.jsx";
-import Sign from "../Login/sign.jsx";
+import LoginPage from "../Login/Login";
+import Sign from "../Login/sign";
 
 function SignIn() {
   const [log, setLog] = useState(false);
@@ -26,7 +26,11 @@ function SignIn() {
           >
             Back
           </Link>
-          {log ? <Login setDisplay={setLog} /> : <Sign setDisplay={setLog} />}
+          {log ? (
+            <LoginPage setVisibility={setLog} />
+          ) : (
+            <Sign setVisibility={setLog} />
+          )}
         </main>
       </div>
 

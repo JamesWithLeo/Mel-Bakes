@@ -23,7 +23,7 @@ export default mongoDB;
 
 export async function findUser(coll, value) {
   try {
-    return await coll.findOne({ "Gmail": value });
+    return await coll.findOne({ "Gmail": value })
   } catch (error) {
     console.log(error);
   }
@@ -90,9 +90,7 @@ export async function removeFromOrder(coll, userId, documentObject) {
 }
 export async function removeFromCart(coll, UserId, documentObject) {
   try {
-    coll.updateOne({ "_id": new ObjectId(UserId) }, {
-      $pull: { Cart: documentObject }
-    })
+    return await coll.updateOne({ "_id": new ObjectId(UserId) }, { "$pull": { "Cart": documentObject } })
   } catch (err) {
     console.log(err);
     throw err;
