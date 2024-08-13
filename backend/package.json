@@ -16,5 +16,8 @@
     "express": "^4.19.2",
     "mongodb": "^6.7.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
 }
