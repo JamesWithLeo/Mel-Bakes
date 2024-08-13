@@ -14,18 +14,13 @@ import Account from "./Account/Account";
 import Orders from "./orders.component/Orders";
 import { Provider } from "react-redux";
 import { store } from "./store";
-// import axios from "axios";
 import ProtectedRoute from "./protectedRoute";
 const route = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    // loader: async () => {
-    //   return axios.get("melbake").then((value) => {
-    //     return value.data;
-    //   });
-    // },
+
     shouldRevalidate: ({ currentUrl, currentParams }) => {
       console.log("revalidated, react-router");
       return currentUrl.pathname === "/cart";
@@ -37,7 +32,7 @@ const route = createBrowserRouter([
     path: "Admin",
     element: (
       <ProtectedRoute>
-        <Admin />,
+        <Admin />
       </ProtectedRoute>
     ),
   },
