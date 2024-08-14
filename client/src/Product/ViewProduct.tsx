@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { ICart, IOrder } from "../slice/orderSlice";
 import axios from "axios";
-import { response } from "express";
 function ViewProduct({
   setDisplay,
   setLoginModalVisibility,
@@ -38,16 +37,7 @@ function ViewProduct({
       let Flavor = cupcakeObj.Flavor;
       let Price = cupcakeObj.Price;
       let Quantity = quantity;
-      let orderObj = JSON.stringify({
-        Name,
-        Url,
-        PublicId,
-        Description,
-        Flavor,
-        Quantity,
-        C_id,
-        Price,
-      });
+
       axios
         .post("/melbake/mycart/add/" + auth.User._id, {
           Name,
@@ -74,15 +64,6 @@ function ViewProduct({
         .catch((response) => {
           console.log(response);
         });
-      // await fetch("/cart/add/" + auth.User._id, {
-      //   method: "POST",
-      //   body: orderObj,
-      //   headers: {
-      //     "Content-type": "application/json; charset=UTF-8",
-      //   },
-      // }).then((response) => {
-
-      // });
     }
   }
   async function AddToOrder() {
@@ -140,18 +121,17 @@ function ViewProduct({
         });
     }
   }
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function fetchCupcake() {
       const destinationUrl = "melbake/cupcake/" + id;
       const response = await fetch(destinationUrl);
-
       await response.json().then((value) => {
-        const cupcake: IOrder = JSON.parse(value);
+        console.log(value);
+        const cupcake = value;
         setCupcakeObj(cupcake);
 
         const arrayFlavors = cupcake.Flavor.split(" ");
-        const flavorElements = arrayFlavors.map((flavor) => {
+        const flavorElements = arrayFlavors.map((flavor: string) => {
           let cname;
           switch (flavor) {
             case "Strawberry":
@@ -193,12 +173,12 @@ function ViewProduct({
   return (
     <>
       <div
-        className="fixed z-10 flex h-svh w-full items-center justify-center bg-[#393664] opacity-70"
+        className="fixed z-20 flex h-svh w-full items-center justify-center bg-[#393664] opacity-70"
         id="ViewProduct__OutsideWrapper"
       ></div>
 
       <PanelGroup
-        className="fixed inset-x-0 bottom-0 z-10 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto"
+        className="fixed inset-x-0 bottom-0 z-20 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto"
         direction="vertical"
       >
         <Panel

@@ -19,6 +19,7 @@ import { AppState } from "./store";
 export const ViewProductContext = createContext<React.Dispatch<
   React.SetStateAction<boolean>
 > | null>(null);
+
 export const ProductIdContext = createContext<
   React.Dispatch<React.SetStateAction<number>> | null | number
 >(null);

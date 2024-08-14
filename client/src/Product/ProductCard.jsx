@@ -18,12 +18,6 @@ function ProductCard({ productObj }) {
       id="card"
       onClick={onOpen}
     >
-      {/* <img
-        className="h-auto w-24 delay-150 duration-200 ease-in-out group-hover:scale-[1.05] sm:w-28 md:w-36 lg:w-96"
-        id="productImg"
-        src={productObj.Url}
-        alt="cupcake"
-      /> */}
       {productObj.Url ? (
         <>
           <div
