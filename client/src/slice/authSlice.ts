@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const userlocal = localStorage.getItem("melbakesUser");
-const user = userlocal ? JSON.parse(userlocal) : null;
+const user: IUser | null = userlocal ? JSON.parse(userlocal) : null;
 
 type IUser = {
   Type: "admin" | "user";

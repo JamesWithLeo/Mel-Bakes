@@ -1,32 +1,45 @@
 import React, { useEffect, useState, useRef } from "react";
 import ccg1 from "../assets/images/ccG1.jpg";
 import ccg2 from "../assets/images/ccG2.jpg";
-import { usePageVisibility } from "react-page-visibility";
-import SlideShow from "./Slideshow";
-
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 function Gallary() {
-  const isVisible = usePageVisibility();
-  let images = [ccg1, ccg2];
-  const [image, setImage] = useState(images[0]);
-  let index = useRef(0);
-  useEffect(() => {
-    setTimeout(() => {
-      if (isVisible) {
-        if (index.current === images.length) {
-          index.current = 0;
-          setImage(images[index.current]);
-        } else {
-          setImage(images[index.current]);
-          index.current++;
-          console.log("Current Slide : ", index.current);
-        }
-        setImage(images[index.current]);
-      }
-    }, 3000);
-  }, [image, index, isVisible]);
+  var settings = {
+    dots: false,
+    fade: true,
+    infinite: true,
+    centerMode: true,
+    arrows: false,
+    speed: 2000,
+    slidesToShow: 1,
+    autoplay: true,
+    adaptiveHeight: true,
+    autoplaySpeed: 2000,
+    slidesToScroll: 1,
+  };
   return (
-    <div id="gallery" className="w-11/12 bg-white p-8 shadow-2xl">
-      <SlideShow url={image} />
+    <div
+      id="gallery"
+      className="h-max w-80 rounded bg-white py-10 shadow-2xl drop-shadow sm:w-96 lg:w-[30rem]"
+    >
+      <Slider {...settings} className="">
+        <div className="h-full">
+          <img
+            src={ccg1}
+            alt="cupcake"
+            className="h-auto w-full overflow-hidden"
+          />
+        </div>
+
+        <div className="h-full w-full">
+          <img
+            src={ccg2}
+            alt="cupcake"
+            className="h-auto w-full overflow-hidden"
+          />
+        </div>
+      </Slider>
     </div>
   );
 }

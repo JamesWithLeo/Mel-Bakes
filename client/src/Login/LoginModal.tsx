@@ -36,10 +36,10 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
   return (
     <>
       <div
-        className="fixed z-10 h-screen w-full bg-[#393664] opacity-70"
+        className="fixed z-20 h-screen w-full bg-[#393664] opacity-70"
         onClick={exitModal}
       />
-      <div className="fixed left-1/2 top-1/4 z-10 flex w-full max-w-md -translate-x-1/2 flex-col items-center justify-between self-center rounded-lg bg-white p-8">
+      <div className="fixed left-1/2 top-1/4 z-20 flex w-full max-w-md -translate-x-1/2 flex-col items-center justify-between self-center rounded-lg bg-white p-8">
         <div className="flex w-full flex-col">
           <button className="self-end" onClick={exitModal}>
             <FontAwesomeIcon
