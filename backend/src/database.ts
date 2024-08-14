@@ -1,5 +1,4 @@
 import { MongoClient, ServerApiVersion, ObjectId, Collection } from "mongodb";
-import { getAssetInfo } from "./cloudinary.js";
 
 const mongoDB = (uri: string) => {
   try {
