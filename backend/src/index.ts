@@ -10,6 +10,8 @@ if (
 ) {
   process.exit;
 }
+const port = process.env.PORT || 2024;
+
 import express, { Request, Response } from "express";
 
 // database for images
@@ -40,7 +42,6 @@ const DATABASE = CLIENT.db("MelBake");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
-const port = process.env.PORT || 2024;
 const app = express();
 
 app.use(express.json());
