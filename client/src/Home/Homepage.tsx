@@ -1,5 +1,4 @@
 import * as React from "react";
-import Gallary from "../GallerySlideshow/GallerySlideshow";
 
 function Homepage() {
   return (

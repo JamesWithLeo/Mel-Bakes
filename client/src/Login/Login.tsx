@@ -1,16 +1,16 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../store";
 import { Login } from "../slice/authSlice";
 interface ILogin {
   setVisibility: React.Dispatch<React.SetStateAction<Boolean>>;
 }
 function LoginPage({ setVisibility }: ILogin) {
+  const AuthMessage = useSelector((state: AppState) => state.auth.AuthMessage);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  // const [account, seAccount] = useState();
 
   const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const gmailElement = document.getElementById(
@@ -23,7 +23,7 @@ function LoginPage({ setVisibility }: ILogin) {
     const password: string = passwordElement.value;
     if (gmail) {
       dispatch(Login({ Gmail: gmail, Password: password }));
-      navigate("/", { replace: true });
+      // navigate("/", { replace: true });
     } else {
       event.preventDefault();
     }
@@ -31,7 +31,7 @@ function LoginPage({ setVisibility }: ILogin) {
   return (
     <div className="flex h-full w-full max-w-7xl flex-col items-center self-center px-4 py-4">
       <h1 className="my-8 text-3xl font-bold text-primary">Login Account</h1>
-
+      <h1 className="mb-3 font-sans text-sm text-red-500">{AuthMessage}</h1>
       <input
         className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         placeholder="Enter gmail"
@@ -40,6 +40,7 @@ function LoginPage({ setVisibility }: ILogin) {
       <input
         className="mt-4 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:max-w-sm"
         placeholder="Enter password"
+        type="password"
         id="passwordLoginTB"
       />
       <div className="mt-2 flex w-full flex-col sm:max-w-sm">

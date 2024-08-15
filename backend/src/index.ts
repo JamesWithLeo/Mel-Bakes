@@ -27,7 +27,7 @@ const DB_URI = `mongodb+srv://${user}:${password}@${cluster}.wadd7q8.mongodb.net
 import mongoDB, {
   findUser,
   fetchCupcake,
-  fetchCupcakes,
+  fetchDocuments,
   insertDocument,
   findUserById,
   insertToCart,
@@ -47,7 +47,7 @@ const app = express();
 app.use(express.json());
 
 // get all cupcakes in the db
-interface ICupcakes {
+interface IProduct {
   _id: string;
   Name: string;
   Price: string | number;
@@ -58,10 +58,20 @@ interface ICupcakes {
   Flavor: string;
 }
 app.get("/melbake", async (req: Request, res: Response) => {
+  await DATABASE.admin()
+    .ping()
+    .then((value) => {
+      res.status(200).json(value);
+    })
+    .catch((reason) => {
+      res.status(200).json(reason);
+    });
+});
+app.get("/melbake/cupcakes", async (req: Request, res: Response) => {
   async function destribute(array: any) {
     // destribute img from cloudinary
     let i: number;
-    let cups: ICupcakes[] = [];
+    let cups: IProduct[] = [];
     for (i = 0; i <= array.length; i++) {
       if (i === array.length) {
         return cups;
@@ -72,10 +82,8 @@ app.get("/melbake", async (req: Request, res: Response) => {
       });
     }
   }
-  await fetchCupcakes(CUPCAKE_COLLECTION).then(async (cupcakes) => {
-    console.log(cupcakes);
+  await fetchDocuments(CUPCAKE_COLLECTION).then(async (cupcakes) => {
     destribute(cupcakes).then((value) => {
-      console.log(value);
       res.status(200).json(value);
     });
   });
@@ -160,6 +168,11 @@ app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
   });
 });
 
+app.get("/melbake/account", async (req: Request, res: Response) => {
+  await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
+    res.status(200).json(value);
+  });
+});
 /// account middleware
 app.get("/melbake/profile/:id", async (req: Request, res: Response) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {

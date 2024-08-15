@@ -10,11 +10,16 @@ export default function ErrorPage() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center bg-secondarylight">
       <h1 className="text-6xl font-bold text-primary">Error</h1>
-      <div className="flex flex-row">
-        <h1 className="text-base text-primary">
-          {error.status} {error.statusText}
-        </h1>
-      </div>
+      <h1 className="text-center text-base text-primary">
+        {error.name}: {error.message}
+      </h1>
+      <h1 className="text-center text-xs text-primary">
+        please contact the{" "}
+        <a href="https://www.facebook.com/JAMES.ocampoGI" className="underline">
+          developer
+        </a>
+        .
+      </h1>
     </div>
   );
 }

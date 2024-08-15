@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useFetcher, useLoaderData } from "react-router-dom";
 import { useState, createContext, lazy, Suspense, useEffect } from "react";
 // major components
 import GuestHome from "./Home/GuestHome";
@@ -33,7 +33,6 @@ function App() {
   const [isFilterModalVisible, setFilterModalVisible] =
     useState<boolean>(false);
   const [productId, SetProductId] = useState(0);
-
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
       {ViewProductDisplay ? (

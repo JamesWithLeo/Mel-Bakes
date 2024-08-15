@@ -45,6 +45,7 @@ if (!process.env.DB_USER ||
     !process.env.DB_PASSWORD) {
     process.exit;
 }
+const port = process.env.PORT || 2024;
 const express_1 = __importDefault(require("express"));
 // database for images
 const cloudinary_js_1 = __importStar(require("./cloudinary.js"));
@@ -62,10 +63,19 @@ const DATABASE = CLIENT.db("MelBake");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
-const port = process.env.PORT || 2024;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.get("/melbake", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield DATABASE.admin()
+        .ping()
+        .then((value) => {
+        res.status(200).json(value);
+    })
+        .catch((reason) => {
+        res.status(200).json(reason);
+    });
+}));
+app.get("/melbake/cupcakes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     function destribute(array) {
         return __awaiter(this, void 0, void 0, function* () {
             // destribute img from cloudinary
@@ -82,7 +92,7 @@ app.get("/melbake", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             }
         });
     }
-    yield (0, database_js_1.fetchCupcakes)(CUPCAKE_COLLECTION).then((cupcakes) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.fetchDocuments)(CUPCAKE_COLLECTION).then((cupcakes) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(cupcakes);
         destribute(cupcakes).then((value) => {
             console.log(value);
@@ -160,6 +170,11 @@ app.post("/melbake/myorder/:id", (req, res) => __awaiter(void 0, void 0, void 0,
 // cancel order
 app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, database_js_1.removeFromOrder)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+app.get("/melbake/account", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.fetchDocuments)(ACCOUNT_COLLECTION).then((value) => {
         res.status(200).json(value);
     });
 }));

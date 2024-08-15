@@ -1,38 +1,50 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { CartTypeface } from "../Product/CartComponent";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IUser | null = userlocal ? JSON.parse(userlocal) : null;
 
-type IUser = {
+export type IUser = {
   Type: "admin" | "user";
   _id: string;
   Gmail: string;
-  Password: string;
   FirstName: string;
   LastName: string;
+  Cart: CartTypeface[];
 };
+export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
 interface IUserInit {
   User: IUser | null;
+  AuthMessage: null | string;
+  LoginTriesCount: number;
 }
 const userInit: IUserInit = {
-  User: user,
+  User: user ? user : null,
+  AuthMessage: null,
+  LoginTriesCount: 0,
 };
-
 const authSlice = createSlice({
   initialState: userInit,
   name: "auth",
-  reducers: {},
+  reducers: {
+    ResetAuthMessage: (state) => {
+      state.AuthMessage = null;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(Login.fulfilled, (state, action) => {
-      state.User = action.payload;
-      localStorage.setItem("melbakesUser", JSON.stringify(action.payload));
+      state.User = action.payload.User;
+      state.AuthMessage = action.payload.AuthMessage;
+      localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
     builder.addCase(Login.rejected, (state) => {
       state.User = null;
+      localStorage.removeItem("melbakesUser");
     });
     builder.addCase(Logout.fulfilled, (state, action) => {
       state.User = null;
+      state.AuthMessage = null;
       localStorage.removeItem("melbakesUser");
     });
   },
@@ -44,7 +56,7 @@ const LoginRequest = async (email: string) => {
       return response.data;
     })
     .catch((response) => {
-      return;
+      return response;
     });
 };
 
@@ -54,12 +66,33 @@ export const Login = createAsyncThunk(
     { Gmail, Password }: { Gmail: string; Password: string },
     thunkApi,
   ) => {
-    return await LoginRequest(Gmail);
+    type returnType = { User: null | IUser; AuthMessage: IAuthMessage | null };
+    const document = await LoginRequest(Gmail);
+    if (!document) {
+      const authloginResult: returnType = {
+        User: null,
+        AuthMessage: "Account doesn't exist",
+      };
+      return authloginResult;
+    }
+    if (document.Password && document.Password !== Password) {
+      const authloginResult: returnType = {
+        User: null,
+        AuthMessage: "Wrong Password",
+      };
+      return authloginResult;
+    }
+    delete document.Password;
+    const authloginResult: returnType = {
+      User: document,
+      AuthMessage: null,
+    };
+    return authloginResult;
   },
 );
 
 export const Logout = createAsyncThunk("auth/Logout", async () => {
   return;
 });
-
+export const { ResetAuthMessage } = { ...authSlice.actions };
 export default authSlice.reducer;

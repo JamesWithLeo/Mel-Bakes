@@ -9,7 +9,7 @@ export default function ProtectedRoute({
   children: React.JSX.Element;
 }) {
   const auth = useSelector((state: AppState) => state.auth);
-  if (auth.User?.Type === "admin") {
+  if (auth.User) {
     return children;
   }
   return <Navigate to={"/"} replace={true} />;

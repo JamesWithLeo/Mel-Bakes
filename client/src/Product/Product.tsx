@@ -6,20 +6,25 @@ import axios from "axios";
 import { IOrder } from "../slice/orderSlice";
 
 function Product() {
-  const [cupcakesElement, setCupcakesElement] = useState([]);
+  const [cupcakesElement, setCupcakesElement] = useState<JSX.Element[]>([]);
   async function fetchCupcakes() {
-    await axios.get("melbake").then((value) => {
-      if (value.data) {
-        const cupcakes = value.data.map((cupcake: IOrder) => {
-          return (
-            <>
-              <ProductCard key={cupcake._id} productObj={cupcake} />
-            </>
-          );
-        });
-        setCupcakesElement(cupcakes);
-      }
-    });
+    await axios
+      .get("melbake/cupcakes")
+      .then((value) => {
+        if (value.data) {
+          const cupcakes = value.data.map((cupcake: IOrder) => {
+            return (
+              <>
+                <ProductCard key={cupcake._id} productObj={cupcake} />
+              </>
+            );
+          });
+          setCupcakesElement(cupcakes);
+        }
+      })
+      .catch((reason) => {
+        console.log(reason);
+      });
   }
 
   useEffect(() => {
@@ -38,7 +43,7 @@ function Product() {
       ) : (
         <div
           id="productContainer"
-          className="row-span-2 flex flex-col flex-wrap items-center justify-center gap-4 sm:gap-5 md:gap-6"
+          className="row-span-2 flex h-96 flex-col flex-wrap items-center justify-center gap-4 sm:gap-5 md:gap-6"
         >
           <FontAwesomeIcon
             icon={faCircleNotch}

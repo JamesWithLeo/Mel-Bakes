@@ -40,7 +40,7 @@ export async function fetchCupcake(coll: Collection, cupcakeId: string) {
     throw error;
   }
 }
-export async function fetchCupcakes(coll: Collection) {
+export async function fetchDocuments(coll: Collection) {
   try {
     // fetch all document in the collection
     return await coll.find().toArray();

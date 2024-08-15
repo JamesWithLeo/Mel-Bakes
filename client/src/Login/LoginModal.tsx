@@ -2,17 +2,23 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { AuthConsumer } from "../authProvider";
 import { useNavigate } from "react-router-dom";
-import { Login } from "../slice/authSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store";
+import { Login, ResetAuthMessage } from "../slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, AppState } from "../store";
 
 export default function LoginModal({ onClose }: { onClose: () => void }) {
-  const Auth = AuthConsumer();
+  const AuthMessage = useSelector((state: AppState) => state.auth.AuthMessage);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
   const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    const loginButton = document.getElementById(
+      "loginButton",
+    ) as HTMLButtonElement;
+    loginButton.disabled = true;
+    loginButton.style.cursor = "wait";
+
     const gmailElement = document.getElementById(
       "gmailLoginTB",
     ) as HTMLInputElement;
@@ -21,16 +27,41 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     ) as HTMLInputElement;
     const gmail: string = gmailElement.value;
     const password: string = passwordElement.value;
-    if (gmail) {
-      dispatch(Login({ Gmail: gmail, Password: password }));
-      exitModal();
-      navigate("/", { replace: true });
-    } else {
-      event.preventDefault();
+
+    if (gmail && password) {
+      dispatch(Login({ Gmail: gmail, Password: password }))
+        .unwrap()
+        .then((value) => {
+          setTimeout(() => {
+            loginButton.disabled = false;
+            loginButton.style.cursor = "pointer";
+          }, 3000);
+          if (value.AuthMessage === "Account doesn't exist") {
+            gmailElement.value = "";
+            passwordElement.value = "";
+          } else if (value.AuthMessage === "Wrong Password") {
+            passwordElement.style.outlineColor = "red";
+            passwordElement.style.color = "red";
+          } else if (value.User && value.AuthMessage === null) {
+            exitModal();
+            navigate("/", { replace: true });
+          }
+        });
     }
   };
+  function handleFocusInput() {
+    const passwordElement = document.getElementById(
+      "passwordLoginTB",
+    ) as HTMLButtonElement;
+    passwordElement.style.outlineColor = "";
+    passwordElement.style.color = "black";
+    setTimeout(() => {
+      dispatch(ResetAuthMessage());
+    }, 3000);
+  }
   function exitModal() {
     onClose();
+    dispatch(ResetAuthMessage());
     document.body.style.overflowY = "scroll";
   }
   return (
@@ -52,14 +83,16 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           <h1 className="mb-12 mt-4 text-3xl font-bold text-primary">
             Login Account
           </h1>
-
+          <h1 className="mb-3 font-sans text-sm text-red-500">{AuthMessage}</h1>
           <input
+            onFocus={handleFocusInput}
             className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
             placeholder="Enter gmail"
             id="gmailLoginTB"
             type="gmail"
           />
           <input
+            onFocus={handleFocusInput}
             className="mt-4 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
             placeholder="Enter password"
             id="passwordLoginTB"
@@ -71,6 +104,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             </Link>
           </div>
           <button
+            id="loginButton"
             className="mt-2 h-8 w-full self-center rounded bg-primary py-2 text-center align-middle text-xs text-white md:text-sm"
             onClick={checkAccount}
           >

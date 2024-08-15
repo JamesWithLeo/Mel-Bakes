@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.insertDocument = exports.fetchCupcakes = exports.fetchCupcake = exports.findUserById = exports.findUser = void 0;
+exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findUserById = exports.findUser = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -63,7 +63,7 @@ function fetchCupcake(coll, cupcakeId) {
     });
 }
 exports.fetchCupcake = fetchCupcake;
-function fetchCupcakes(coll) {
+function fetchDocuments(coll) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // fetch all document in the collection
@@ -75,7 +75,7 @@ function fetchCupcakes(coll) {
         }
     });
 }
-exports.fetchCupcakes = fetchCupcakes;
+exports.fetchDocuments = fetchDocuments;
 function insertDocument(coll, documentObject) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

@@ -10,7 +10,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { ICart, IOrder } from "../slice/orderSlice";
+import { IProduct, IOrder } from "../slice/orderSlice";
 import axios from "axios";
 function ViewProduct({
   setDisplay,
@@ -22,7 +22,7 @@ function ViewProduct({
   const auth = useSelector((state: AppState) => state.auth);
   const id = useContext(ProductIdContext);
 
-  const [cupcakeObj, setCupcakeObj] = useState<null | ICart>(null);
+  const [cupcakeObj, setCupcakeObj] = useState<null | IProduct>(null);
   const [flavors, setFlavors] = useState<JSX.Element[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [status, setStatus] = useState<string | null>(null);

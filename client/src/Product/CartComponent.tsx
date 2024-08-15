@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CartCardComponent from "./cartCardComponent";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-export type CartTypeface = {
+export interface CartTypeface {
   Cupcake: string;
   Quantity: number;
   C_id: string;
@@ -11,7 +11,7 @@ export type CartTypeface = {
   IsCancel: boolean;
   IsDelivered: boolean;
   DateOrdered: string;
-};
+}
 // export const orderContext = createContext<null>(null);
 
 export default function CartComponent() {
