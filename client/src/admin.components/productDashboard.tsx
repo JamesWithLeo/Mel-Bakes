@@ -4,72 +4,51 @@ import { IProduct } from "../slice/orderSlice";
 import ProductTable from "./productTable";
 import { useLayoutEffect } from "react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import LoadingComponents from "../loading/LoadingComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import LoadingPage from "../Pages/loadingPage";
+import { Navigate } from "react-router-dom";
+import { useCreateProduct, useUpdateProduct } from "../services/productService";
 function AddProduct() {
-  const [result, setResult] = useState("Pending");
-  const [products, SetProducts] = useState<IProduct[]>([]);
+  const query = useQuery({
+    queryKey: ["product"],
+    queryFn: async () => {
+      const response = axios.get("/melbake/cupcakes");
+      return (await response).data;
+    },
+  });
+  const { mutateAsync: updateProduct, isPending: isUpdatingProduct } =
+    useUpdateProduct();
+  const { mutateAsync: createProduct, isPending: isCreatingProduct } =
+    useCreateProduct();
 
-  // send document to the Api
-  async function writeProduct(objBody: BodyInit) {
-    await fetch("/melbake/admin/product/append/", {
-      method: "POST",
-      body: objBody,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      response.json().then((value) => {
-        // console.log(value);
-        setResult(value.result);
-        setTimeout(() => {
-          setResult("Pending");
-        }, 3000);
-      });
-    });
-  }
-
-  const handleAddProduct = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // get the values,
-    // then create object, keys will match in the database;
-    const name = document.getElementById("nameTB") as HTMLInputElement;
-    const price = document.getElementById("priceTB") as HTMLInputElement;
-    const flavor = document.getElementById("flavorTB") as HTMLInputElement;
-    const description = document.getElementById(
-      "descriptionTB",
-    ) as HTMLInputElement;
-    const itemQuantity = document.getElementById(
-      "itemQuantityTB",
-    ) as HTMLInputElement;
-    const publicId = document.getElementById("publicIdTB") as HTMLInputElement;
-
-    const body = JSON.stringify({
-      Name: name.value,
-      Price: price.value,
-      Flavor: flavor.value,
-      Description: description.value,
-      Quantity: itemQuantity.value,
-      PublicId: publicId.value,
-      Url: "",
-    });
-    writeProduct(body);
+  const HandleUpdateProduct = async (product: IProduct) => {
+    if (!isUpdatingProduct) updateProduct(product);
   };
-
-  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // clear the input box for later use .
-    document.getElementById("nameTB") as HTMLInputElement;
-    document.getElementById("priceTB") as HTMLInputElement;
-    document.getElementById("flavorTB") as HTMLInputElement;
-    document.getElementById("descriptionTB") as HTMLInputElement;
-    document.getElementById("itemQuantityTB") as HTMLInputElement;
-    document.getElementById("publicIdTB") as HTMLInputElement;
+  const HandleCreateProduct = async (product: IProduct) => {
+    if (!isCreatingProduct) createProduct(product);
   };
-  useLayoutEffect(() => {
-    axios.get("/melbake/cupcakes").then((value) => {
-      SetProducts(value.data);
-    });
-  }, []);
+  if (query.isLoading)
+    return (
+      <LoadingPage>
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="animate-spin text-3xl text-primary"
+        />
+      </LoadingPage>
+    );
+  if (query.isError) return <Navigate to={"/"} replace />;
   return (
     <div className="flex w-full flex-col bg-white">
-      {products ? <ProductTable data={products} /> : null}
+      {query.data ? (
+        <ProductTable
+          data={query.data}
+          addRow={HandleCreateProduct}
+          updateRow={HandleUpdateProduct}
+        />
+      ) : null}
     </div>
   );
 }

@@ -3,19 +3,22 @@ import axios from "axios";
 import { CartTypeface } from "../Product/CartComponent";
 
 const userlocal = localStorage.getItem("melbakesUser");
-const user: IUser | null = userlocal ? JSON.parse(userlocal) : null;
+const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
 
-export type IUser = {
+export type IAccount = {
   Type: "admin" | "user";
   _id: string;
   Gmail: string;
+  Password: string;
   FirstName: string;
   LastName: string;
+  Contact: string;
+  Address: string;
   Cart: CartTypeface[];
 };
 export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
 interface IUserInit {
-  User: IUser | null;
+  User: IAccount | null;
   AuthMessage: null | string;
   LoginTriesCount: number;
 }
@@ -66,7 +69,10 @@ export const Login = createAsyncThunk(
     { Gmail, Password }: { Gmail: string; Password: string },
     thunkApi,
   ) => {
-    type returnType = { User: null | IUser; AuthMessage: IAuthMessage | null };
+    type returnType = {
+      User: null | IAccount;
+      AuthMessage: IAuthMessage | null;
+    };
     const document = await LoginRequest(Gmail);
     if (!document) {
       const authloginResult: returnType = {

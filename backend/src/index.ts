@@ -34,6 +34,8 @@ import mongoDB, {
   removeFromCart,
   insertToOrder,
   removeFromOrder,
+  deleteDocumentById,
+  updateDocumentById,
 } from "./database.js";
 import { ObjectId, WithId } from "mongodb";
 const CLIENT = mongoDB(DB_URI);
@@ -168,26 +170,57 @@ app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
   });
 });
 
+/// account middleware
+// fetch accounts
 app.get("/melbake/account", async (req: Request, res: Response) => {
   await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
     res.status(200).json(value);
   });
 });
+// insert account
+app.post("/melbake/account/insert", async (req: Request, res: Response) => {
+  req.body._id = new ObjectId();
+  await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
+    res.status(200).json(value);
+  });
+});
+// update account
+app.post("/melbake/account/update/:id", async (req: Request, res: Response) => {
+  delete req.body._id;
+  await updateDocumentById(ACCOUNT_COLLECTION, req.params.id, req.body).then(
+    (value) => {
+      res.status(200).json(value);
+    },
+  );
+});
+// delete account
+app.get("/melbake/account/delete/:id", async (req: Request, res: Response) => {
+  await deleteDocumentById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json(value);
+  });
+});
 /// account middleware
+
 app.get("/melbake/profile/:id", async (req: Request, res: Response) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {
     res.status(200).json(account);
   });
 });
 // add product to database
-app.post(
-  "/melbake/admin/product/append",
-  async (req: Request, res: Response) => {
-    insertDocument(CUPCAKE_COLLECTION, req.body).then((value) => {
+app.post("/melbake/product/insert", async (req: Request, res: Response) => {
+  insertDocument(CUPCAKE_COLLECTION, req.body).then((value) => {
+    res.status(200).json(value);
+  });
+});
+// update cupcake
+app.post("/melbake/product/update/:id", async (req: Request, res: Response) => {
+  delete req.body._id;
+  await updateDocumentById(CUPCAKE_COLLECTION, req.params.id, req.body).then(
+    (value) => {
       res.status(200).json(value);
-    });
-  },
-);
+    },
+  );
+});
 // add account to database
 app.post("/melbake/signin/create", async (req: Request, res: Response) => {
   insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {

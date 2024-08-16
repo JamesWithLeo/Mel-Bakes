@@ -1,12 +1,26 @@
 import {
   MaterialReactTable,
   MRT_ColumnDef,
+  MRT_TableOptions,
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
 import { IProduct } from "../slice/orderSlice";
 
-export default function ProductTable({ data }: { data: IProduct[] }) {
+export default function ProductTable({
+  data,
+  addRow,
+  updateRow,
+}: {
+  data: IProduct[];
+  addRow: (product: IProduct) => void;
+  updateRow: (product: IProduct) => void;
+}) {
+  const HandleEditingRowSave: MRT_TableOptions<IProduct>["onEditingRowSave"] =
+    async ({ values, table }) => {
+      updateRow(values);
+      table.setEditingRow(null);
+    };
   const columns = useMemo<MRT_ColumnDef<IProduct>[]>(
     () => [
       {
@@ -20,6 +34,7 @@ export default function ProductTable({ data }: { data: IProduct[] }) {
       { accessorKey: "Flavor", header: "Flavor", size: 80 },
       { accessorKey: "Quantity", header: "Quantity", size: 60 },
       { accessorKey: "PublicId", header: "Img PublicId", size: 100 },
+      { accessorKey: "Description", header: "Desciption", size: 150 },
     ],
     [],
   );
@@ -51,7 +66,9 @@ export default function ProductTable({ data }: { data: IProduct[] }) {
         left: ["mrt-row-expand", "mrt-row-select"],
         right: ["mrt-row-actions"],
       },
-      columnVisibility: {},
+      columnVisibility: {
+        Flavor: false,
+      },
     },
     paginationDisplayMode: "pages",
     positionToolbarAlertBanner: "bottom",
@@ -74,12 +91,27 @@ export default function ProductTable({ data }: { data: IProduct[] }) {
       shape: "rounded",
       variant: "text",
     },
+    onEditingRowSave: HandleEditingRowSave,
     renderRowActionMenuItems: ({ closeMenu, row }) => {
       return [
         <div className="flex flex-col gap-2 py-1">
           <button className="px-8 py-2 hover:bg-gray-100">Delete</button>
         </div>,
       ];
+    },
+    renderTopToolbarCustomActions: ({ table }) => {
+      return (
+        <div className="flex w-max items-center justify-center px-2 py-1">
+          <button
+            className="rounded border border-gray-400 px-2 py-1"
+            onClick={() => {
+              table.setCreatingRow(true);
+            }}
+          >
+            Add Product
+          </button>
+        </div>
+      );
     },
   });
   return <MaterialReactTable table={table} />;

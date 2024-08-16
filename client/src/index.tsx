@@ -15,8 +15,10 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
 import axios from "axios";
-import AddAcount from "./admin.components/acccountDashboard";
+import AccountDashboard from "./admin.components/acccountDashboard";
 import AddProduct from "./admin.components/productDashboard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCode } from "@fortawesome/free-solid-svg-icons";
 const route = createBrowserRouter([
   {
     path: "/",
@@ -49,7 +51,15 @@ const route = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { path: "account", element: <AddAcount /> },
+      {
+        index: true,
+        element: (
+          <div className="flex h-full flex-col items-center justify-center text-4xl text-gray-300">
+            <FontAwesomeIcon icon={faCode} />
+          </div>
+        ),
+      },
+      { path: "account", element: <AccountDashboard /> },
       { path: "product", element: <AddProduct /> },
     ],
   },
@@ -67,7 +77,6 @@ const route = createBrowserRouter([
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>

@@ -40,6 +40,7 @@ export async function fetchCupcake(coll: Collection, cupcakeId: string) {
     throw error;
   }
 }
+
 export async function fetchDocuments(coll: Collection) {
   try {
     // fetch all document in the collection
@@ -56,6 +57,28 @@ export async function insertDocument(
 ) {
   try {
     return await coll.insertOne(documentObject);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteDocumentById(coll: Collection, id: string) {
+  try {
+    return await coll.deleteOne({ _id: new ObjectId(id) });
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function updateDocumentById(
+  coll: Collection,
+  id: string,
+  document: any,
+) {
+  try {
+    return await coll.findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: document },
+    );
   } catch (error) {
     console.log(error);
   }

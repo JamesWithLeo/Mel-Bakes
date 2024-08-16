@@ -93,9 +93,7 @@ app.get("/melbake/cupcakes", (req, res) => __awaiter(void 0, void 0, void 0, fun
         });
     }
     yield (0, database_js_1.fetchDocuments)(CUPCAKE_COLLECTION).then((cupcakes) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(cupcakes);
         destribute(cupcakes).then((value) => {
-            console.log(value);
             res.status(200).json(value);
         });
     }));
@@ -173,8 +171,30 @@ app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, vo
         res.status(200).json(value);
     });
 }));
+/// account middleware
+// fetch accounts
 app.get("/melbake/account", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.fetchDocuments)(ACCOUNT_COLLECTION).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+// insert account
+app.post("/melbake/account/insert", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.body._id = new mongodb_1.ObjectId();
+    yield (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+// update account
+app.post("/melbake/account/update/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    delete req.body._id;
+    yield (0, database_js_1.updateDocumentById)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+// delete account
+app.get("/melbake/account/delete/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.deleteDocumentById)(ACCOUNT_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
     });
 }));
@@ -185,8 +205,14 @@ app.get("/melbake/profile/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     });
 }));
 // add product to database
-app.post("/melbake/admin/product/append", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/melbake/product/insert", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, database_js_1.insertDocument)(CUPCAKE_COLLECTION, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+app.post("/melbake/product/update/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    delete req.body._id;
+    yield (0, database_js_1.updateDocumentById)(CUPCAKE_COLLECTION, req.params.id, req.body).then((value) => {
         res.status(200).json(value);
     });
 }));

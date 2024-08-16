@@ -1,38 +1,69 @@
-import axios from "axios";
 import AccountTable from "./accountTable";
-import { useLayoutEffect, useState } from "react";
-import { IUser } from "../slice/authSlice";
-function AddAcount() {
-  const [accounts, SetAccounts] = useState<IUser[]>([]);
-  useLayoutEffect(() => {
-    axios.get("/melbake/account").then((value) => {
-      SetAccounts(value.data);
-    });
-  }, []);
+
+import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "react-router-dom";
+import LoadingPage from "../Pages/loadingPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { IAccount } from "../slice/authSlice";
+import {
+  useCreateAccount,
+  useDeleteAccount,
+  useUpdateAccount,
+} from "../services/accountService";
+import axios from "axios";
+
+function AccountDashboard() {
+  const query = useQuery({
+    queryKey: ["account"],
+    queryFn: async () => {
+      const response = await axios.get("/melbake/account");
+      return await response.data;
+    },
+  });
+
+  const { mutateAsync: createAccount, isPending: isCreatingAccount } =
+    useCreateAccount();
+
+  const { mutateAsync: deleteAccount, isPending: isDeletingAccount } =
+    useDeleteAccount();
+  const { mutateAsync: updateAccount, isPending: isUpdatingAccount } =
+    useUpdateAccount();
+
+  const HandleCreateAccount = async (account: IAccount) => {
+    if (!isCreatingAccount) createAccount(account);
+  };
+
+  const HandleDeleteAccount = async (id: string) => {
+    if (!isDeletingAccount) deleteAccount(id);
+  };
+
+  const HandleUpdateAccount = async (account: IAccount) => {
+    if (!isUpdatingAccount) updateAccount(account);
+  };
+
+  if (query.isLoading)
+    return (
+      <LoadingPage>
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="animate-spin text-3xl text-primary"
+        />
+      </LoadingPage>
+    );
+  if (query.error) return <Navigate to={"/admin"} replace />;
 
   return (
     <div className="flex h-full max-h-full w-full flex-col bg-white">
-      {/* <div className="flex justify-evenly">
-        <div className="flex w-1/2 flex-col justify-evenly gap-4 p-4 sm:grid sm:grid-cols-3 sm:gap-4">
-          <h1 className="align-middle text-primary">Username</h1>
-          <input className="col-span-2 mb-2 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:mb-0 sm:w-full" />
-          <h1 className="text-primary">Gmail</h1>
-          <input className="col-span-2 mb-2 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:mb-0 sm:w-full" />
-          <h1 className="text-primary">Password</h1>
-          <input className="col-span-2 mb-2 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500 sm:mb-0 sm:w-full" />
-        </div>
-
-        <div className="flex w-1/3 flex-col gap-2 p-4">
-          <button className="rounded bg-primary py-1 text-sm text-white">
-            Save
-          </button>
-          <button className="rounded border border-primary bg-white py-1 text-sm">
-            Cancel
-          </button>
-        </div>
-      </div> */}
-      {accounts ? <AccountTable data={accounts} /> : null}
+      {query.data ? (
+        <AccountTable
+          data={query.data}
+          addRow={HandleCreateAccount}
+          deleteRow={HandleDeleteAccount}
+          updateRow={HandleUpdateAccount}
+        />
+      ) : null}
     </div>
   );
 }
-export default AddAcount;
+export default AccountDashboard;

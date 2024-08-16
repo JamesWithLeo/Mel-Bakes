@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findUserById = exports.findUser = void 0;
+exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findUserById = exports.findUser = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -87,6 +87,28 @@ function insertDocument(coll, documentObject) {
     });
 }
 exports.insertDocument = insertDocument;
+function deleteDocumentById(coll, id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield coll.deleteOne({ _id: new mongodb_1.ObjectId(id) });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.deleteDocumentById = deleteDocumentById;
+function updateDocumentById(coll, id, document) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield coll.findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: document });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.updateDocumentById = updateDocumentById;
 function insertToCart(coll, UserId, documentObject) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
