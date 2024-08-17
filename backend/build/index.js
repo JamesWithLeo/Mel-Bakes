@@ -228,7 +228,7 @@ app.get("/melbake/order/delete/:id", (req, res) => __awaiter(void 0, void 0, voi
 /// order middleware
 /// cart middleware
 // get all in the cart
-app.get("/melbake/cart/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.route("/melbake/cart").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, database_js_1.fetchDocuments)(CART_COLLECTION).then((value) => {
             res.status(200).json(value);
@@ -238,8 +238,10 @@ app.get("/melbake/cart/", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json(error);
     }
 }));
-// get individual cart
-app.get("/melbake/cart/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// routes for single request
+app
+    .route("/melbake/cart/:id")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, database_js_1.findCartById)(CART_COLLECTION, req.params.id).then((value) => {
             res.status(200).json(value);
@@ -248,17 +250,39 @@ app.get("/melbake/cart/:id", (req, res) => __awaiter(void 0, void 0, void 0, fun
     catch (error) {
         res.status(500).json(error);
     }
-}));
-app.post("/melbake/cart/insert/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body.U_id = new mongodb_1.ObjectId(req.params.id);
     (0, database_js_1.insertDocument)(CART_COLLECTION, req.body).then((value) => {
         res.status(200).json(value);
     });
-}));
-app.get("/melbake/cart/delete/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+}))
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.deleteDocumentById)(CART_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
     });
+}));
+app.route("/melbake/carts").delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const ids = req.query.ids;
+    const idsToDelete = ids.split(",");
+    try {
+        const p1 = yield new Promise(() => {
+            return idsToDelete.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+                return (0, database_js_1.deleteDocumentById)(CART_COLLECTION, id).then((value) => {
+                    if (!value)
+                        return;
+                    const deletedId = String(value._id);
+                    return deletedId;
+                });
+            }));
+        });
+        Promise.all([p1]).then((result) => {
+            console.log(result);
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
 }));
 /// cart middleware
 // add account to database

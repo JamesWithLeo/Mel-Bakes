@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IProduct } from "../slice/orderSlice";
 import axios from "axios";
+
 function ViewProduct({
   setDisplay,
   setLoginModalVisibility,
@@ -38,7 +39,7 @@ function ViewProduct({
       const Quantity = quantity;
 
       axios
-        .post("/melbake/cart/insert/" + auth.User._id, {
+        .post("/melbake/cart/" + auth.User._id, {
           Name,
           Url,
           Quantity,

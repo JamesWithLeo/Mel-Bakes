@@ -6,8 +6,13 @@ import { AppState } from "../store";
 import axios from "axios";
 import { IOrder } from "../slice/orderSlice";
 import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useMultiDeleteCart } from "../services/cartService";
 
 export default function CartComponent() {
+  document.body.style.overflowY = "hidden";
+  const user = useSelector((state: AppState) => state.auth.User);
+  const [selectedProducts, SetSelectedProducts] = useState<IOrder[]>([]);
+
   const cartQuery = useQuery({
     queryKey: ["cart"],
     queryFn: async () => {
@@ -15,10 +20,6 @@ export default function CartComponent() {
       return await response.data;
     },
   });
-
-  document.body.style.overflowY = "hidden";
-  const user = useSelector((state: AppState) => state.auth.User);
-  const [selectedProducts, SetSelectedProducts] = useState<IOrder[]>([]);
 
   async function addToSelected(item: IOrder) {
     const existedItem = selectedProducts.filter(
@@ -28,26 +29,21 @@ export default function CartComponent() {
       SetSelectedProducts([...selectedProducts, item]);
   }
   async function removeToSelected(item: IOrder) {
-    const newSelected: IOrder[] = selectedProducts.filter(
-      (value) => value._id !== item._id,
+    SetSelectedProducts(
+      selectedProducts.filter((value) => value._id !== item._id),
     );
-    SetSelectedProducts(newSelected);
   }
+  const {
+    mutateAsync: MulitDeleteCart,
+    isPending: isDeletingMultiDeleteCart,
+    isSuccess: isSuccessMultiDeleteCart,
+  } = useMultiDeleteCart();
 
   async function removeProduct() {
-    console.log(selectedProducts);
-  }
-  async function checkOut() {
-    // if (selectedProduct && user) {
-    //   selectedProduct.U_id = user._id;
-    //   selectedProduct.DateOrdered = new Date().toLocaleString();
-    //   console.log(selectedProduct);
-    // }
-    await axios
-      .post("/order/checkout", selectedProducts)
-      .then(async (response) => {
-        console.log(response);
-      });
+    if (!isDeletingMultiDeleteCart) {
+      MulitDeleteCart(selectedProducts.map((value: IOrder) => value._id));
+      SetSelectedProducts([]);
+    }
   }
 
   const exitCart = () => {
@@ -75,7 +71,6 @@ export default function CartComponent() {
       >
         <div className="flex w-full justify-between">
           <h1 className="text-3xl font-bold text-primary">Cart</h1>
-          <h1>{selectedProducts.length}</h1>
           <Link
             to="/Orders"
             replace={true}
@@ -113,17 +108,17 @@ export default function CartComponent() {
         <div className="flex flex-col gap-2 md:gap-4">
           {selectedProducts.length ? (
             <>
-              <button
+              {/* <button
                 onClick={checkOut}
                 className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow"
               >
                 Check Out
-              </button>
+              </button> */}
               <button
                 onClick={removeProduct}
                 className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow"
               >
-                Remove
+                Remove ({selectedProducts.length})
               </button>
             </>
           ) : null}

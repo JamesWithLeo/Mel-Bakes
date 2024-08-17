@@ -119,7 +119,7 @@ function Admin() {
           </aside>
         </div>
 
-        <div className="h-full w-full bg-white">
+        <div className="h-full w-full bg-white lg:w-10/12">
           <QueryClientProvider client={queryClient}>
             <Outlet />
           </QueryClientProvider>

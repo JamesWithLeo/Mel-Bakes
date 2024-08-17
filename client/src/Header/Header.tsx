@@ -71,15 +71,11 @@ function HeaderComponent() {
           ) : null}
           <div
             id="headerButton"
-            className="items-center justify-center gap-2 sm:gap-4"
+            className="flex w-max items-center justify-center gap-2 sm:gap-4"
           >
-            <button
-              className="hidden items-center justify-center gap-2 px-3 py-1 text-primary md:flex"
-              id="contactUsButton"
-              onClick={() => {}}
-            >
-              <a href="#footer">Contact us</a>
-            </button>
+            <a href="#footer" className="w-max">
+              Contact us
+            </a>
             <button
               onClick={() => {
                 setIsMenuVisible(!isMenuVisible);
