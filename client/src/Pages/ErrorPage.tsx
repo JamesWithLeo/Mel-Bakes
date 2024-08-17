@@ -3,7 +3,7 @@ import * as React from "react";
 import { useEffect } from "react";
 
 export default function ErrorPage() {
-  const error = useRouteError();
+  const error = useRouteError() as Error;
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -20,6 +20,18 @@ export default function ErrorPage() {
         </a>
         .
       </h1>
+      <button
+        onClick={(e) => {
+          e.currentTarget.style.cursor = "wait";
+          e.currentTarget.disabled = true;
+          setTimeout(() => {
+            window.location.reload();
+          }, 4000);
+        }}
+        className="mt-2 rounded bg-white px-2 py-1 text-sm text-primary active:ring"
+      >
+        Refresh
+      </button>
     </div>
   );
 }

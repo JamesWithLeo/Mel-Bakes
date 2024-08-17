@@ -63,6 +63,7 @@ const DATABASE = CLIENT.db("MelBake");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
+const CART_COLLECTION = DATABASE.collection("CART");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.get("/melbake", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -101,15 +102,10 @@ app.get("/melbake/cupcakes", (req, res) => __awaiter(void 0, void 0, void 0, fun
 // get single cupcake
 app.get("/melbake/cupcake/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let cupcake = yield (0, database_js_1.fetchCupcake)(CUPCAKE_COLLECTION, req.params.id);
-    // convert the document to json then to object
-    // cupcake = JSON.stringify(cupcake);
-    // cupcake = JSON.parse(cupcake);
     if (cupcake) {
         yield (0, cloudinary_js_1.getAssetInfo)(cupcake.PublicId).then((value) => {
-            // reference the Url to the cupcake object
             if (cupcake) {
                 cupcake.Url = value;
-                // cupcake = JSON.stringify(cupcake);
             }
         });
         if (cupcake) {
@@ -123,12 +119,6 @@ app.get("/melbake/cupcake/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
 // fetch user
 app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.findUser)(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
-        res.status(200).json(value);
-    });
-}));
-// fetch cart
-app.get("/cart/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
     });
 }));
@@ -152,7 +142,7 @@ app.get("/orders/:id", (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(200).json(value.Orders);
     });
 }));
-app.post("/orders", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/order/checkout", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId(req.body._id);
     (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
         res.status(200).json(result);
@@ -161,9 +151,10 @@ app.post("/orders", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // checkOut order
 app.post("/melbake/myorder/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
-    (0, database_js_1.insertToOrder)(ACCOUNT_COLLECTION, req.params.id, req.body).then((result) => {
-        res.status(200).json({ result: "Product is Checked out!" });
+    (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
+        res.status(200).json(result);
     });
+    // insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).
 }));
 // cancel order
 app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -210,12 +201,66 @@ app.post("/melbake/product/insert", (req, res) => __awaiter(void 0, void 0, void
         res.status(200).json(value);
     });
 }));
+// update product
 app.post("/melbake/product/update/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     delete req.body._id;
     yield (0, database_js_1.updateDocumentById)(CUPCAKE_COLLECTION, req.params.id, req.body).then((value) => {
         res.status(200).json(value);
     });
 }));
+/// order middlewware
+// get product
+app.get("/melbake/order", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, database_js_1.fetchDocuments)(ORDER_COLLECTION).then((value) => {
+            res.status(200).json(value);
+        });
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+app.get("/melbake/order/delete/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.deleteDocumentById)(ORDER_COLLECTION, req.params.id).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+/// order middleware
+/// cart middleware
+// get all in the cart
+app.get("/melbake/cart/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, database_js_1.fetchDocuments)(CART_COLLECTION).then((value) => {
+            res.status(200).json(value);
+        });
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+// get individual cart
+app.get("/melbake/cart/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, database_js_1.findCartById)(CART_COLLECTION, req.params.id).then((value) => {
+            res.status(200).json(value);
+        });
+    }
+    catch (error) {
+        res.status(500).json(error);
+    }
+}));
+app.post("/melbake/cart/insert/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.body.U_id = new mongodb_1.ObjectId(req.params.id);
+    (0, database_js_1.insertDocument)(CART_COLLECTION, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+app.get("/melbake/cart/delete/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.deleteDocumentById)(CART_COLLECTION, req.params.id).then((value) => {
+        res.status(200).json(value);
+    });
+}));
+/// cart middleware
 // add account to database
 app.post("/melbake/signin/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {

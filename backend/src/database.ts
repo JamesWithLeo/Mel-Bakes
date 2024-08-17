@@ -32,6 +32,14 @@ export async function findUserById(coll: Collection, value: string) {
     console.log(error);
   }
 }
+export async function findCartById(coll: Collection, value: string) {
+  try {
+    return await coll.find({ U_id: new ObjectId(value) }).toArray();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function fetchCupcake(coll: Collection, cupcakeId: string) {
   try {
     return await coll.findOne({ _id: new ObjectId(cupcakeId) });
@@ -64,7 +72,7 @@ export async function insertDocument(
 
 export async function deleteDocumentById(coll: Collection, id: string) {
   try {
-    return await coll.deleteOne({ _id: new ObjectId(id) });
+    return await coll.findOneAndDelete({ _id: new ObjectId(id) });
   } catch (error) {
     console.log(error);
   }

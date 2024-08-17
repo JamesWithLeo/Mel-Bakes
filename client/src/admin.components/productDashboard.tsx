@@ -11,7 +11,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import LoadingPage from "../Pages/loadingPage";
 import { Navigate } from "react-router-dom";
 import { useCreateProduct, useUpdateProduct } from "../services/productService";
-function AddProduct() {
+function ProductDashboard() {
   const query = useQuery({
     queryKey: ["product"],
     queryFn: async () => {
@@ -52,4 +52,4 @@ function AddProduct() {
     </div>
   );
 }
-export default AddProduct;
+export default ProductDashboard;

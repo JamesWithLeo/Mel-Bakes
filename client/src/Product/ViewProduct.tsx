@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useLayoutEffect } from "react";
+import { useState, useContext, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -10,7 +10,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { IProduct, IOrder } from "../slice/orderSlice";
+import { IProduct } from "../slice/orderSlice";
 import axios from "axios";
 function ViewProduct({
   setDisplay,
@@ -25,108 +25,77 @@ function ViewProduct({
   const [cupcakeObj, setCupcakeObj] = useState<null | IProduct>(null);
   const [flavors, setFlavors] = useState<JSX.Element[]>([]);
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState<string | null>(null);
+  const [isAddedToCart, setIsAddedToCart] = useState<
+    "Added" | "Can't add to cart" | null
+  >(null);
 
   async function AddToCart() {
     if (cupcakeObj && auth.User) {
-      let Name = cupcakeObj.Name;
-      let C_id = cupcakeObj._id;
-      let Url = cupcakeObj.Url;
-      let PublicId = cupcakeObj.PublicId;
-      let Description = cupcakeObj.Description;
-      let Flavor = cupcakeObj.Flavor;
-      let Price = cupcakeObj.Price;
-      let Quantity = quantity;
+      const Name = cupcakeObj.Name;
+      const Url = cupcakeObj.Url;
+      const C_id = cupcakeObj._id;
+      const Price = cupcakeObj.Price;
+      const Quantity = quantity;
 
       axios
-        .post("/melbake/mycart/add/" + auth.User._id, {
+        .post("/melbake/cart/insert/" + auth.User._id, {
           Name,
           Url,
-          Description,
-          Flavor,
           Quantity,
           C_id,
           Price,
         })
         .then((response) => {
-          if (response.status) {
-            setStatus("Added");
-            setTimeout(() => {
-              setStatus(null);
-            }, 3000);
+          if (response.data.insertedId) {
+            setIsAddedToCart("Added");
           } else {
-            setStatus("Can't Add to Cart");
-            setTimeout(() => {
-              setStatus(null);
-            }, 3000);
+            setIsAddedToCart("Can't add to cart");
           }
+          setTimeout(() => {
+            setIsAddedToCart(null);
+          }, 3000);
         })
         .catch((response) => {
           console.log(response);
         });
     }
   }
+
   async function AddToOrder() {
     if (cupcakeObj) {
       let Name = cupcakeObj.Name;
       let Quantity = quantity;
-      let Uid = auth.User?._id;
-      let Cupcake_id = cupcakeObj._id;
+      let U_id = auth.User?._id;
+      let C_id = cupcakeObj._id;
       let Price = cupcakeObj.Price;
       let Url = cupcakeObj.Url;
-      let IsCancel = false;
-      let IsDelivered = false;
+      let Amount = quantity * cupcakeObj.Price;
       let DateOrdered = new Date().toLocaleString();
-      let orderObj = JSON.stringify({
-        Name,
-        DateOrdered,
-        Quantity,
-        Url,
-        Cupcake_id,
-        Price,
-        IsCancel,
-        IsDelivered,
-      });
-      await fetch("/melbake/myorder/" + auth.User?._id, {
-        method: "POST",
-        body: orderObj,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then((response) => {
-        if (response.ok) {
-          setStatus("Checked out!");
-          setTimeout(() => {
-            setStatus(null);
-          }, 3000);
-        } else {
-          setStatus("Cant check out : ( ");
-        }
-      });
-
       axios
-        .post("/orders", {
+        .post("/order/checkout", {
           Name,
           Quantity,
-          Uid,
-          Cupcake_id,
+          C_id,
+          U_id,
           Url,
           Price,
+          Amount,
           DateOrdered,
-          IsCancel,
-          IsDelivered,
         })
         .then((response) => {
+          if (response.data.insetedId) {
+            setQuantity(1);
+          }
           console.log(response);
         });
     }
   }
+
   useLayoutEffect(() => {
     async function fetchCupcake() {
       const destinationUrl = "melbake/cupcake/" + id;
       const response = await fetch(destinationUrl);
       await response.json().then((value) => {
-        console.log(value);
         const cupcake = value;
         setCupcakeObj(cupcake);
 
@@ -186,10 +155,10 @@ function ViewProduct({
           onClick={exitViewProduct}
           defaultSize={25}
         >
-          {status ? (
+          {isAddedToCart ? (
             <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
               <h1 className="font-[Raleway] text-xs font-bold text-white">
-                {status}
+                {isAddedToCart}
               </h1>
             </div>
           ) : null}
@@ -213,7 +182,7 @@ function ViewProduct({
             </button>
           </div>
           <div
-            className="inset-x-0 z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-end overflow-y-scroll md:justify-center lg:rounded"
+            className="inset-x-0 z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-end overflow-y-auto md:justify-center lg:rounded"
             id="ViewProduct__wrapper"
           >
             <div
@@ -228,7 +197,7 @@ function ViewProduct({
                   {flavors ? flavors : null}
                 </div>
                 <div
-                  className="flex h-full w-full flex-col items-center"
+                  className="flex h-full w-full flex-grow flex-col items-center"
                   id="cupcakeImgWrapper"
                 >
                   {cupcakeObj ? (
@@ -274,6 +243,7 @@ function ViewProduct({
                     <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
                   )}
                 </div>
+
                 <div className="flex w-full justify-center rounded bg-white px-2">
                   {cupcakeObj?.Description ? (
                     <p className="text-justify text-xs">

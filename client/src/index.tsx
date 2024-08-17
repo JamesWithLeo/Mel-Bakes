@@ -16,9 +16,13 @@ import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
 import axios from "axios";
 import AccountDashboard from "./admin.components/acccountDashboard";
-import AddProduct from "./admin.components/productDashboard";
+import ProductDashboard from "./admin.components/productDashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
+import OrderDashboard from "./admin.components/orderDashboard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const cartQuery = new QueryClient();
 const route = createBrowserRouter([
   {
     path: "/",
@@ -33,7 +37,16 @@ const route = createBrowserRouter([
       console.log("revalidated, react-router");
       return currentUrl.pathname === "/cart";
     },
-    children: [{ path: "/cart", element: <CartComponent /> }],
+    children: [
+      {
+        path: "/cart",
+        element: (
+          <QueryClientProvider client={cartQuery}>
+            <CartComponent />
+          </QueryClientProvider>
+        ),
+      },
+    ],
   },
   {
     path: "Account",
@@ -59,8 +72,9 @@ const route = createBrowserRouter([
           </div>
         ),
       },
-      { path: "account", element: <AccountDashboard /> },
-      { path: "product", element: <AddProduct /> },
+      { path: "accounts", element: <AccountDashboard /> },
+      { path: "products", element: <ProductDashboard /> },
+      { path: "orders", element: <OrderDashboard /> },
     ],
   },
   {

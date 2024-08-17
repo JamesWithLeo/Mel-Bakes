@@ -68,6 +68,7 @@ export default function ProductTable({
       },
       columnVisibility: {
         Flavor: false,
+        Description: false,
       },
     },
     paginationDisplayMode: "pages",
@@ -113,6 +114,17 @@ export default function ProductTable({
         </div>
       );
     },
+    renderDetailPanel: ({ row }) => (
+      <div className="flex w-full items-center justify-center gap-4">
+        <div className="flex h-full items-center justify-center gap-2">
+          <h1>{row.original.Flavor}</h1>
+          <img src={row.original.Url} className="w-32" alt="" />
+        </div>
+        <div className="w-40 text-justify">
+          <h1>{row.original.Description}</h1>
+        </div>
+      </div>
+    ),
   });
   return <MaterialReactTable table={table} />;
 }

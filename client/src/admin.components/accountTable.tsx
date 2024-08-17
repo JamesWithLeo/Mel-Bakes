@@ -151,7 +151,6 @@ export default function AccountTable({
     renderDetailPanel: ({ row }) => (
       <div>
         <h1>Cart</h1>
-        <h1>item: {row.original.Cart?.length}</h1>
       </div>
     ),
   });

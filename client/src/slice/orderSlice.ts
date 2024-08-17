@@ -11,11 +11,16 @@ export type IProduct = {
   Price: number;
   Quantity: number;
 };
-
+// export type ICart = {
+//   _id: string;
+//   Name: string;
+//   C_id: string;
+//   U_id: string;
+//   Quantity: number;
+// };
 export type IOrder = IProduct & {
-  Price: number;
-  IsCancel: boolean;
-  IsDelivered: boolean;
+  U_id: string;
+  Amount: number;
   DateOrdered: string;
 };
 

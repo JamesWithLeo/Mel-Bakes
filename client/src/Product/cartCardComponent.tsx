@@ -1,35 +1,52 @@
-import { useContext, useEffect } from "react";
-import { orderContext } from "./CartComponent";
 import axios from "axios";
+import { IOrder } from "../slice/orderSlice";
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
+import { useDeleteCart } from "../services/cartService";
 
-export default function CartCardComponent({ OrderObj }) {
-  // const SetSelectedOrder = useContext(orderContext);
-  function selectSelf() {
-    // SetSelectedOrder(OrderObj);
-  }
+export default function CartCardComponent({
+  OrderObj,
+  selectThis,
+  unSelectThis,
+}: {
+  OrderObj: IOrder;
+  selectThis: (item: IOrder) => void;
+  unSelectThis: (item: IOrder) => void;
+}) {
+  const user = useSelector((state: AppState) => state.auth.User);
 
-  const handleRemove = () => {
-    console.log(OrderObj);
-    axios
-      .post("/melbake/mycart/remove/" + OrderObj._id, OrderObj)
-      .then((response) => {
-        if (response.status === 200) {
-        }
-        console.log(response);
-      });
+  const { mutateAsync: DeleteCart, isPending: isDeletingCart } =
+    useDeleteCart();
+  const handleRemove = async () => {
+    if (!isDeletingCart) DeleteCart(OrderObj._id);
   };
 
-  const handleCheckOut = () => {
-    axios.post("/melbake/order/:id", { OrderObj }).then((response) => {
+  const HandleCheckOut = async () => {
+    if (!user) return;
+    OrderObj.U_id = user._id;
+    OrderObj.Amount = OrderObj.Quantity * OrderObj.Price;
+    OrderObj.DateOrdered = new Date().toLocaleString();
+    await axios.post("/order/checkout", OrderObj).then(async (response) => {
       console.log(response);
+      if (response.data.acknowledged) {
+        DeleteCart(OrderObj._id);
+      }
     });
   };
+
   return (
-    <div
-      className="group flex h-max w-full grid-cols-6 items-center justify-between gap-2 bg-gray-50 p-2 hover:border hover:bg-gray-100 md:px-4"
-      onClick={selectSelf}
-    >
+    <div className="group flex h-max w-full grid-cols-6 items-center justify-between gap-2 bg-gray-50 p-2 hover:border hover:bg-gray-100 md:px-4">
       <div className="flex w-full max-w-md items-center justify-between">
+        <input
+          type="checkbox"
+          onClick={(e) => {
+            if (e.currentTarget.checked) {
+              selectThis(OrderObj);
+            } else {
+              unSelectThis(OrderObj);
+            }
+          }}
+        />
         <div className="h-16 w-16">
           <img src={OrderObj.Url} alt="cupcake" />
         </div>
@@ -61,7 +78,7 @@ export default function CartCardComponent({ OrderObj }) {
       <div className="hidden flex-col gap-1 group-hover:flex">
         <button
           className="w-full self-end bg-slate-500 px-2 py-1 text-xs text-white md:text-sm"
-          onClick={handleCheckOut}
+          onClick={HandleCheckOut}
         >
           Check Out
         </button>

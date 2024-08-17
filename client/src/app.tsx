@@ -1,5 +1,5 @@
-import { Outlet, useFetcher, useLoaderData } from "react-router-dom";
-import { useState, createContext, lazy, Suspense, useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { useState, createContext, lazy, Suspense } from "react";
 // major components
 import GuestHome from "./Home/GuestHome";
 import FooterComponent from "./Footer/Footer";
@@ -79,7 +79,7 @@ function App() {
 
       <div
         id="productWrapper"
-        className="flex h-max w-full justify-center bg-[#a6b1e1] px-4 py-4 sm:px-8"
+        className="bg-primarylight flex h-max w-full justify-center px-4 py-4 sm:px-8"
       >
         <div
           id="productWrapper__wrapper"

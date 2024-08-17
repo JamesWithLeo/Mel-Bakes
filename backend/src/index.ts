@@ -36,6 +36,7 @@ import mongoDB, {
   removeFromOrder,
   deleteDocumentById,
   updateDocumentById,
+  findCartById,
 } from "./database.js";
 import { ObjectId, WithId } from "mongodb";
 const CLIENT = mongoDB(DB_URI);
@@ -44,6 +45,7 @@ const DATABASE = CLIENT.db("MelBake");
 const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
+const CART_COLLECTION = DATABASE.collection("CART");
 const app = express();
 
 app.use(express.json());
@@ -93,15 +95,10 @@ app.get("/melbake/cupcakes", async (req: Request, res: Response) => {
 // get single cupcake
 app.get("/melbake/cupcake/:id", async (req: Request, res: Response) => {
   let cupcake = await fetchCupcake(CUPCAKE_COLLECTION, req.params.id);
-  // convert the document to json then to object
-  // cupcake = JSON.stringify(cupcake);
-  // cupcake = JSON.parse(cupcake);
   if (cupcake) {
     await getAssetInfo(cupcake.PublicId).then((value) => {
-      // reference the Url to the cupcake object
       if (cupcake) {
         cupcake.Url = value;
-        // cupcake = JSON.stringify(cupcake);
       }
     });
     if (cupcake) {
@@ -114,13 +111,6 @@ app.get("/melbake/cupcake/:id", async (req: Request, res: Response) => {
 // fetch user
 app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
   await findUser(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
-    res.status(200).json(value);
-  });
-});
-
-// fetch cart
-app.get("/cart/:id", async (req: Request, res: Response) => {
-  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
     res.status(200).json(value);
   });
 });
@@ -150,18 +140,21 @@ app.get("/orders/:id", async (req: Request, res: Response) => {
     if (value?.Orders) res.status(200).json(value.Orders);
   });
 });
-app.post("/orders", async (req: Request, res: Response) => {
+
+app.post("/order/checkout", async (req: Request, res: Response) => {
   req.body._id = new ObjectId(req.body._id);
   insertDocument(ORDER_COLLECTION, req.body).then((result) => {
     res.status(200).json(result);
   });
 });
+
 // checkOut order
 app.post("/melbake/myorder/:id", async (req: Request, res: Response) => {
   req.body._id = new ObjectId();
-  insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).then((result) => {
-    res.status(200).json({ result: "Product is Checked out!" });
+  insertDocument(ORDER_COLLECTION, req.body).then((result) => {
+    res.status(200).json(result);
   });
+  // insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).
 });
 // cancel order
 app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
@@ -212,7 +205,7 @@ app.post("/melbake/product/insert", async (req: Request, res: Response) => {
     res.status(200).json(value);
   });
 });
-// update cupcake
+// update product
 app.post("/melbake/product/update/:id", async (req: Request, res: Response) => {
   delete req.body._id;
   await updateDocumentById(CUPCAKE_COLLECTION, req.params.id, req.body).then(
@@ -221,6 +214,61 @@ app.post("/melbake/product/update/:id", async (req: Request, res: Response) => {
     },
   );
 });
+
+/// order middlewware
+// get product
+app.get("/melbake/order", async (req: Request, res: Response) => {
+  try {
+    await fetchDocuments(ORDER_COLLECTION).then((value) => {
+      res.status(200).json(value);
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+app.get("/melbake/order/delete/:id", async (req: Request, res: Response) => {
+  await deleteDocumentById(ORDER_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json(value);
+  });
+});
+/// order middleware
+
+/// cart middleware
+// get all in the cart
+app.get("/melbake/cart/", async (req: Request, res: Response) => {
+  try {
+    await fetchDocuments(CART_COLLECTION).then((value) => {
+      res.status(200).json(value);
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+// get individual cart
+app.get("/melbake/cart/:id", async (req: Request, res: Response) => {
+  try {
+    await findCartById(CART_COLLECTION, req.params.id).then((value) => {
+      res.status(200).json(value);
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+app.post("/melbake/cart/insert/:id", async (req: Request, res: Response) => {
+  req.body.U_id = new ObjectId(req.params.id);
+  insertDocument(CART_COLLECTION, req.body).then((value) => {
+    res.status(200).json(value);
+  });
+});
+
+app.get("/melbake/cart/delete/:id", async (req: Request, res: Response) => {
+  await deleteDocumentById(CART_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json(value);
+  });
+});
+/// cart middleware
+
 // add account to database
 app.post("/melbake/signin/create", async (req: Request, res: Response) => {
   insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {

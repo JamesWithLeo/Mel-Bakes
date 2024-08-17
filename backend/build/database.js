@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findUserById = exports.findUser = void 0;
+exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findCartById = exports.findUserById = exports.findUser = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -51,6 +51,17 @@ function findUserById(coll, value) {
     });
 }
 exports.findUserById = findUserById;
+function findCartById(coll, value) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield coll.find({ U_id: new mongodb_1.ObjectId(value) }).toArray();
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.findCartById = findCartById;
 function fetchCupcake(coll, cupcakeId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -90,7 +101,7 @@ exports.insertDocument = insertDocument;
 function deleteDocumentById(coll, id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield coll.deleteOne({ _id: new mongodb_1.ObjectId(id) });
+            return yield coll.findOneAndDelete({ _id: new mongodb_1.ObjectId(id) });
         }
         catch (error) {
             console.log(error);

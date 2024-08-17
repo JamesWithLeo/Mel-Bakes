@@ -1,107 +1,64 @@
-import { createContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import CartCardComponent from "./cartCardComponent";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-export interface CartTypeface {
-  Cupcake: string;
-  Quantity: number;
-  C_id: string;
-  Price: string;
-  IsCancel: boolean;
-  IsDelivered: boolean;
-  DateOrdered: string;
-}
-// export const orderContext = createContext<null>(null);
+import axios from "axios";
+import { IOrder } from "../slice/orderSlice";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 
 export default function CartComponent() {
+  const cartQuery = useQuery({
+    queryKey: ["cart"],
+    queryFn: async () => {
+      const response = await axios.get("/melbake/cart/" + user?._id);
+      return await response.data;
+    },
+  });
+
   document.body.style.overflowY = "hidden";
-  const auth = useSelector((state: AppState) => state.auth.User);
-  let id = localStorage.getItem("id");
-  const [orderElements, SetOrderElements] = useState<JSX.Element[]>([]);
-  const [selectedOrder, SetSelectedOrder] = useState<CartTypeface | null>(null);
+  const user = useSelector((state: AppState) => state.auth.User);
+  const [selectedProducts, SetSelectedProducts] = useState<IOrder[]>([]);
+
+  async function addToSelected(item: IOrder) {
+    const existedItem = selectedProducts.filter(
+      (value) => value._id === item._id,
+    );
+    if (item && !existedItem.length)
+      SetSelectedProducts([...selectedProducts, item]);
+  }
+  async function removeToSelected(item: IOrder) {
+    const newSelected: IOrder[] = selectedProducts.filter(
+      (value) => value._id !== item._id,
+    );
+    SetSelectedProducts(newSelected);
+  }
 
   async function removeProduct() {
-    // remove product in the cart
-    let usersId = localStorage.getItem("id");
-    const orderbody = JSON.stringify(selectedOrder);
-    await fetch("/melbake/mycart/remove/" + usersId, {
-      method: "POST",
-      body: orderbody,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then(() => {
-        SetSelectedOrder(null);
-        console.log("Remove in the Cart :", selectedOrder);
-      })
-      .catch((RejectReason) => {
-        console.log(RejectReason);
-      });
+    console.log(selectedProducts);
   }
   async function checkOut() {
-    // removes the product in the cart then it checks out that product/ moves to Orders
-    if (auth) {
-      const id = auth._id;
-    }
-
-    removeProduct();
-    if (selectedOrder) {
-      selectedOrder.IsCancel = false;
-      selectedOrder.IsDelivered = false;
-      selectedOrder.DateOrdered = new Date().toLocaleString();
-    }
-    const orderbody = JSON.stringify(selectedOrder);
-    await fetch("/melbake/order/" + id, {
-      method: "POST",
-      body: orderbody,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then(async (response) => {
-      await response.json().then((value) => {
-        console.log(value);
+    // if (selectedProduct && user) {
+    //   selectedProduct.U_id = user._id;
+    //   selectedProduct.DateOrdered = new Date().toLocaleString();
+    //   console.log(selectedProduct);
+    // }
+    await axios
+      .post("/order/checkout", selectedProducts)
+      .then(async (response) => {
+        console.log(response);
       });
-    });
   }
-
-  useEffect(() => {
-    async function fetchCartData() {
-      // add the id to the params so server can fetch corresponding data in the cart .
-      const url = "cart/" + auth?._id;
-      await fetch(url)
-        .then((response) => {
-          response.json().then((orders) => {
-            // if successful, render the data in the UI .
-            if (orders) {
-              let ordersEl = orders.Cart.map((order: CartTypeface) => {
-                // order.index = selectedOrder;
-                return (
-                  <>
-                    <CartCardComponent OrderObj={order} key={order.C_id} />
-                  </>
-                );
-              });
-              // set the Rendered elements in the state which will be display .
-              SetOrderElements(ordersEl);
-            }
-          });
-        })
-        .catch((err) => {
-          SetOrderElements([
-            <h1 className="text-xl font-bold text-primary">
-              Can't fetch Cupcakes
-            </h1>,
-          ]);
-        });
-    }
-    fetchCartData();
-  }, [id, selectedOrder]);
 
   const exitCart = () => {
     document.body.style.overflowY = "scroll";
   };
+
+  if (!user) return <Navigate to={"/"} replace />;
+
+  if (cartQuery.isError) {
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <>
@@ -118,6 +75,7 @@ export default function CartComponent() {
       >
         <div className="flex w-full justify-between">
           <h1 className="text-3xl font-bold text-primary">Cart</h1>
+          <h1>{selectedProducts.length}</h1>
           <Link
             to="/Orders"
             replace={true}
@@ -127,18 +85,33 @@ export default function CartComponent() {
           </Link>
         </div>
         <div className="flex h-full w-full flex-col gap-2 overflow-auto md:flex-row md:gap-4">
-          {orderElements.length ? (
-            <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
-              {/* <orderContext.Provider value={SetSelectedOrder}> */}
-              {orderElements}
-              {/* </orderContext.Provider> */}
+          {cartQuery.isFetching ? (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-2">
+              <h1 className="text-sm text-primary">Loading...</h1>
             </div>
           ) : (
-            <div className="flex h-full w-full animate-pulse flex-col gap-2 bg-gray-200 px-2"></div>
+            <>
+              {cartQuery.data && cartQuery.data.length ? (
+                <div className="flex h-full w-full flex-col gap-2 bg-gray-50 px-2">
+                  {cartQuery.data.map((cartItem: IOrder) => (
+                    <CartCardComponent
+                      OrderObj={cartItem}
+                      key={cartItem._id}
+                      selectThis={addToSelected}
+                      unSelectThis={removeToSelected}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gray-50">
+                  <h1 className="text-gray-300">No cupcakes yet?</h1>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="flex flex-col gap-2 md:gap-4">
-          {selectedOrder ? (
+          {selectedProducts.length ? (
             <>
               <button
                 onClick={checkOut}
