@@ -7,7 +7,7 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ProductIdContext } from "../App";
+import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IProduct } from "../slice/orderSlice";
