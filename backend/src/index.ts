@@ -172,12 +172,6 @@ app
       res.status(200).json(value);
     });
   })
-  .post(async (req: Request, res: Response) => {
-    req.body._id = new ObjectId();
-    await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
-      res.status(200).json(value);
-    });
-  })
   .put(async (req: Request, res: Response) => {
     delete req.body._id;
     await updateDocumentById(ACCOUNT_COLLECTION, req.params.id, req.body).then(
@@ -186,14 +180,42 @@ app
       },
     );
   });
+//
 
-// delete account
-app.get("/melbake/account/delete/:id", async (req: Request, res: Response) => {
-  await deleteDocumentById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
-    res.status(200).json(value);
+// updating account. and deleting account
+app
+  .route("/melbake/accounts/:id")
+  .put(async (req: Request, res: Response) => {
+    delete req.body._id;
+    await updateDocumentById(ACCOUNT_COLLECTION, req.params.id, req.body).then(
+      (value) => {
+        res.status(200).json(value);
+      },
+    );
+  })
+  .delete(async (req: Request, res: Response) => {
+    await deleteDocumentById(ACCOUNT_COLLECTION, req.params.id).then(
+      (value) => {
+        res.status(200).json(value);
+      },
+    );
   });
-});
-/// account middleware
+
+// fetching all account, and inserting new one .
+app
+  .route("/melbake/accounts/")
+  .get(async (req: Request, res: Response) => {
+    await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
+      res.status(200).json(value);
+    });
+  })
+  .post(async (req: Request, res: Response) => {
+    req.body._id = new ObjectId();
+    await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
+      res.status(200).json(value);
+    });
+  });
+//
 
 app.get("/melbake/profile/:id", async (req: Request, res: Response) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {

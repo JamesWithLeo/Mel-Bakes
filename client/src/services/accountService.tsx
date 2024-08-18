@@ -7,7 +7,7 @@ export function useCreateAccount() {
 
   return useMutation({
     mutationFn: async (document: IAccount) => {
-      const response = await axios.post("/melbake/account/insert", document);
+      const response = await axios.post("/melbake/accounts/", document);
       console.log(response);
       const newId = response.data.insertedId;
       return { response, newId };
@@ -32,7 +32,7 @@ export function useDeleteAccount() {
 
   return useMutation({
     mutationFn: async (_id: string) => {
-      const response = await axios.get("/melbake/account/delete/" + _id);
+      const response = await axios.delete("/melbake/accounts/" + _id);
       console.log(response);
       return response;
     },
@@ -49,10 +49,7 @@ export function useUpdateAccount() {
   return useMutation({
     mutationFn: async (document: IAccount) => {
       const id = document._id;
-      const response = await axios.post(
-        "/melbake/account/update/" + id,
-        document,
-      );
+      const response = await axios.put("/melbake/accounts/" + id, document);
       console.log(response);
       return response;
     },

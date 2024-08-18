@@ -17,7 +17,7 @@ function AccountDashboard() {
   const query = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
-      const response = await axios.get("/melbake/account");
+      const response = await axios.get("/melbake/accounts/");
       return await response.data;
     },
   });

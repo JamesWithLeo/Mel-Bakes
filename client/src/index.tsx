@@ -6,7 +6,7 @@ import App from "./app";
 import "./index.css";
 import ErrorPage from "./Pages/ErrorPage";
 import SignIn from "./Pages/SignIn";
-import Admin from "./admin.components/Admin";
+import Admin from "./admin.components/admin";
 import ModalCart from "./Product/modalCart";
 import Faqs from "./faqsComponents/Faqs";
 import Account from "./account.components/account";

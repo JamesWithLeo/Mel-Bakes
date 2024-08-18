@@ -37,7 +37,6 @@ export default function AccountTable({
         maxSize: 250,
         enableColumnDragging: false,
         enableClickToCopy: true,
-        enableEditing: false,
         enableGrouping: false,
       },
       {
@@ -99,9 +98,7 @@ export default function AccountTable({
       )
         return;
 
-      values.Cart = null;
       addRow(values);
-      console.log("done");
       table.setCreatingRow(null);
     };
 
