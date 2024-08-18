@@ -1,3 +1,4 @@
+import ccg3 from "../assets/images/ccg3.jpg";
 import React, { useEffect, useState, useRef } from "react";
 import ccg1 from "../assets/images/ccG1.jpg";
 import ccg2 from "../assets/images/ccG2.jpg";
@@ -7,38 +8,49 @@ import "slick-carousel/slick/slick-theme.css";
 function Gallary() {
   var settings = {
     dots: false,
-    fade: true,
     infinite: true,
-    centerMode: true,
+    centerMode: false,
     arrows: false,
-    speed: 2000,
+    speed: 1000,
     slidesToShow: 1,
+    slidesToScroll: 1,
     autoplay: true,
     adaptiveHeight: true,
     autoplaySpeed: 2000,
-    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 480,
+        settings: {
+          centerMode: false,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
   };
   return (
     <div
       id="gallery"
-      className="-z-0 h-max w-80 rounded bg-white py-10 shadow-2xl drop-shadow sm:w-96 lg:w-[30rem]"
+      className="-z-0 h-max w-96 max-w-xs overflow-hidden rounded bg-white p-1 shadow-2xl drop-shadow sm:w-full sm:max-w-lg sm:rounded-lg sm:p-3 lg:w-[30rem]"
     >
       <Slider {...settings} className="">
-        <div className="h-full">
-          <img
-            src={ccg1}
-            alt="cupcake"
-            className="h-auto w-full overflow-hidden"
-          />
-        </div>
+        <img
+          src={ccg1}
+          alt="cupcake"
+          className="h-auto w-full overflow-hidden"
+        />
 
-        <div className="h-full w-full">
-          <img
-            src={ccg2}
-            alt="cupcake"
-            className="h-auto w-full overflow-hidden"
-          />
-        </div>
+        <img
+          src={ccg2}
+          alt="cupcake"
+          className="h-auto w-full overflow-hidden"
+        />
+        <img
+          src={ccg3}
+          alt="cupcake"
+          className="h-auto w-full overflow-hidden"
+        />
       </Slider>
     </div>
   );

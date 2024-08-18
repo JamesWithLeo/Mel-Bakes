@@ -50,7 +50,7 @@ function HeaderComponent() {
               </>
 
               <Link
-                to={"/cart"}
+                to={"/minicart"}
                 onClick={closeMenuGotoCart}
                 className="flex items-center justify-center gap-1"
               >
@@ -64,13 +64,14 @@ function HeaderComponent() {
 
               <Link
                 className="flex items-center justify-center gap-1"
-                to={"Account"}
+                to={"account"}
+                replace={false}
               >
                 <FontAwesomeIcon
                   icon={faUser}
                   className="text-primary sm:text-base lg:text-base"
                 />
-                <h1 className="px-3 py-1 text-primary">Account</h1>
+                <h1 className="px-3 py-1 text-primary">account</h1>
               </Link>
             </div>
           ) : null}
@@ -97,13 +98,13 @@ function HeaderComponent() {
       </div>
       {isMenuVisible ? (
         <>
-          <div className="fixed z-10 grid h-full w-full grid-cols-1 items-center justify-evenly gap-8 bg-secondarylight pb-16 text-left text-4xl md:hidden">
+          <div className="fixed z-10 flex h-full w-full grid-cols-1 flex-col items-center justify-evenly gap-8 bg-secondarylight pb-16 text-left text-xl sm:text-2xl md:hidden">
             <Link
               to={"/"}
               onClick={() => {
                 setIsMenuVisible(false);
               }}
-              className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+              className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
             >
               <FontAwesomeIcon icon={faHome} id="cart" className="" />
               Home
@@ -112,17 +113,17 @@ function HeaderComponent() {
             {auth.User ? (
               <>
                 <Link
-                  to={"/cart"}
+                  to={"/minicart"}
                   onClick={closeMenuGotoCart}
-                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                 >
                   <FontAwesomeIcon icon={faShoppingCart} id="cart" />
                   Cart
                 </Link>
 
                 <Link
-                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
-                  to={"Account"}
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
+                  to={"account"}
                 >
                   <FontAwesomeIcon icon={faUser} />
                   Account
@@ -131,7 +132,7 @@ function HeaderComponent() {
             ) : null}
 
             <a
-              className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+              className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
               href="#footer"
               onClick={closeMenu}
             >
@@ -143,7 +144,7 @@ function HeaderComponent() {
               {auth.User && auth.User.Type === "admin" ? (
                 <Link
                   to={"Admin"}
-                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+                  className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                 >
                   <FontAwesomeIcon icon={faCode} id="Admin" />
                   <h1 className="px-3 py-1 text-primary">Admin</h1>

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { ViewProductContext, ProductIdContext } from "../app";
+import React, { useContext } from "react";
+import { ViewProductContext, ProductIdContext } from "../App";
 
 function ProductCard({ productObj }) {
   const ViewProduct = useContext(ViewProductContext);

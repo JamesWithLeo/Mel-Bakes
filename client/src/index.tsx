@@ -2,14 +2,14 @@ import * as React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import App from "./app";
+import App from "./App";
 import "./index.css";
 import ErrorPage from "./Pages/ErrorPage";
 import SignIn from "./Pages/SignIn";
 import Admin from "./admin.components/Admin";
-import CartComponent from "./Product/CartComponent";
+import ModalCart from "./Product/modalCart";
 import Faqs from "./faqsComponents/Faqs";
-import Account from "./Account/Account";
+import Account from "./account.components/account";
 import Orders from "./orders.component/Orders";
 import { Provider } from "react-redux";
 import { store } from "./store";
@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode } from "@fortawesome/free-solid-svg-icons";
 import OrderDashboard from "./admin.components/orderDashboard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Cart from "./account.components/cart";
 
 const cartQuery = new QueryClient();
 const route = createBrowserRouter([
@@ -29,32 +30,43 @@ const route = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     loader: async () => {
-      return axios.get("melbake").then((res) => {
+      return axios.get("/melbake").then((res) => {
+        console.log(res.data);
         return res.data;
       });
     },
-    // shouldRevalidate: ({ currentUrl, currentParams }) => {
-    //   console.log("revalidated, react-router");
-    //   return currentUrl.pathname === "/cart";
-    // },
     children: [
       {
-        path: "/cart",
+        path: "/minicart",
         element: (
           <QueryClientProvider client={cartQuery}>
-            <CartComponent />
+            <ModalCart />
           </QueryClientProvider>
         ),
       },
     ],
   },
   {
-    path: "Account",
+    path: "account",
     element: (
       <ProtectedRoute>
         <Account />
       </ProtectedRoute>
     ),
+    children: [
+      {
+        path: "cart",
+        element: (
+          <QueryClientProvider client={cartQuery}>
+            <Cart />
+          </QueryClientProvider>
+        ),
+      },
+      { path: "favorites", element: <div>fav</div> },
+      { path: "order", element: <div>order</div> },
+      { path: "recieved", element: <div>recieved</div> },
+      { path: "cancelled", element: <div>cancelled</div> },
+    ],
   },
   {
     path: "admin",
@@ -63,6 +75,7 @@ const route = createBrowserRouter([
         <Admin />
       </ProtectedRoute>
     ),
+
     children: [
       {
         index: true,

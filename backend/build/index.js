@@ -151,10 +151,10 @@ app.post("/order/checkout", (req, res) => __awaiter(void 0, void 0, void 0, func
 // checkOut order
 app.post("/melbake/myorder/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
+    req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
     (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
         res.status(200).json(result);
     });
-    // insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).
 }));
 // cancel order
 app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -164,20 +164,20 @@ app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, vo
 }));
 /// account middleware
 // fetch accounts
-app.get("/melbake/account", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app
+    .route("/melbake/account/:id")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.fetchDocuments)(ACCOUNT_COLLECTION).then((value) => {
         res.status(200).json(value);
     });
-}));
-// insert account
-app.post("/melbake/account/insert", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
     yield (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
         res.status(200).json(value);
     });
-}));
-// update account
-app.post("/melbake/account/update/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+}))
+    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     delete req.body._id;
     yield (0, database_js_1.updateDocumentById)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
         res.status(200).json(value);

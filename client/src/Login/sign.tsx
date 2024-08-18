@@ -49,6 +49,7 @@ function Sign({ setVisibility }: ISign) {
       LastName: lastname.value,
       Gmail: gmail.value,
       Password: password.value,
+      CartQuantity: null,
     });
     writeUser(body);
     navigate("/", { replace: true });

@@ -7,6 +7,8 @@ export function useCreateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (document: IProduct) => {
+      document.Quantity = Number(document.Quantity);
+      document.Price = Number(document.Price);
       const response = await axios.post("/melbake/product/insert", document);
       console.log(response);
       if (response.data.insertedId) {
@@ -34,6 +36,8 @@ export function useUpdateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (document: IProduct) => {
+      document.Quantity = Number(document.Quantity);
+      document.Price = Number(document.Price);
       const id = document._id;
       const response = await axios.post(
         "/melbake/product/update/" + id,
@@ -42,6 +46,7 @@ export function useUpdateProduct() {
       console.log(response);
       return response;
     },
+
     onMutate: (updatedProduct: IProduct) => {
       queryClient.setQueryData(["product"], (prevProducts: any) =>
         prevProducts?.map((prevProduct: IProduct) =>

@@ -112,7 +112,7 @@ exports.deleteDocumentById = deleteDocumentById;
 function updateDocumentById(coll, id, document) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield coll.findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: document });
+            return yield coll.findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: document }, { returnDocument: "after" });
         }
         catch (error) {
             console.log(error);

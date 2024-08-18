@@ -7,11 +7,12 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ProductIdContext } from "../app";
+import { ProductIdContext } from "../App";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IProduct } from "../slice/orderSlice";
 import axios from "axios";
+import Notify from "../components/notify";
 
 function ViewProduct({
   setDisplay,
@@ -20,53 +21,65 @@ function ViewProduct({
   setDisplay: () => void;
   setLoginModalVisibility: () => void;
 }) {
-  const auth = useSelector((state: AppState) => state.auth);
+  const user = useSelector((state: AppState) => state.auth.User);
   const id = useContext(ProductIdContext);
 
   const [cupcakeObj, setCupcakeObj] = useState<null | IProduct>(null);
   const [flavors, setFlavors] = useState<JSX.Element[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [isPurchase, setIsPurchase] = useState<
+    "Purchased" | "Can't purchase right now." | null
+  >(null);
   const [isAddedToCart, setIsAddedToCart] = useState<
     "Added" | "Can't add to cart" | null
   >(null);
+  const [isCartFull, setIsCartFull] = useState<"Cart is full" | null>(null);
+  const maxCartCapacity = 6;
 
   async function AddToCart() {
-    if (cupcakeObj && auth.User) {
-      const Name = cupcakeObj.Name;
-      const Url = cupcakeObj.Url;
-      const C_id = cupcakeObj._id;
-      const Price = cupcakeObj.Price;
-      const Quantity = quantity;
+    if (!(cupcakeObj && user)) return;
 
-      axios
-        .post("/melbake/cart/" + auth.User._id, {
-          Name,
-          Url,
-          Quantity,
-          C_id,
-          Price,
-        })
-        .then((response) => {
-          if (response.data.insertedId) {
-            setIsAddedToCart("Added");
-          } else {
-            setIsAddedToCart("Can't add to cart");
-          }
-          setTimeout(() => {
-            setIsAddedToCart(null);
-          }, 3000);
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    }
+    const Name = cupcakeObj.Name;
+    const Url = cupcakeObj.Url;
+    const C_id = cupcakeObj._id;
+    const Price = cupcakeObj.Price;
+    const Quantity = quantity;
+    axios.get("/melbake/cart/" + user._id).then((value) => {
+      const cartItemQuantity = value.data as object[];
+      if (!(cartItemQuantity.length < maxCartCapacity)) {
+        setIsCartFull("Cart is full");
+        setTimeout(() => {
+          setIsCartFull(null);
+        }, 3000);
+      } else
+        axios
+          .post("/melbake/cart/" + user._id, {
+            Name,
+            Url,
+            Quantity,
+            C_id,
+            Price,
+          })
+          .then((response) => {
+            if (response.data.insertedId) setIsAddedToCart("Added");
+            else {
+              setIsAddedToCart("Can't add to cart");
+            }
+            setTimeout(() => {
+              setIsAddedToCart(null);
+            }, 3000);
+          })
+          .catch((response) => {
+            console.log(response);
+          });
+    });
   }
 
   async function AddToOrder() {
     if (cupcakeObj) {
       let Name = cupcakeObj.Name;
       let Quantity = quantity;
-      let U_id = auth.User?._id;
+      let U_id = user?._id;
       let C_id = cupcakeObj._id;
       let Price = cupcakeObj.Price;
       let Url = cupcakeObj.Url;
@@ -84,10 +97,15 @@ function ViewProduct({
           DateOrdered,
         })
         .then((response) => {
-          if (response.data.insetedId) {
+          if (response.data.insertedId) {
             setQuantity(1);
+            setIsPurchase("Purchased");
+          } else {
+            setIsPurchase("Can't purchase right now.");
           }
-          console.log(response);
+          setTimeout(() => {
+            setIsPurchase(null);
+          }, 3000);
         });
     }
   }
@@ -155,21 +173,30 @@ function ViewProduct({
           className="h-full bg-transparent"
           onClick={exitViewProduct}
           defaultSize={25}
-        >
-          {isAddedToCart ? (
-            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
-              <h1 className="font-[Raleway] text-xs font-bold text-white">
-                {isAddedToCart}
-              </h1>
-            </div>
-          ) : null}
-        </Panel>
+        ></Panel>
         <PanelResizeHandle className="h-4 w-full self-center rounded bg-gray-100" />
 
         <Panel
           className="flex flex-col items-center justify-between bg-white lg:justify-around"
           defaultSize={75}
         >
+          {isAddedToCart ? (
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
+              <Notify text={isAddedToCart} />
+            </div>
+          ) : null}
+
+          {isPurchase ? (
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
+              <Notify text={isPurchase} />
+            </div>
+          ) : null}
+          {isCartFull ? (
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
+              <Notify text={isCartFull} />
+            </div>
+          ) : null}
+
           <div className="flex w-full max-w-7xl flex-col">
             <button
               className="m-1 w-max self-end text-gray-300"
@@ -315,7 +342,7 @@ function ViewProduct({
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
                   {cupcakeObj?.Name ? (
                     <>
-                      {auth.User ? (
+                      {user ? (
                         <>
                           <button
                             className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
@@ -324,6 +351,19 @@ function ViewProduct({
                           >
                             Add to Cart
                           </button>
+                          {/* {user.CartQuantity < maxCartCapacity ? (
+                            <button
+                              className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
+                              id="addToCartButton"
+                              onClick={AddToCart}
+                            >
+                              Add to Cart
+                            </button>
+                          ) : (
+                            <button className="h-8 w-full bg-red-200 text-xs text-red-500 sm:text-sm md:w-1/2 md:text-base">
+                              Cart is full
+                            </button>
+                          )} */}
 
                           <button
                             className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"

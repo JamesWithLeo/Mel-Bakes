@@ -3,6 +3,7 @@ import axios from "axios";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
+type IAccountEditableFields = "CartQuantity";
 
 export type IAccount = {
   Type: "admin" | "user";
@@ -13,6 +14,7 @@ export type IAccount = {
   LastName: string;
   Contact: string;
   Address: string;
+  CartQuantity: number;
 };
 export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
 interface IUserInit {
@@ -47,6 +49,10 @@ const authSlice = createSlice({
       state.User = null;
       state.AuthMessage = null;
       localStorage.removeItem("melbakesUser");
+    });
+    builder.addCase(update.fulfilled, (state, action) => {
+      state.User = action.payload.User;
+      localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
   },
 });
@@ -98,5 +104,42 @@ export const Login = createAsyncThunk(
 export const Logout = createAsyncThunk("auth/Logout", async () => {
   return;
 });
+
+const updateRequest = async (
+  id: string,
+  fieldToUpdate: IAccountEditableFields,
+  updatedValue: string | number,
+) => {
+  switch (fieldToUpdate) {
+    case "CartQuantity":
+      return axios
+        .put(`/melbake/account/` + id, {
+          CartQuantity: updatedValue,
+        })
+        .then((response) => response.data);
+  }
+};
+
+export const update = createAsyncThunk(
+  "auth/update",
+  async (
+    {
+      id,
+      field,
+      value,
+    }: { id: string; field: IAccountEditableFields; value: string | number },
+    thunkApi,
+  ) => {
+    try {
+      const document: IAccount = await updateRequest(id, field, value);
+      if (!document) return { User: null };
+      localStorage.removeItem("melbakesUser");
+      localStorage.setItem("melbakesUser", JSON.stringify(document));
+      return { User: document };
+    } catch (error) {
+      return { User: null };
+    }
+  },
+);
 export const { ResetAuthMessage } = { ...authSlice.actions };
 export default authSlice.reducer;

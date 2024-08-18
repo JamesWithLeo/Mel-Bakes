@@ -151,10 +151,10 @@ app.post("/order/checkout", async (req: Request, res: Response) => {
 // checkOut order
 app.post("/melbake/myorder/:id", async (req: Request, res: Response) => {
   req.body._id = new ObjectId();
+  req.body.U_id = new ObjectId(req.body.U_id);
   insertDocument(ORDER_COLLECTION, req.body).then((result) => {
     res.status(200).json(result);
   });
-  // insertToOrder(ACCOUNT_COLLECTION, req.params.id, req.body).
 });
 // cancel order
 app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
@@ -165,27 +165,28 @@ app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
 
 /// account middleware
 // fetch accounts
-app.get("/melbake/account", async (req: Request, res: Response) => {
-  await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
-    res.status(200).json(value);
-  });
-});
-// insert account
-app.post("/melbake/account/insert", async (req: Request, res: Response) => {
-  req.body._id = new ObjectId();
-  await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
-    res.status(200).json(value);
-  });
-});
-// update account
-app.post("/melbake/account/update/:id", async (req: Request, res: Response) => {
-  delete req.body._id;
-  await updateDocumentById(ACCOUNT_COLLECTION, req.params.id, req.body).then(
-    (value) => {
+app
+  .route("/melbake/account/:id")
+  .get(async (req: Request, res: Response) => {
+    await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
       res.status(200).json(value);
-    },
-  );
-});
+    });
+  })
+  .post(async (req: Request, res: Response) => {
+    req.body._id = new ObjectId();
+    await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
+      res.status(200).json(value);
+    });
+  })
+  .put(async (req: Request, res: Response) => {
+    delete req.body._id;
+    await updateDocumentById(ACCOUNT_COLLECTION, req.params.id, req.body).then(
+      (value) => {
+        res.status(200).json(value);
+      },
+    );
+  });
+
 // delete account
 app.get("/melbake/account/delete/:id", async (req: Request, res: Response) => {
   await deleteDocumentById(ACCOUNT_COLLECTION, req.params.id).then((value) => {

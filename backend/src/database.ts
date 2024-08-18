@@ -86,6 +86,7 @@ export async function updateDocumentById(
     return await coll.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: document },
+      { returnDocument: "after" },
     );
   } catch (error) {
     console.log(error);

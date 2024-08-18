@@ -113,7 +113,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           <Link
             to={"Signin"}
             onClick={exitModal}
-            className="mt-4 h-8 w-full self-center rounded bg-secondarylight py-1 text-center align-middle text-xs text-primary md:text-sm"
+            className="mt-4 flex h-8 w-full items-center justify-center self-center rounded bg-secondarylight py-1 text-center align-middle text-xs text-primary md:text-sm"
           >
             Create account?
           </Link>

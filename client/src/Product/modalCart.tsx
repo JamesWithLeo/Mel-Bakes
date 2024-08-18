@@ -8,7 +8,7 @@ import { IOrder } from "../slice/orderSlice";
 import { useQuery } from "@tanstack/react-query";
 import { useMultiDeleteCart } from "../services/cartService";
 
-export default function CartComponent() {
+export default function ModalCart() {
   document.body.style.overflowY = "hidden";
   const user = useSelector((state: AppState) => state.auth.User);
   const [selectedProducts, SetSelectedProducts] = useState<IOrder[]>([]);

@@ -3,6 +3,8 @@ import { IOrder } from "../slice/orderSlice";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { useDeleteCart } from "../services/cartService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 export default function CartCardComponent({
   OrderObj,
@@ -35,7 +37,7 @@ export default function CartCardComponent({
   };
 
   return (
-    <div className="group flex h-max w-full grid-cols-6 items-center justify-between gap-2 bg-gray-50 p-2 hover:border hover:bg-gray-100 md:px-4">
+    <div className="group flex h-max w-full grid-cols-6 items-center justify-between gap-2 border border-transparent px-2 hover:border-gray-300 md:px-4">
       <div className="flex w-full max-w-md items-center justify-between">
         <input
           type="checkbox"
@@ -47,9 +49,13 @@ export default function CartCardComponent({
             }
           }}
         />
-        <div className="h-16 w-16">
-          <img src={OrderObj.Url} alt="cupcake" />
-        </div>
+        {OrderObj.Url ? (
+          <img src={OrderObj.Url} alt="cupcake" className="h-16 w-16" />
+        ) : (
+          <div className="flex h-16 w-16 animate-pulse items-center justify-center rounded bg-slate-100 text-xl text-primarylight">
+            <FontAwesomeIcon icon={faImage} />
+          </div>
+        )}
 
         <div>
           <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">

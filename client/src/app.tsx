@@ -79,7 +79,7 @@ function App() {
 
       <div
         id="productWrapper"
-        className="bg-primarylight flex h-max w-full justify-center px-4 py-4 sm:px-8"
+        className="flex h-max w-full justify-center bg-primarylight px-4 py-4 sm:px-8"
       >
         <div
           id="productWrapper__wrapper"
