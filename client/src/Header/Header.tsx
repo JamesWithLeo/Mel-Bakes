@@ -5,6 +5,7 @@ import {
   faUser,
   faBars,
   faHome,
+  faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Link } from "react-router-dom";
@@ -15,9 +16,13 @@ import { AppState } from "../store";
 function HeaderComponent() {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const auth = useSelector((state: AppState) => state.auth);
-  const openCart = () => {
+  const closeMenu = () => {
     setIsMenuVisible(false);
-    document.body.style.overflowY = "hidden";
+    document.body.style.overflowY = "true";
+  };
+  const closeMenuGotoCart = () => {
+    setIsMenuVisible(false);
+    document.body.style.overflowY = "false";
   };
 
   return (
@@ -46,7 +51,7 @@ function HeaderComponent() {
 
               <Link
                 to={"/cart"}
-                onClick={openCart}
+                onClick={closeMenuGotoCart}
                 className="flex items-center justify-center gap-1"
               >
                 <FontAwesomeIcon
@@ -73,7 +78,8 @@ function HeaderComponent() {
             id="headerButton"
             className="flex w-max items-center justify-center gap-2 sm:gap-4"
           >
-            <a href="#footer" className="w-max">
+            {" "}
+            <a href="#footer" className="hidden w-max lg:flex">
               Contact us
             </a>
             <button
@@ -91,48 +97,60 @@ function HeaderComponent() {
       </div>
       {isMenuVisible ? (
         <>
-          {auth.User ? (
-            <div className="fixed grid h-full w-full grid-cols-1 items-center justify-evenly gap-8 bg-secondarylight pb-16 text-left text-4xl md:hidden">
-              <Link
-                to={"/"}
-                onClick={() => {
-                  setIsMenuVisible(false);
-                }}
-                className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
-              >
-                <FontAwesomeIcon icon={faHome} id="cart" className="" />
-                Home
-              </Link>
+          <div className="fixed z-10 grid h-full w-full grid-cols-1 items-center justify-evenly gap-8 bg-secondarylight pb-16 text-left text-4xl md:hidden">
+            <Link
+              to={"/"}
+              onClick={() => {
+                setIsMenuVisible(false);
+              }}
+              className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+            >
+              <FontAwesomeIcon icon={faHome} id="cart" className="" />
+              Home
+            </Link>
 
-              <Link
-                to={"/cart"}
-                onClick={openCart}
-                className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
-              >
-                <FontAwesomeIcon icon={faShoppingCart} id="cart" />
-                Cart
-              </Link>
-
-              <Link
-                className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
-                to={"Account"}
-              >
-                <FontAwesomeIcon icon={faUser} />
-                Account
-              </Link>
+            {auth.User ? (
               <>
-                {auth.User.Type === "admin" ? (
-                  <Link
-                    to={"Admin"}
-                    className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
-                  >
-                    <FontAwesomeIcon icon={faCode} id="Admin" />
-                    <h1 className="px-3 py-1 text-primary">Admin</h1>
-                  </Link>
-                ) : null}
+                <Link
+                  to={"/cart"}
+                  onClick={closeMenuGotoCart}
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+                >
+                  <FontAwesomeIcon icon={faShoppingCart} id="cart" />
+                  Cart
+                </Link>
+
+                <Link
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+                  to={"Account"}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  Account
+                </Link>
               </>
-            </div>
-          ) : null}
+            ) : null}
+
+            <a
+              className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+              href="#footer"
+              onClick={closeMenu}
+            >
+              <FontAwesomeIcon icon={faPhone} />
+              Contact us
+            </a>
+
+            <>
+              {auth.User && auth.User.Type === "admin" ? (
+                <Link
+                  to={"Admin"}
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-3xl text-primary hover:animate-pulse"
+                >
+                  <FontAwesomeIcon icon={faCode} id="Admin" />
+                  <h1 className="px-3 py-1 text-primary">Admin</h1>
+                </Link>
+              ) : null}
+            </>
+          </div>
         </>
       ) : null}
     </>

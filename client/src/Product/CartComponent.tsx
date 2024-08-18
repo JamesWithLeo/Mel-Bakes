@@ -1,11 +1,11 @@
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import CartCardComponent from "./cartCardComponent";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import axios from "axios";
 import { IOrder } from "../slice/orderSlice";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useMultiDeleteCart } from "../services/cartService";
 
 export default function CartComponent() {
@@ -33,11 +33,8 @@ export default function CartComponent() {
       selectedProducts.filter((value) => value._id !== item._id),
     );
   }
-  const {
-    mutateAsync: MulitDeleteCart,
-    isPending: isDeletingMultiDeleteCart,
-    isSuccess: isSuccessMultiDeleteCart,
-  } = useMultiDeleteCart();
+  const { mutateAsync: MulitDeleteCart, isPending: isDeletingMultiDeleteCart } =
+    useMultiDeleteCart();
 
   async function removeProduct() {
     if (!isDeletingMultiDeleteCart) {

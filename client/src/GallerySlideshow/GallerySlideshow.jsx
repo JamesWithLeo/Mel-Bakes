@@ -21,7 +21,7 @@ function Gallary() {
   return (
     <div
       id="gallery"
-      className="h-max w-80 rounded bg-white py-10 shadow-2xl drop-shadow sm:w-96 lg:w-[30rem]"
+      className="-z-0 h-max w-80 rounded bg-white py-10 shadow-2xl drop-shadow sm:w-96 lg:w-[30rem]"
     >
       <Slider {...settings} className="">
         <div className="h-full">

@@ -33,10 +33,10 @@ const route = createBrowserRouter([
         return res.data;
       });
     },
-    shouldRevalidate: ({ currentUrl, currentParams }) => {
-      console.log("revalidated, react-router");
-      return currentUrl.pathname === "/cart";
-    },
+    // shouldRevalidate: ({ currentUrl, currentParams }) => {
+    //   console.log("revalidated, react-router");
+    //   return currentUrl.pathname === "/cart";
+    // },
     children: [
       {
         path: "/cart",
