@@ -2,16 +2,16 @@ import { Outlet } from "react-router-dom";
 import { useState, createContext, lazy, Suspense } from "react";
 // major components
 import GuestHome from "./Home/GuestHome";
-import FooterComponent from "./Footer/Footer";
-import HeaderComponent from "./Header/Header";
+import FooterComponent from "./components/Footer";
+import HeaderComponent from "./components/Header";
 // components
 import plaidPattern from "./assets/images/pattern.svg";
 import Product from "./Product/Product";
 
 // icon
 import Homepage from "./Home/Homepage";
-import LoadingComponents from "./loading/LoadingComponent";
-import LoginModal from "./Login/LoginModal";
+import LoadingComponents from "./components/LoadingComponent";
+import LoginModal from "./login-signin/LoginModal";
 import FilterComponent from "./Product/FilterComponent";
 import { useSelector } from "react-redux";
 import { AppState } from "./store";

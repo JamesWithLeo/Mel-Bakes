@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import plaidPattern from "../assets/images/pattern.svg";
-import FooterComponent from "../Footer/Footer";
+import FooterComponent from "../components/Footer";
 import { Link } from "react-router-dom";
-import LoginPage from "../Login/Login";
-import Sign from "../Login/sign";
+import LoginPage from "./Login";
+import Sign from "./sign";
 
 function SignIn() {
   const [log, setLog] = useState(false);

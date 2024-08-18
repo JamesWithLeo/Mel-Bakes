@@ -162,7 +162,6 @@ app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, vo
         res.status(200).json(value);
     });
 }));
-/// account middleware
 // fetch accounts
 app
     .route("/melbake/account/:id")
@@ -177,20 +176,10 @@ app
         res.status(200).json(value);
     });
 }));
-// admin, routing for acccounts
+//
+// updating account. and deleting account
 app
     .route("/melbake/accounts/:id")
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.fetchDocuments)(ACCOUNT_COLLECTION).then((value) => {
-        res.status(200).json(value);
-    });
-}))
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.body._id = new mongodb_1.ObjectId();
-    yield (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
-        res.status(200).json(value);
-    });
-}))
     .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     delete req.body._id;
     yield (0, database_js_1.updateDocumentById)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
@@ -202,6 +191,7 @@ app
         res.status(200).json(value);
     });
 }));
+// fetching all account, and inserting new one .
 app
     .route("/melbake/accounts/")
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -215,31 +205,31 @@ app
         res.status(200).json(value);
     });
 }));
-// app
-//   .route("/melbake/a/accounts/:id")
-//   .delete(async (req: Request, res: Response) => {
-//     await deleteDocumentById(ACCOUNT_COLLECTION, req.params.id).then(
-//       (value) => {
-//         res.status(200).json(value);
-//       },
-//     );
-//   });
-app.get("/melbake/profile/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((account) => {
-        res.status(200).json(account);
-    });
-}));
+//
 // add product to database
-app.post("/melbake/product/insert", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.route("/melbake/product/").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.body._id = new mongodb_1.ObjectId();
     (0, database_js_1.insertDocument)(CUPCAKE_COLLECTION, req.body).then((value) => {
         res.status(200).json(value);
     });
 }));
-// update product
-app.post("/melbake/product/update/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// update product,
+app
+    .route("/melbake/product/:id")
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.deleteDocumentById)(CUPCAKE_COLLECTION, req.params.id).then((value) => {
+        res.status(200).json(value);
+    });
+}))
+    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     delete req.body._id;
     yield (0, database_js_1.updateDocumentById)(CUPCAKE_COLLECTION, req.params.id, req.body).then((value) => {
         res.status(200).json(value);
+    });
+}));
+app.get("/melbake/profile/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((account) => {
+        res.status(200).json(account);
     });
 }));
 /// order middlewware

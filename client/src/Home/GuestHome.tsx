@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import Gallary from "../GallerySlideshow/GallerySlideshow";
+import Gallary from "../components/GallerySlideshow";
 interface IGuestHome {
   setLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

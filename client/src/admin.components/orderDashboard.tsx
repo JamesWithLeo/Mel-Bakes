@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import OrderTable from "./orderTable";
 import { useDeleteOrder } from "../services/orderService";
+import LoadingPage from "../components/loadingPage";
 
 export default function OrderDashboard() {
   const query = useQuery({
@@ -17,6 +18,7 @@ export default function OrderDashboard() {
   const HandleDeleteOrder = (id: string) => {
     deleteOrder(id);
   };
+  if (query.isLoading) return <LoadingPage />;
   return (
     <main>
       <>

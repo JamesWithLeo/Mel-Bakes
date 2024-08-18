@@ -1,26 +1,26 @@
 import * as React from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Provider } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCode } from "@fortawesome/free-solid-svg-icons";
 
 import App from "./app";
 import "./index.css";
-import ErrorPage from "./Pages/ErrorPage";
-import SignIn from "./Pages/SignIn";
+import ErrorPage from "./components/ErrorPage";
+import SignIn from "./login-signin/SignIn";
 import Admin from "./admin.components/admin";
 import ModalCart from "./Product/modalCart";
-import Faqs from "./faqsComponents/Faqs";
+import Faqs from "./components/Faqs";
 import Account from "./account.components/account";
 import Orders from "./orders.component/Orders";
-import { Provider } from "react-redux";
 import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
-import axios from "axios";
 import AccountDashboard from "./admin.components/acccountDashboard";
 import ProductDashboard from "./admin.components/productDashboard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCode } from "@fortawesome/free-solid-svg-icons";
 import OrderDashboard from "./admin.components/orderDashboard";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Cart from "./account.components/cart";
 
 const cartQuery = new QueryClient();

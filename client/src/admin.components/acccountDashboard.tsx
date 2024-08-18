@@ -2,9 +2,7 @@ import AccountTable from "./accountTable";
 
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-import LoadingPage from "../Pages/loadingPage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import LoadingPage from "../components/loadingPage";
 import { IAccount } from "../slice/authSlice";
 import {
   useCreateAccount,
@@ -42,15 +40,7 @@ function AccountDashboard() {
     if (!isUpdatingAccount) updateAccount(account);
   };
 
-  if (query.isLoading)
-    return (
-      <LoadingPage>
-        <FontAwesomeIcon
-          icon={faSpinner}
-          className="animate-spin text-3xl text-primary"
-        />
-      </LoadingPage>
-    );
+  if (query.isLoading) return <LoadingPage />;
   if (query.error) return <Navigate to={"/admin"} replace />;
 
   return (

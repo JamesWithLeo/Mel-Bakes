@@ -163,7 +163,6 @@ app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
   });
 });
 
-/// account middleware
 // fetch accounts
 app
   .route("/melbake/account/:id")
@@ -217,27 +216,38 @@ app
   });
 //
 
+// add product to database
+app.route("/melbake/product/").post(async (req: Request, res: Response) => {
+  req.body._id = new ObjectId();
+  insertDocument(CUPCAKE_COLLECTION, req.body).then((value) => {
+    res.status(200).json(value);
+  });
+});
+
+// update product,
+app
+  .route("/melbake/product/:id")
+  .delete(async (req: Request, res: Response) => {
+    await deleteDocumentById(CUPCAKE_COLLECTION, req.params.id).then(
+      (value) => {
+        res.status(200).json(value);
+      },
+    );
+  })
+  .put(async (req: Request, res: Response) => {
+    delete req.body._id;
+    await updateDocumentById(CUPCAKE_COLLECTION, req.params.id, req.body).then(
+      (value) => {
+        res.status(200).json(value);
+      },
+    );
+  });
+
 app.get("/melbake/profile/:id", async (req: Request, res: Response) => {
   await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {
     res.status(200).json(account);
   });
 });
-// add product to database
-app.post("/melbake/product/insert", async (req: Request, res: Response) => {
-  insertDocument(CUPCAKE_COLLECTION, req.body).then((value) => {
-    res.status(200).json(value);
-  });
-});
-// update product
-app.post("/melbake/product/update/:id", async (req: Request, res: Response) => {
-  delete req.body._id;
-  await updateDocumentById(CUPCAKE_COLLECTION, req.params.id, req.body).then(
-    (value) => {
-      res.status(200).json(value);
-    },
-  );
-});
-
 /// order middlewware
 // get product
 app.get("/melbake/order", async (req: Request, res: Response) => {

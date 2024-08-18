@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IProduct } from "../slice/orderSlice";
 import axios from "axios";
-import { Update } from "@mui/icons-material";
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
@@ -9,7 +8,7 @@ export function useCreateProduct() {
     mutationFn: async (document: IProduct) => {
       document.Quantity = Number(document.Quantity);
       document.Price = Number(document.Price);
-      const response = await axios.post("/melbake/product/insert", document);
+      const response = await axios.post("/melbake/product/", document);
       console.log(response);
       if (response.data.insertedId) {
         const newId = response.data.insertedId;
@@ -39,10 +38,7 @@ export function useUpdateProduct() {
       document.Quantity = Number(document.Quantity);
       document.Price = Number(document.Price);
       const id = document._id;
-      const response = await axios.post(
-        "/melbake/product/update/" + id,
-        document,
-      );
+      const response = await axios.put("/melbake/product/" + id, document);
       console.log(response);
       return response;
     },
@@ -52,6 +48,21 @@ export function useUpdateProduct() {
         prevProducts?.map((prevProduct: IProduct) =>
           prevProduct._id === updatedProduct._id ? updatedProduct : prevProduct,
         ),
+      );
+    },
+  });
+}
+export function useDeleteProduct() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (_id: string) => {
+      const response = await axios.delete("/melbake/product/" + _id);
+      console.log(response);
+      return response;
+    },
+    onMutate: (_id: string) => {
+      queryClient.setQueryData(["product"], (prevProducts: IProduct[]) =>
+        prevProducts?.filter((product: IProduct) => product._id !== _id),
       );
     },
   });

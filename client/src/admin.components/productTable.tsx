@@ -11,16 +11,25 @@ export default function ProductTable({
   data,
   addRow,
   updateRow,
+  deleteRow,
 }: {
   data: IProduct[];
   addRow: (product: IProduct) => void;
   updateRow: (product: IProduct) => void;
+  deleteRow: (_id: string) => void;
 }) {
   const HandleEditingRowSave: MRT_TableOptions<IProduct>["onEditingRowSave"] =
     async ({ values, table }) => {
       updateRow(values);
       table.setEditingRow(null);
     };
+
+  const HandleCreatingRowSave: MRT_TableOptions<IProduct>["onCreatingRowSave"] =
+    async ({ values, table }) => {
+      addRow(values);
+      table.setCreatingRow(null);
+    };
+
   const columns = useMemo<MRT_ColumnDef<IProduct>[]>(
     () => [
       {
@@ -92,11 +101,19 @@ export default function ProductTable({
       shape: "rounded",
       variant: "text",
     },
+    onCreatingRowSave: HandleCreatingRowSave,
     onEditingRowSave: HandleEditingRowSave,
     renderRowActionMenuItems: ({ closeMenu, row }) => {
       return [
         <div className="flex flex-col gap-2 py-1">
-          <button className="px-8 py-2 hover:bg-gray-100">Delete</button>
+          <button
+            className="px-8 py-2 hover:bg-gray-100"
+            onClick={() => {
+              deleteRow(row.original._id);
+            }}
+          >
+            Delete
+          </button>
         </div>,
       ];
     },
