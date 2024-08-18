@@ -40,7 +40,7 @@ function Admin() {
           </button>
         </div>
       </header>
-      <main className="bg-primarylight flex h-full w-full max-w-7xl">
+      <main className="flex h-full w-full max-w-7xl bg-primarylight">
         {isAsideVisible === true ? (
           <>
             <div
@@ -71,7 +71,7 @@ function Admin() {
           >
             Mel Bakes
           </Link>
-          <h1 className="border-primarylight mt-12 flex w-full items-center gap-2 px-6 text-center text-sm text-primary">
+          <h1 className="mt-12 flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary">
             <FontAwesomeIcon icon={faDatabase} />
             Database
           </h1>
