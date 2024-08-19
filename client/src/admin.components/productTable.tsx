@@ -6,6 +6,7 @@ import {
 } from "material-react-table";
 import { useMemo } from "react";
 import { IProduct } from "../slice/orderSlice";
+import { Public } from "@mui/icons-material";
 
 export default function ProductTable({
   data,
@@ -41,7 +42,7 @@ export default function ProductTable({
       { accessorKey: "Name", header: "Product Name", size: 100 },
       { accessorKey: "Price", header: "Price", size: 60 },
       { accessorKey: "Flavor", header: "Flavor", size: 80 },
-      { accessorKey: "Quantity", header: "Quantity", size: 60 },
+      { accessorKey: "Stock", header: "Stock", size: 60 },
       { accessorKey: "PublicId", header: "Img PublicId", size: 100 },
       { accessorKey: "Description", header: "Desciption", size: 150 },
     ],
@@ -78,6 +79,7 @@ export default function ProductTable({
       columnVisibility: {
         Flavor: false,
         Description: false,
+        PublicId: false,
       },
     },
     paginationDisplayMode: "pages",

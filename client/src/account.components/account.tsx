@@ -6,24 +6,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 export default function Account() {
-  const navigate = useNavigate();
   const auth = useSelector((state: AppState) => state.auth);
   if (!auth.User) {
     return <Navigate to={"/"} replace />;
   }
-
+  document.getElementById("logNavs")?.scrollIntoView({ behavior: "smooth" });
   return (
-    <div className="h-dvh w-full">
+    <main className="flex h-dvh w-full flex-col items-center">
       <Link
         to={"/"}
         replace
-        className="absolute left-4 top-4 font-[Lobster] text-3xl text-primary"
+        className="absolute left-4 top-4 z-10 font-[Lobster] text-3xl text-primary"
       >
         Mel Bakes
       </Link>
       <section
         style={{ backgroundImage: `url(${plaidPattern})` }}
-        className="mb-14 grid h-52 grid-cols-1 grid-rows-3 items-center"
+        className="mb-14 grid h-52 w-full grid-cols-1 grid-rows-3 items-center drop-shadow-sm"
       >
         <div className="row-start-3 flex h-20 w-full justify-center">
           <div className="row-start-2 h-28 w-28 bg-gray-100">.</div>
@@ -49,7 +48,11 @@ export default function Account() {
         <NavLink
           to={"cart"}
           className={({ isActive, isPending, isTransitioning }) =>
-            [isActive ? "bg-gray-50 px-4 py-1" : "px-4 py-1"].join()
+            [
+              isActive
+                ? "rounded-t bg-primarylight px-4 py-1 text-white"
+                : "px-4 py-1 text-primary",
+            ].join()
           }
         >
           cart
@@ -57,54 +60,35 @@ export default function Account() {
         <NavLink
           to={"order"}
           className={({ isActive, isPending, isTransitioning }) =>
-            [isActive ? "bg-gray-50 px-4 py-1" : "px-4 py-1"].join()
+            [
+              isActive
+                ? "rounded-t bg-primarylight px-4 py-1 text-white"
+                : "px-4 py-1 text-primary",
+            ].join()
           }
         >
           orders
         </NavLink>
-        <button className="px-4 py-1 sm:hidden">
-          <FontAwesomeIcon icon={faEllipsisVertical} />
-        </button>
+
         <NavLink
           to={"recieved"}
           className={({ isActive, isPending, isTransitioning }) =>
             [
               isActive
-                ? "hidden bg-gray-50 px-4 py-1 sm:block"
-                : "hidden px-4 py-1 sm:block",
+                ? "rounded-t bg-primarylight px-4 py-1 text-white"
+                : "px-4 py-1 text-primary",
             ].join()
           }
         >
           recieved
         </NavLink>
-        <NavLink
-          to={"favorites"}
-          className={({ isActive, isPending, isTransitioning }) =>
-            [
-              isActive
-                ? "hidden bg-gray-50 px-4 py-1 sm:block"
-                : "hidden px-4 py-1 sm:block",
-            ].join()
-          }
-        >
-          favorites
-        </NavLink>
-        <NavLink
-          to={"cancelled"}
-          className={({ isActive, isPending, isTransitioning }) =>
-            [
-              isActive
-                ? "hidden bg-gray-50 px-4 py-1 sm:block"
-                : "hidden px-4 py-1 sm:block",
-            ].join()
-          }
-        >
-          cancelled
-        </NavLink>
       </section>
-      <section id="logPanel" className="h-full w-full bg-gray-50">
-        <Outlet />
+
+      <section className="flex w-full flex-col items-center border-t-2 border-primarylight">
+        <section id="logPanel" className="w-full max-w-7xl">
+          <Outlet />
+        </section>
       </section>
-    </div>
+    </main>
   );
 }

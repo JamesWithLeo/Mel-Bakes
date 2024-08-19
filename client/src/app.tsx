@@ -6,13 +6,13 @@ import FooterComponent from "./components/Footer";
 import HeaderComponent from "./components/Header";
 // components
 import plaidPattern from "./assets/images/pattern.svg";
-import Product from "./Product/Product";
+import Product from "./product.components/Product";
 
 // icon
 import Homepage from "./Home/Homepage";
 import LoadingComponents from "./components/LoadingComponent";
 import LoginModal from "./login-signin/LoginModal";
-import FilterComponent from "./Product/FilterComponent";
+import FilterComponent from "./product.components/FilterComponent";
 import { useSelector } from "react-redux";
 import { AppState } from "./store";
 
@@ -24,7 +24,7 @@ export const ProductIdContext = createContext<
   React.Dispatch<React.SetStateAction<number>> | null | number
 >(null);
 
-const ViewProduct = lazy(() => import("./Product/ViewProduct"));
+const ViewProduct = lazy(() => import("./product.components/ViewProduct"));
 
 function App() {
   const auth = useSelector((state: AppState) => state.auth);

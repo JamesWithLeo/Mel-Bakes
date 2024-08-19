@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+
 export type IProduct = {
   _id: string;
   Name: string;
@@ -9,17 +10,12 @@ export type IProduct = {
   Description: string;
   Flavor: string;
   Price: number;
-  Quantity: number;
+  Stock: number;
 };
-// export type ICart = {
-//   _id: string;
-//   Name: string;
-//   C_id: string;
-//   U_id: string;
-//   Quantity: number;
-// };
+
 export type IOrder = IProduct & {
   U_id: string;
+  Quantity: number;
   Amount: number;
   DateOrdered: string;
 };

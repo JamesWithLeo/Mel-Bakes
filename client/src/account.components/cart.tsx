@@ -3,14 +3,17 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IOrder } from "../slice/orderSlice";
-import CartCardComponent from "../Product/cartCardComponent";
+import CartCard from "../cart.components/cartCard";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useMultiDeleteCart } from "../services/cartService";
 
 export default function Cart() {
-  const [selectedProducts, SetSelectedProducts] = useState<IOrder[]>([]);
   const user = useSelector((state: AppState) => state.auth.User);
+
+  const [selectedProducts, setSelectedProducts] = useState<IOrder[]>([]);
+  const [isSelecting, setIsSelecting] = useState<boolean>(false);
+
   const cartQuery = useQuery({
     queryKey: ["cart"],
     queryFn: async () => {
@@ -24,10 +27,10 @@ export default function Cart() {
       (value) => value._id === item._id,
     );
     if (item && !existedItem.length)
-      SetSelectedProducts([...selectedProducts, item]);
+      setSelectedProducts([...selectedProducts, item]);
   }
   async function removeToSelected(item: IOrder) {
-    SetSelectedProducts(
+    setSelectedProducts(
       selectedProducts.filter((value) => value._id !== item._id),
     );
   }
@@ -35,9 +38,12 @@ export default function Cart() {
     useMultiDeleteCart();
 
   async function removeProduct() {
+    console.log("1here`");
     if (!isDeletingMultiDeleteCart) {
+      console.log("here`");
       MulitDeleteCart(selectedProducts.map((value: IOrder) => value._id));
-      SetSelectedProducts([]);
+      setIsSelecting(false);
+      setSelectedProducts([]);
     }
   }
   if (!user) return <Navigate to={"/"} replace />;
@@ -47,23 +53,73 @@ export default function Cart() {
   }
 
   return (
-    <main className="">
-      {cartQuery.data && cartQuery.data.length ? (
-        <div className="flex h-full w-full flex-col gap-2 p-4">
-          {cartQuery.data.map((cartItem: IOrder) => (
-            <CartCardComponent
-              OrderObj={cartItem}
-              key={cartItem._id}
-              selectThis={addToSelected}
-              unSelectThis={removeToSelected}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-2">
-          <h1 className="text-gray-300">No cupcakes yet?</h1>
-        </div>
-      )}
-    </main>
+    <>
+      <main className="flex h-max flex-col items-center py-2 pb-4">
+        {cartQuery.data && cartQuery.data.length ? (
+          <div className="flex w-full justify-end gap-2 px-2 md:gap-4">
+            {isSelecting ? (
+              <button
+                className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
+                onClick={() => {
+                  setSelectedProducts([]);
+                  setIsSelecting(false);
+                }}
+              >
+                deselect
+              </button>
+            ) : (
+              <button
+                className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
+                onClick={() => {
+                  setIsSelecting(true);
+                }}
+              >
+                select
+              </button>
+            )}
+            <div className="flex flex-row gap-2 md:gap-4">
+              {selectedProducts.length ? (
+                <>
+                  <button className="rounded bg-primary px-3 py-1 text-white shadow">
+                    Check Out
+                  </button>
+                  <button
+                    onClick={removeProduct}
+                    className="rounded bg-red-300 px-3 py-1 text-red-500 shadow"
+                  >
+                    Remove ({selectedProducts.length})
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+        {cartQuery.data && cartQuery.data.length ? (
+          <>
+            <div className="flex w-full flex-col gap-1 p-2 lg:p-4">
+              {cartQuery.data.map((cartItem: IOrder) => (
+                <CartCard
+                  OrderObj={cartItem}
+                  key={cartItem._id}
+                  selectThis={addToSelected}
+                  isVisibleCheckbox={isSelecting}
+                  unSelectThis={removeToSelected}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2">
+            <h1 className="text-gray-300">No cupcakes yet?</h1>
+          </div>
+        )}
+        {/* <a
+          className="w-max font-mono text-sm text-primary hover:underline hover:underline-offset-2"
+          href="#top"
+        >
+          scroll to top
+        </a> */}
+      </main>
+    </>
   );
 }

@@ -31,10 +31,10 @@ function ViewProduct({
     "Purchased" | "Can't purchase right now." | null
   >(null);
   const [isAddedToCart, setIsAddedToCart] = useState<
-    "Added" | "Can't add to cart" | null
+    "Added" | "Can't add to cart!" | null
   >(null);
-  const [isCartFull, setIsCartFull] = useState<"Cart is full" | null>(null);
-  const maxCartCapacity = 6;
+  const [isCartFull, setIsCartFull] = useState<"Cart is full!" | null>(null);
+  const maxCartCapacity = 10;
 
   async function AddToCart() {
     if (!(cupcakeObj && user)) return;
@@ -47,7 +47,7 @@ function ViewProduct({
     axios.get("/melbake/cart/" + user._id).then((value) => {
       const cartItemQuantity = value.data as object[];
       if (!(cartItemQuantity.length < maxCartCapacity)) {
-        setIsCartFull("Cart is full");
+        setIsCartFull("Cart is full!");
         setTimeout(() => {
           setIsCartFull(null);
         }, 3000);
@@ -63,7 +63,7 @@ function ViewProduct({
           .then((response) => {
             if (response.data.insertedId) setIsAddedToCart("Added");
             else {
-              setIsAddedToCart("Can't add to cart");
+              setIsAddedToCart("Can't add to cart!");
             }
             setTimeout(() => {
               setIsAddedToCart(null);
@@ -181,19 +181,19 @@ function ViewProduct({
           defaultSize={75}
         >
           {isAddedToCart ? (
-            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
-              <Notify text={isAddedToCart} />
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2">
+              <Notify text={isAddedToCart} type={"information"} />
             </div>
           ) : null}
 
           {isPurchase ? (
-            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
-              <Notify text={isPurchase} />
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2">
+              <Notify text={isPurchase} type={"danger"} />
             </div>
           ) : null}
           {isCartFull ? (
-            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2 rounded bg-primary px-2 py-1">
-              <Notify text={isCartFull} />
+            <div className="absolute left-1/2 top-1/4 z-20 mx-auto h-max w-max -translate-x-1/2">
+              <Notify text={isCartFull} type={"danger"} />
             </div>
           ) : null}
 
@@ -281,62 +281,58 @@ function ViewProduct({
                 </div>
 
                 <div className="flex w-full items-center justify-center gap-4 px-2">
-                  {cupcakeObj?.Quantity ? (
-                    <>
-                      <button>
+                  <>
+                    <button>
+                      <FontAwesomeIcon
+                        id="hearIcon"
+                        icon={faHeart}
+                        className="text-base text-gray-400"
+                      />
+                    </button>
+                    <label
+                      className="text-sm font-bold text-gray-400"
+                      id="quantityLabel"
+                    >
+                      Quantity
+                    </label>
+                    <div
+                      className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center rounded border-2 border-gray-400 align-middle"
+                      id="quantityWrapper"
+                    >
+                      <button
+                        className="px-2"
+                        onClick={() => {
+                          if (quantity !== 1) {
+                            setQuantity(quantity - 1);
+                          }
+                        }}
+                      >
                         <FontAwesomeIcon
-                          id="hearIcon"
-                          icon={faHeart}
-                          className="text-base text-gray-400"
+                          className="text-sm text-gray-400"
+                          icon={faMinus}
+                          id="minusQuantity"
                         />
                       </button>
-                      <label
-                        className="text-sm font-bold text-gray-400"
-                        id="quantityLabel"
+                      <p
+                        className="text-center text-xs font-bold text-gray-400"
+                        id="quantityIndicator"
                       >
-                        Quantity
-                      </label>
-                      <div
-                        className="grid h-max w-max grid-cols-3 grid-rows-1 items-center justify-center rounded border-2 border-gray-400 align-middle"
-                        id="quantityWrapper"
+                        {quantity}
+                      </p>
+                      <button
+                        className="px-2"
+                        onClick={() => {
+                          setQuantity(quantity + 1);
+                        }}
                       >
-                        <button
-                          className="px-2"
-                          onClick={() => {
-                            if (quantity !== 1) {
-                              setQuantity(quantity - 1);
-                            }
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            className="text-sm text-gray-400"
-                            icon={faMinus}
-                            id="minusQuantity"
-                          />
-                        </button>
-                        <p
-                          className="text-center text-xs font-bold text-gray-400"
-                          id="quantityIndicator"
-                        >
-                          {quantity}
-                        </p>
-                        <button
-                          className="px-2"
-                          onClick={() => {
-                            setQuantity(quantity + 1);
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            className="text-sm text-gray-400"
-                            icon={faPlus}
-                            id="plusQuantity"
-                          />
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="h-8 w-40 animate-pulse rounded-lg bg-gray-100 sm:h-8 sm:w-64 md:h-8 md:w-80 lg:h-8 lg:w-96" />
-                  )}
+                        <FontAwesomeIcon
+                          className="text-sm text-gray-400"
+                          icon={faPlus}
+                          id="plusQuantity"
+                        />
+                      </button>
+                    </div>
+                  </>
                 </div>
 
                 <div className="flex flex-col items-center gap-2 p-2 md:p-0">
@@ -344,34 +340,42 @@ function ViewProduct({
                     <>
                       {user ? (
                         <>
-                          <button
-                            className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
-                            id="addToCartButton"
-                            onClick={AddToCart}
-                          >
-                            Add to Cart
-                          </button>
-                          {/* {user.CartQuantity < maxCartCapacity ? (
-                            <button
-                              className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
-                              id="addToCartButton"
-                              onClick={AddToCart}
-                            >
-                              Add to Cart
-                            </button>
+                          {cupcakeObj.Stock ? (
+                            <>
+                              <button
+                                className="h-8 w-full bg-secondarylight text-xs text-primary active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
+                                id="addToCartButton"
+                                onClick={AddToCart}
+                              >
+                                Add to Cart
+                              </button>
+                              <button
+                                className="h-8 w-full bg-primary text-xs text-white active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
+                                onClick={AddToOrder}
+                                id="chechOutButton"
+                              >
+                                Buy Now
+                              </button>
+                            </>
                           ) : (
-                            <button className="h-8 w-full bg-red-200 text-xs text-red-500 sm:text-sm md:w-1/2 md:text-base">
-                              Cart is full
-                            </button>
-                          )} */}
-
-                          <button
-                            className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
-                            onClick={AddToOrder}
-                            id="chechOutButton"
-                          >
-                            Buy Now
-                          </button>
+                            <>
+                              <button className="h-8 w-full cursor-not-allowed bg-secondarylight text-xs text-primary active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base">
+                                Add to Cart
+                              </button>
+                              <button
+                                className="h-8 w-full cursor-not-allowed bg-red-400 text-xs text-white active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
+                                onClick={() => {
+                                  setIsPurchase("Can't purchase right now.");
+                                  setTimeout(() => {
+                                    setIsPurchase(null);
+                                  }, 3000);
+                                }}
+                                id="chechOutButton"
+                              >
+                                Out of stock
+                              </button>
+                            </>
+                          )}
                         </>
                       ) : (
                         <>

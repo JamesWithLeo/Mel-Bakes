@@ -12,10 +12,9 @@ import "./index.css";
 import ErrorPage from "./components/ErrorPage";
 import SignIn from "./login-signin/SignIn";
 import Admin from "./admin.components/Admin";
-import ModalCart from "./Product/modalCart";
+import ModalCart from "./cart.components/modalCart";
 import Faqs from "./components/Faqs";
 import Account from "./account.components/account";
-import Orders from "./orders.component/Orders";
 import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
 import AccountDashboard from "./admin.components/acccountDashboard";
@@ -98,7 +97,6 @@ const route = createBrowserRouter([
     path: "Faqs",
     element: <Faqs />,
   },
-  { path: "Orders", element: <Orders /> },
 ]);
 
 const root = ReactDOM.createRoot(

@@ -6,7 +6,7 @@ export function useCreateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (document: IProduct) => {
-      document.Quantity = Number(document.Quantity);
+      document.Stock = Number(document.Stock);
       document.Price = Number(document.Price);
       const response = await axios.post("/melbake/product/", document);
       console.log(response);
@@ -35,7 +35,7 @@ export function useUpdateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (document: IProduct) => {
-      document.Quantity = Number(document.Quantity);
+      document.Stock = Number(document.Stock);
       document.Price = Number(document.Price);
       const id = document._id;
       const response = await axios.put("/melbake/product/" + id, document);
