@@ -120,41 +120,25 @@ app
     .route("/melbake/order/:id")
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.findByU_Id)(ORDER_COLLECTION, req.params.id).then((value) => {
-        console.log(value);
         res.status(200).json(value);
     });
 }))
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.body.C_id = new mongodb_1.ObjectId(req.params.C_id);
-    req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
-    (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
-        res.status(200).json(result);
-    });
-}));
-// fetch user
-app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUser)(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
-        res.status(200).json(value);
-    });
-}));
-// app.post("/order/checkout", async (req: Request, res: Response) => {
-//   req.body.U_id = new ObjectId(req.body.U_id);
-//   req.body.C_id = new ObjectId(req.body.C_id);
-//   insertDocument(ORDER_COLLECTION, req.body).then((result) => {
-//     res.status(200).json(result);
-//   });
-// });
-// checkOut order
-app.post("/melbake/myorder/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
     req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
     (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
         res.status(200).json(result);
     });
+}))
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const OrderId = req.query.OrderId;
+    yield (0, database_js_1.cancellOrder)(ORDER_COLLECTION, OrderId, req.params.id).then((response) => {
+        res.status(200).json(response);
+    });
 }));
-// cancel order
-app.post("/melbake/order/remove/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, database_js_1.removeFromOrder)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
+// fetch user
+app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.findUser)(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
         res.status(200).json(value);
     });
 }));

@@ -2,6 +2,9 @@ import { useSelector } from "react-redux";
 import { AppState } from "../store";
 
 import { IOrder } from "../slice/orderSlice";
+import axios from "axios";
+import { response } from "express";
+import { useCancelOrder } from "../services/orderService";
 
 export const OrderCard = ({
   orderObj,
@@ -11,43 +14,36 @@ export const OrderCard = ({
   // setState: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>;
 }) => {
   const auth = useSelector((state: AppState) => state.auth);
-
-  async function cancelOrder() {
+  const { mutateAsync: CancelOrder } = useCancelOrder();
+  async function HandleCancel() {
     if (auth.User) {
       const id = auth.User._id;
-      const orderToRemove = JSON.stringify(orderObj);
-
-      await fetch("/melbake/order/remove/" + id, {
-        method: "POST",
-        body: orderToRemove,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      }).then(async (response) => {
-        await response.json().then((value) => {
-          console.log(value);
-        });
-      });
+      const orderId = orderObj._id;
+      CancelOrder({ _id: id, OrderId: orderId });
     }
   }
 
   return (
-    <div className="rounded bg-gray-100 p-2">
-      <h1>{orderObj.Name}</h1>
-      <h1>{orderObj._id}</h1>
-      <img src={orderObj.Url} className="w-24" alt="cupcake" />
-      <h1>Quantity: {orderObj.Quantity}</h1>
-      <h1>Total Price: {orderObj.Price}</h1>
-      <button
-        onClick={cancelOrder}
-        className="rounded bg-red-200 px-2 py-1 text-sm text-red-500"
-      >
-        Cancel Order
-      </button>
-      <div className="flex items-center gap-2">
-        <h1 className="text-sm text-gray-600"> Recieved order confirmation</h1>
-        <button className="rounded bg-primary px-2 py-1 text-sm text-white">
-          Confirm
+    <div className="flex flex-row items-center justify-evenly rounded bg-gray-100 p-4 shadow">
+      <img
+        src={orderObj.Url}
+        className="w-28 select-none sm:w-40"
+        alt="cupcake"
+      />
+      <div className="flex flex-1 flex-col text-darker">
+        <h1 className="font-raleway text-lg">{orderObj.Name}</h1>
+        <h1 className="text-xs font-thin">{orderObj._id}</h1>
+        <h1 className="font-raleway">Quantity: {orderObj.Quantity}</h1>
+        <h1 className="font-raleway text-lg">
+          Total Price: &#8369;{orderObj.Price}.00
+        </h1>
+
+        <h1 className="font-raleway">Date Ordered : {orderObj.DateOrdered}</h1>
+        <button
+          onClick={HandleCancel}
+          className="mt-4 select-none self-end rounded bg-red-200 px-2 py-1 text-sm text-red-500 ring-red-500 active:ring"
+        >
+          Cancel Order
         </button>
       </div>
     </div>

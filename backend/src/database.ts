@@ -22,21 +22,21 @@ export async function findUser(coll: Collection, value: string) {
   try {
     return await coll.findOne({ Gmail: value });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export async function findUserById(coll: Collection, value: string) {
   try {
     return await coll.findOne({ _id: new ObjectId(value) });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export async function findByU_Id(coll: Collection, id: string) {
   try {
     return await coll.find({ U_id: new ObjectId(id) }).toArray();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -44,8 +44,7 @@ export async function fetchCupcake(coll: Collection, cupcakeId: string) {
   try {
     return await coll.findOne({ _id: new ObjectId(cupcakeId) });
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.error(error);
   }
 }
 
@@ -54,8 +53,7 @@ export async function fetchDocuments(coll: Collection) {
     // fetch all document in the collection
     return await coll.find().toArray();
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.error(error);
   }
 }
 
@@ -66,7 +64,7 @@ export async function insertDocument(
   try {
     return await coll.insertOne(documentObject);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -74,7 +72,7 @@ export async function deleteDocumentById(coll: Collection, id: string) {
   try {
     return await coll.findOneAndDelete({ _id: new ObjectId(id) });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 export async function updateDocumentById(
@@ -89,66 +87,17 @@ export async function updateDocumentById(
       { returnDocument: "after" },
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
-export async function insertToCart(
-  coll: Collection,
-  UserId: string,
-  documentObject: any,
-) {
+export async function cancellOrder(coll: Collection, id: string, uid: string) {
   try {
-    return coll.updateOne(
-      { _id: new ObjectId(UserId) },
-      { $push: { Cart: documentObject } },
-    );
+    return await coll.deleteOne({
+      _id: new ObjectId(id),
+      U_id: new ObjectId(uid),
+    });
   } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
-export async function insertToOrder(
-  coll: Collection,
-  UserId: string,
-  documentObject: any,
-) {
-  try {
-    coll.updateOne(
-      { _id: new ObjectId(UserId) },
-      { $push: { Orders: documentObject } },
-    );
-  } catch (err) {
-    console.log(err);
-  }
-}
-export async function removeFromOrder(
-  coll: Collection,
-  userId: string,
-  documentObject: any,
-) {
-  try {
-    return coll.updateOne(
-      { _id: new ObjectId(userId) },
-      { $pull: { Orders: documentObject } },
-    );
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-}
-export async function removeFromCart(
-  coll: Collection,
-  UserId: string,
-  documentObject: any,
-) {
-  try {
-    return await coll.updateOne(
-      { _id: new ObjectId(UserId) },
-      { $pull: { Cart: documentObject } },
-    );
-  } catch (err) {
-    console.log(err);
-    throw err;
+    console.error(error);
   }
 }

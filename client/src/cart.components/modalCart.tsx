@@ -134,15 +134,15 @@ export default function ModalCart() {
             </>
           )}
         </div>
-        <div className="flex flex-col gap-2 md:gap-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-4">
           {selectedProducts.length ? (
             <>
-              <button className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow">
+              <button className="rounded border bg-primarylight px-3 py-1 text-white shadow">
                 Check Out
               </button>
               <button
                 onClick={removeProduct}
-                className="rounded border border-slate-50 px-3 py-1 text-red-300 shadow"
+                className="rounded border bg-red-300 px-3 py-1 text-red-500 shadow"
               >
                 Remove ({selectedProducts.length})
               </button>

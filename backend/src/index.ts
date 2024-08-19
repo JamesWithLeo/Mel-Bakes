@@ -30,13 +30,10 @@ import mongoDB, {
   fetchDocuments,
   insertDocument,
   findUserById,
-  insertToCart,
-  removeFromCart,
-  insertToOrder,
-  removeFromOrder,
   deleteDocumentById,
   updateDocumentById,
   findByU_Id,
+  cancellOrder,
 } from "./database.js";
 import { ObjectId, WithId } from "mongodb";
 const CLIENT = mongoDB(DB_URI);
@@ -117,30 +114,22 @@ app
   })
   .post(async (req: Request, res: Response) => {
     req.body._id = new ObjectId();
-    req.body.C_id = new ObjectId(req.params.C_id);
     req.body.U_id = new ObjectId(req.body.U_id);
     insertDocument(ORDER_COLLECTION, req.body).then((result) => {
       res.status(200).json(result);
     });
+  })
+  .delete(async (req: Request, res: Response) => {
+    const OrderId = req.query.OrderId as string;
+    await cancellOrder(ORDER_COLLECTION, OrderId, req.params.id).then(
+      (response) => {
+        res.status(200).json(response);
+      },
+    );
   });
 // fetch user
 app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
   await findUser(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
-    res.status(200).json(value);
-  });
-});
-
-// checkOut order
-app.post("/melbake/myorder/:id", async (req: Request, res: Response) => {
-  req.body._id = new ObjectId();
-  req.body.U_id = new ObjectId(req.body.U_id);
-  insertDocument(ORDER_COLLECTION, req.body).then((result) => {
-    res.status(200).json(result);
-  });
-});
-// cancel order
-app.post("/melbake/order/remove/:id", async (req: Request, res: Response) => {
-  removeFromOrder(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
     res.status(200).json(value);
   });
 });

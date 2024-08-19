@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.removeFromCart = exports.removeFromOrder = exports.insertToOrder = exports.insertToCart = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUser = void 0;
+exports.cancellOrder = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUser = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -35,7 +35,7 @@ function findUser(coll, value) {
             return yield coll.findOne({ Gmail: value });
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
@@ -46,7 +46,7 @@ function findUserById(coll, value) {
             return yield coll.findOne({ _id: new mongodb_1.ObjectId(value) });
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
@@ -57,7 +57,7 @@ function findByU_Id(coll, id) {
             return yield coll.find({ U_id: new mongodb_1.ObjectId(id) }).toArray();
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
@@ -68,8 +68,7 @@ function fetchCupcake(coll, cupcakeId) {
             return yield coll.findOne({ _id: new mongodb_1.ObjectId(cupcakeId) });
         }
         catch (error) {
-            console.log(error);
-            throw error;
+            console.error(error);
         }
     });
 }
@@ -81,8 +80,7 @@ function fetchDocuments(coll) {
             return yield coll.find().toArray();
         }
         catch (error) {
-            console.log(error);
-            throw error;
+            console.error(error);
         }
     });
 }
@@ -93,7 +91,7 @@ function insertDocument(coll, documentObject) {
             return yield coll.insertOne(documentObject);
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
@@ -104,7 +102,7 @@ function deleteDocumentById(coll, id) {
             return yield coll.findOneAndDelete({ _id: new mongodb_1.ObjectId(id) });
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
@@ -115,55 +113,22 @@ function updateDocumentById(coll, id, document) {
             return yield coll.findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: document }, { returnDocument: "after" });
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
         }
     });
 }
 exports.updateDocumentById = updateDocumentById;
-function insertToCart(coll, UserId, documentObject) {
+function cancellOrder(coll, id, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return coll.updateOne({ _id: new mongodb_1.ObjectId(UserId) }, { $push: { Cart: documentObject } });
+            return yield coll.deleteOne({
+                _id: new mongodb_1.ObjectId(id),
+                U_id: new mongodb_1.ObjectId(uid),
+            });
         }
         catch (error) {
-            console.log(error);
-            throw error;
+            console.error(error);
         }
     });
 }
-exports.insertToCart = insertToCart;
-function insertToOrder(coll, UserId, documentObject) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            coll.updateOne({ _id: new mongodb_1.ObjectId(UserId) }, { $push: { Orders: documentObject } });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    });
-}
-exports.insertToOrder = insertToOrder;
-function removeFromOrder(coll, userId, documentObject) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            return coll.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $pull: { Orders: documentObject } });
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
-    });
-}
-exports.removeFromOrder = removeFromOrder;
-function removeFromCart(coll, UserId, documentObject) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            return yield coll.updateOne({ _id: new mongodb_1.ObjectId(UserId) }, { $pull: { Cart: documentObject } });
-        }
-        catch (err) {
-            console.log(err);
-            throw err;
-        }
-    });
-}
-exports.removeFromCart = removeFromCart;
+exports.cancellOrder = cancellOrder;
