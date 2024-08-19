@@ -21,7 +21,7 @@ export default function CartCard({
   const user = useSelector((state: AppState) => state.auth.User);
   const [cupcakeObj, setCupcakeObj] = useState<IProduct | null>(null);
   const [flavors, setFlavors] = useState<JSX.Element[]>([]);
-
+  const [isSelecting, setIsSelecting] = useState<boolean>(false);
   const { mutateAsync: DeleteCart, isPending: isDeletingCart } =
     useDeleteCart();
   const handleRemove = async () => {
@@ -33,17 +33,19 @@ export default function CartCard({
     OrderObj.U_id = user._id;
     OrderObj.Amount = OrderObj.Quantity * OrderObj.Price;
     OrderObj.DateOrdered = new Date().toLocaleString();
-    await axios.post("/order/checkout", OrderObj).then(async (response) => {
-      console.log(response);
-      if (response.data.acknowledged) {
-        DeleteCart(OrderObj._id);
-      }
-    });
+    await axios
+      .post("/melbake/order/" + user._id, OrderObj)
+      .then(async (response) => {
+        console.log(response);
+        if (response.data.acknowledged) {
+          DeleteCart(OrderObj._id);
+        }
+      });
   };
 
   useLayoutEffect(() => {
     async function fetchCupcake() {
-      const destinationUrl = "melbake/cupcake/" + OrderObj.C_id;
+      const destinationUrl = "/melbake/cupcake/" + OrderObj.C_id;
       const response = await fetch(destinationUrl);
       await response.json().then((value) => {
         const cupcake = value;
@@ -85,10 +87,35 @@ export default function CartCard({
     fetchCupcake();
   }, []);
   return (
-    <div className="group flex h-max w-full items-center justify-between border border-transparent hover:border-gray-300 sm:gap-2 sm:px-2 md:px-4">
+    <div
+      className="group flex h-max w-full items-center justify-between border border-transparent hover:border-gray-300 sm:gap-2 sm:px-2 md:px-4"
+      onClick={(e) => {
+        // checkbox not visible, then exit function.
+        const checkbox = document.getElementById(
+          OrderObj._id,
+        ) as HTMLInputElement | null;
+        if (!checkbox) return;
+
+        // click is not on div element, exit funtion
+        const target = e.target as HTMLElement;
+        if (target.nodeName !== e.currentTarget.nodeName) return;
+
+        // the click will change the value of the checbox, then synchonize the state
+        // the state will decide if the checbox is check or not.
+        checkbox.checked = !isSelecting;
+        setIsSelecting(!isSelecting);
+        if (checkbox.checked) {
+          selectThis(OrderObj);
+        } else {
+          unSelectThis(OrderObj);
+        }
+      }}
+    >
       <div className="grid w-full max-w-md grid-cols-5 grid-rows-1 flex-row items-center justify-between sm:grid-cols-8 md:max-w-lg md:grid-cols-10 lg:max-w-2xl">
         {isVisibleCheckbox ? (
+          // the id of product is used as id of checkbox so each checkbox is unique.
           <input
+            id={OrderObj._id}
             type="checkbox"
             onClick={(e) => {
               if (e.currentTarget.checked) {
@@ -100,54 +127,54 @@ export default function CartCard({
           />
         ) : null}
         {OrderObj.Url ? (
-          <div className="col-span-2 flex flex-col items-center text-center">
+          <div className="group col-span-2 flex flex-col items-center text-center">
             <img
               src={OrderObj.Url}
               alt="cupcake"
-              className="h-14 w-14 sm:h-20 sm:w-20 md:h-24 md:w-24"
+              className="h-14 w-14 group-[]:select-none sm:h-20 sm:w-20 md:h-24 md:w-24"
             />
-            <div className="col-span-2 sm:hidden">
-              <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">
+            <div className="group col-span-2 sm:hidden">
+              <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
                 {OrderObj.Name}
               </h1>
-              <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">
+              <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
                 {OrderObj.Flavor}
               </h1>
             </div>
           </div>
         ) : (
-          <div className="flex h-14 w-14 animate-pulse items-center justify-center rounded bg-slate-100 text-xl text-primarylight sm:h-16 sm:w-16">
+          <div className="flex h-14 w-14 animate-pulse select-none items-center justify-center rounded bg-slate-100 text-xl text-primarylight sm:h-16 sm:w-16">
             <FontAwesomeIcon icon={faImage} />
           </div>
         )}
 
         <div className="col-span-2 hidden sm:block">
-          <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">
+          <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
             {OrderObj.Name}
           </h1>
-          <h1 className="col-span-3 font-[Raleway] text-xs text-gray-700 sm:text-sm">
+          <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
             {OrderObj.Flavor}
           </h1>
         </div>
 
         <div className="col-span-2 col-start-7">
-          <h1 className="text-end font-[Raleway] text-xs text-gray-700">
+          <h1 className="select-none text-end font-[Raleway] text-xs text-gray-700">
             Quantity : {OrderObj.Quantity}
           </h1>
           {OrderObj.Price ? (
-            <h1 className="text-end font-[Raleway] text-xs text-gray-700">
+            <h1 className="select-none text-end font-[Raleway] text-xs text-gray-700">
               Price : &#8369;{cupcakeObj?.Price}.00
             </h1>
           ) : (
-            <h1 className="text-end font-[Raleway] text-xs text-gray-700">
+            <h1 className="select-none text-end font-[Raleway] text-xs text-gray-700">
               Price : --.--
             </h1>
           )}
-          <div className="flex flex-row items-end gap-1 md:hidden">
+          <div className="flex select-none flex-row items-end gap-1 md:hidden">
             {flavors}
           </div>
         </div>
-        <div className="col-span-1 col-start-10 hidden flex-col items-center gap-1 md:flex">
+        <div className="col-span-1 col-start-10 hidden select-none flex-col items-center gap-1 md:flex">
           {flavors}
         </div>
       </div>
@@ -157,18 +184,18 @@ export default function CartCard({
           <>
             {cupcakeObj?.Stock ? (
               <button
-                className="h-full w-full self-end bg-slate-500 px-2 py-1 text-xs text-white md:text-sm"
+                className="h-full w-full select-none self-end bg-slate-500 px-2 py-1 text-xs text-white md:text-sm"
                 onClick={HandleCheckOut}
               >
                 Check Out
               </button>
             ) : (
-              <button className="h-full w-full self-end bg-red-400 px-2 py-1 text-xs text-white md:text-sm">
+              <button className="h-full w-full select-none self-end bg-red-400 px-2 py-1 text-xs text-white md:text-sm">
                 Out of stock
               </button>
             )}
             <button
-              className="h-full w-full self-end bg-red-300 px-2 py-1 text-xs text-white md:text-sm"
+              className="h-full w-full select-none self-end bg-red-300 px-2 py-1 text-xs text-white md:text-sm"
               onClick={handleRemove}
             >
               Remove

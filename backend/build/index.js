@@ -116,38 +116,34 @@ app.get("/melbake/cupcake/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
         }
     }
 }));
+app
+    .route("/melbake/order/:id")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.findByU_Id)(ORDER_COLLECTION, req.params.id).then((value) => {
+        console.log(value);
+        res.status(200).json(value);
+    });
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.body.C_id = new mongodb_1.ObjectId(req.params.C_id);
+    req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
+    (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
+        res.status(200).json(result);
+    });
+}));
 // fetch user
 app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.findUser)(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
         res.status(200).json(value);
     });
 }));
-// add product to cart
-app.post("/melbake/mycart/add/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.body._id = new mongodb_1.ObjectId();
-    yield (0, database_js_1.insertToCart)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
-        res.status(200).json(value);
-    });
-}));
-// remove product from cart
-app.post("/melbake/mycart/remove/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.removeFromCart)(ACCOUNT_COLLECTION, req.params.id, req.body).then((result) => {
-        res.status(200).json(result);
-    });
-}));
-// fetch orders of user
-app.get("/orders/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((value) => {
-        if (value === null || value === void 0 ? void 0 : value.Orders)
-            res.status(200).json(value.Orders);
-    });
-}));
-app.post("/order/checkout", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.body._id = new mongodb_1.ObjectId(req.body._id);
-    (0, database_js_1.insertDocument)(ORDER_COLLECTION, req.body).then((result) => {
-        res.status(200).json(result);
-    });
-}));
+// app.post("/order/checkout", async (req: Request, res: Response) => {
+//   req.body.U_id = new ObjectId(req.body.U_id);
+//   req.body.C_id = new ObjectId(req.body.C_id);
+//   insertDocument(ORDER_COLLECTION, req.body).then((result) => {
+//     res.status(200).json(result);
+//   });
+// });
 // checkOut order
 app.post("/melbake/myorder/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
@@ -267,7 +263,7 @@ app
     .route("/melbake/cart/:id")
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield (0, database_js_1.findCartById)(CART_COLLECTION, req.params.id).then((value) => {
+        yield (0, database_js_1.findByU_Id)(CART_COLLECTION, req.params.id).then((value) => {
             res.status(200).json(value);
         });
     }

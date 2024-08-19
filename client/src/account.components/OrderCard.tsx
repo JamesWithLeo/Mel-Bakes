@@ -1,19 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { AppState } from "../store";
 
-import { IOrder, orderSliceReducer } from "../slice/orderSlice";
-import { memo } from "react";
+import { IOrder } from "../slice/orderSlice";
 
 export const OrderCard = ({
   orderObj,
-  setState,
+  // setState,
 }: {
   orderObj: IOrder;
-  setState: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>;
+  // setState: React.Dispatch<React.SetStateAction<React.JSX.Element[]>>;
 }) => {
-  const orderState = useSelector((state: AppState) => state.order);
   const auth = useSelector((state: AppState) => state.auth);
-  const dispatch = useDispatch();
 
   async function cancelOrder() {
     if (auth.User) {

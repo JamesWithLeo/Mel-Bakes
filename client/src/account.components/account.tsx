@@ -1,9 +1,7 @@
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { Link, Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
 import plaidPattern from "../assets/images/pattern.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 export default function Account() {
   const auth = useSelector((state: AppState) => state.auth);
@@ -12,18 +10,18 @@ export default function Account() {
   }
   document.getElementById("logNavs")?.scrollIntoView({ behavior: "smooth" });
   return (
-    <main className="flex h-dvh w-full flex-col items-center">
-      <Link
-        to={"/"}
-        replace
-        className="absolute left-4 top-4 z-10 font-[Lobster] text-3xl text-primary"
-      >
-        Mel Bakes
-      </Link>
+    <main className="flex h-dvh w-full flex-col items-center overflow-y-scroll">
       <section
         style={{ backgroundImage: `url(${plaidPattern})` }}
         className="mb-14 grid h-52 w-full grid-cols-1 grid-rows-3 items-center drop-shadow-sm"
       >
+        <Link
+          to={"/"}
+          replace
+          className="absolute left-4 top-4 z-10 font-[Lobster] text-3xl text-primary"
+        >
+          Mel Bakes
+        </Link>
         <div className="row-start-3 flex h-20 w-full justify-center">
           <div className="row-start-2 h-28 w-28 bg-gray-100">.</div>
         </div>
@@ -43,7 +41,7 @@ export default function Account() {
 
       <section
         id="logNavs"
-        className="flex w-full items-center justify-center align-middle"
+        className="font-redhat flex w-full items-center justify-center align-middle"
       >
         <NavLink
           to={"cart"}

@@ -76,17 +76,17 @@ function ViewProduct({
   }
 
   async function AddToOrder() {
-    if (cupcakeObj) {
+    if (cupcakeObj && user) {
       let Name = cupcakeObj.Name;
       let Quantity = quantity;
-      let U_id = user?._id;
+      let U_id = user._id;
       let C_id = cupcakeObj._id;
       let Price = cupcakeObj.Price;
       let Url = cupcakeObj.Url;
       let Amount = quantity * cupcakeObj.Price;
       let DateOrdered = new Date().toLocaleString();
       axios
-        .post("/order/checkout", {
+        .post("/melbake/order/" + user._id, {
           Name,
           Quantity,
           C_id,

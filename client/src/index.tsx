@@ -21,8 +21,9 @@ import AccountDashboard from "./admin.components/acccountDashboard";
 import ProductDashboard from "./admin.components/productDashboard";
 import OrderDashboard from "./admin.components/orderDashboard";
 import Cart from "./account.components/cart";
+import Orders from "./account.components/Orders";
 
-const cartQuery = new QueryClient();
+const queryClient = new QueryClient();
 const route = createBrowserRouter([
   {
     path: "/",
@@ -38,7 +39,7 @@ const route = createBrowserRouter([
       {
         path: "/minicart",
         element: (
-          <QueryClientProvider client={cartQuery}>
+          <QueryClientProvider client={queryClient}>
             <ModalCart />
           </QueryClientProvider>
         ),
@@ -48,21 +49,19 @@ const route = createBrowserRouter([
   {
     path: "account",
     element: (
-      <ProtectedRoute>
-        <Account />
-      </ProtectedRoute>
+      <QueryClientProvider client={queryClient}>
+        <ProtectedRoute>
+          <Account />
+        </ProtectedRoute>
+      </QueryClientProvider>
     ),
     children: [
       {
         path: "cart",
-        element: (
-          <QueryClientProvider client={cartQuery}>
-            <Cart />
-          </QueryClientProvider>
-        ),
+        element: <Cart />,
       },
+      { path: "order", element: <Orders /> },
       { path: "favorites", element: <div>fav</div> },
-      { path: "order", element: <div>order</div> },
       { path: "recieved", element: <div>recieved</div> },
       { path: "cancelled", element: <div>cancelled</div> },
     ],

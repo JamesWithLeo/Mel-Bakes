@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import orderReducer from "./slice/orderSlice";
 import authReducer from "./slice/authSlice";
 
 export const store = configureStore({
-  reducer: { order: orderReducer, auth: authReducer },
+  reducer: {
+    auth: authReducer,
+  },
 });
 
 export type AppState = ReturnType<typeof store.getState>;

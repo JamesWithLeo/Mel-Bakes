@@ -14,6 +14,12 @@ module.exports = {
         warning: '#fca5a5'
       },
     },
+    fontFamily: {
+      "advent": "Advent",
+      "lobster": "Lobster",
+      "raleway": "Raleway",
+      "redhat": "Redhat"
+    }
   },
   plugins: [
   ],

@@ -70,26 +70,30 @@ export default function ModalCart() {
         <section className="flex w-full justify-between">
           <h1 className="text-3xl font-bold text-primary">Cart</h1>
           <div className="flex gap-2">
-            {isSelecting ? (
-              <button
-                className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
-                onClick={() => {
-                  setIsSelecting(false);
-                  setSelectedProducts([]);
-                }}
-              >
-                deselect
-              </button>
-            ) : (
-              <button
-                className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
-                onClick={() => {
-                  setIsSelecting(true);
-                }}
-              >
-                select
-              </button>
-            )}
+            {cartQuery.data && cartQuery.data.length ? (
+              <>
+                {isSelecting ? (
+                  <button
+                    className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
+                    onClick={() => {
+                      setIsSelecting(false);
+                      setSelectedProducts([]);
+                    }}
+                  >
+                    deselect
+                  </button>
+                ) : (
+                  <button
+                    className="rounded border border-primarylight px-3 py-1 text-primarylight shadow"
+                    onClick={() => {
+                      setIsSelecting(true);
+                    }}
+                  >
+                    select
+                  </button>
+                )}
+              </>
+            ) : null}
             <Link
               to="/account/cart"
               onClick={() => {

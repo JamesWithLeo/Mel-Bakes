@@ -32,9 +32,9 @@ export async function findUserById(coll: Collection, value: string) {
     console.log(error);
   }
 }
-export async function findCartById(coll: Collection, value: string) {
+export async function findByU_Id(coll: Collection, id: string) {
   try {
-    return await coll.find({ U_id: new ObjectId(value) }).toArray();
+    return await coll.find({ U_id: new ObjectId(id) }).toArray();
   } catch (error) {
     console.log(error);
   }

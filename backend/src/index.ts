@@ -36,7 +36,7 @@ import mongoDB, {
   removeFromOrder,
   deleteDocumentById,
   updateDocumentById,
-  findCartById,
+  findByU_Id,
 } from "./database.js";
 import { ObjectId, WithId } from "mongodb";
 const CLIENT = mongoDB(DB_URI);
@@ -108,43 +108,25 @@ app.get("/melbake/cupcake/:id", async (req: Request, res: Response) => {
     }
   }
 });
+app
+  .route("/melbake/order/:id")
+  .get(async (req: Request, res: Response) => {
+    await findByU_Id(ORDER_COLLECTION, req.params.id).then((value) => {
+      res.status(200).json(value);
+    });
+  })
+  .post(async (req: Request, res: Response) => {
+    req.body._id = new ObjectId();
+    req.body.C_id = new ObjectId(req.params.C_id);
+    req.body.U_id = new ObjectId(req.body.U_id);
+    insertDocument(ORDER_COLLECTION, req.body).then((result) => {
+      res.status(200).json(result);
+    });
+  });
 // fetch user
 app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
   await findUser(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
     res.status(200).json(value);
-  });
-});
-
-// add product to cart
-app.post("/melbake/mycart/add/:id", async (req: Request, res: Response) => {
-  req.body._id = new ObjectId();
-  await insertToCart(ACCOUNT_COLLECTION, req.params.id, req.body).then(
-    (value) => {
-      res.status(200).json(value);
-    },
-  );
-});
-
-// remove product from cart
-app.post("/melbake/mycart/remove/:id", async (req: Request, res: Response) => {
-  await removeFromCart(ACCOUNT_COLLECTION, req.params.id, req.body).then(
-    (result) => {
-      res.status(200).json(result);
-    },
-  );
-});
-
-// fetch orders of user
-app.get("/orders/:id", async (req: Request, res: Response) => {
-  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
-    if (value?.Orders) res.status(200).json(value.Orders);
-  });
-});
-
-app.post("/order/checkout", async (req: Request, res: Response) => {
-  req.body._id = new ObjectId(req.body._id);
-  insertDocument(ORDER_COLLECTION, req.body).then((result) => {
-    res.status(200).json(result);
   });
 });
 
@@ -284,7 +266,7 @@ app
   .route("/melbake/cart/:id")
   .get(async (req: Request, res: Response) => {
     try {
-      await findCartById(CART_COLLECTION, req.params.id).then((value) => {
+      await findByU_Id(CART_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
       });
     } catch (error) {
