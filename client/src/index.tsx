@@ -23,7 +23,7 @@ import OrderDashboard from "./admin.components/orderDashboard";
 import Cart from "./order.components/cart";
 import Orders from "./order.components/Orders";
 import DeliveryLayout from "./delivery.components/deliveryLayout";
-import Account from "./account.components/Account";
+import Account from "./account.components/account";
 import OrderLayout from "./order.components/ordersLayout";
 
 const queryClient = new QueryClient();
