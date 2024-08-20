@@ -1,5 +1,5 @@
 import * as React from "react";
-import Gallary from "../components/GallerySlideshow";
+import Gallary from "../components/Gallery";
 interface IGuestHome {
   setLoginModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

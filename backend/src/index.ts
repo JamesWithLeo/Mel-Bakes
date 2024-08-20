@@ -127,6 +127,7 @@ app
       },
     );
   });
+
 // fetch user
 app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
   await findUser(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
@@ -138,7 +139,7 @@ app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
 app
   .route("/melbake/account/:id")
   .get(async (req: Request, res: Response) => {
-    await fetchDocuments(ACCOUNT_COLLECTION).then((value) => {
+    await findUserById(ACCOUNT_COLLECTION, req.params.id).then((value) => {
       res.status(200).json(value);
     });
   })
@@ -250,7 +251,6 @@ app.route("/melbake/cart").get(async (req: Request, res: Response) => {
   }
 });
 
-// routes for single request
 app
   .route("/melbake/cart/:id")
   .get(async (req: Request, res: Response) => {

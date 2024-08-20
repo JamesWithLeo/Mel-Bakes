@@ -64,7 +64,7 @@ function HeaderComponent() {
 
               <Link
                 className="flex items-center justify-center gap-1"
-                to={"account"}
+                to={"account/info"}
                 replace={false}
               >
                 <FontAwesomeIcon

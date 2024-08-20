@@ -15,24 +15,7 @@ function FooterComponent() {
   const handleLogout = async () => {
     dispatch(Logout());
   };
-  // const ceo =
-  //   "Melia, the inspiring CEO of Mel Bakes, has turned a small local cupcake store into a renowned international cupcake producer. With a blend of business savvy and a deep love for baking, she skillfully manages every part of the business. Melia ensures every cupcake meets the highest quality standards, overseeing everything from product development to marketing and customer service. Her creative strategies include expanding the product range, adopting eco-friendly practices, and using social media to reach a global audience. Thanks to Melia's passionate and innovative leadership, Mel Bakes has grown from a favorite local bakery into a leading name in the cupcake world, bringing joy to customers worldwide with delicious, beautifully crafted treats.";
 
-  // const handleAbout = () => {
-  //   document.querySelector("#content").innerHTML = about;
-  //   document.getElementById("aboutButton").style.backgroundColor = "#2b2a35";
-  //   document.getElementById("ceoButton").style.backgroundColor = "transparent";
-  //   document.getElementById("ceoButton").style.color = "rgb(212, 170, 65)";
-  //   document.getElementById("aboutButton").style.color = "goldenrod";
-  // };
-  // const handleCeo = () => {
-  //   document.querySelector("#content").innerHTML = ceo;
-  //   document.getElementById("ceoButton").style.backgroundColor = "#2b2a35";
-  //   document.getElementById("aboutButton").style.backgroundColor =
-  //     "transparent";
-  //   document.getElementById("aboutButton").style.color = "rgb(212, 170, 65)";
-  //   document.getElementById("ceoButton").style.color = "goldenrod";
-  // };
   return (
     <div
       id="footerWrapper"

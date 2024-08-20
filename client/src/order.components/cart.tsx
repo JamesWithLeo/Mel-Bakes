@@ -54,7 +54,7 @@ export default function Cart() {
 
   return (
     <>
-      <main className="flex h-max flex-col items-center py-2 pb-4">
+      <main className="flex h-full flex-col items-center py-2 pb-4">
         {cartQuery.data && cartQuery.data.length ? (
           <div className="flex w-full justify-end gap-2 px-2 md:gap-4">
             {isSelecting ? (

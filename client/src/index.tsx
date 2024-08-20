@@ -10,18 +10,21 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import App from "./app";
 import "./index.css";
 import ErrorPage from "./components/ErrorPage";
-import SignIn from "./login-signin/SignIn";
+import LoginSigninLayout from "./login-signin/loginSigninLayout";
 import Admin from "./admin.components/Admin";
 import ModalCart from "./cart.components/modalCart";
-import Faqs from "./components/Faqs";
-import Account from "./account.components/account";
+import Info from "./components/info";
+import AccountLayout from "./account.components/accountLayout";
 import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
 import AccountDashboard from "./admin.components/acccountDashboard";
 import ProductDashboard from "./admin.components/productDashboard";
 import OrderDashboard from "./admin.components/orderDashboard";
-import Cart from "./account.components/cart";
-import Orders from "./account.components/Orders";
+import Cart from "./order.components/cart";
+import Orders from "./order.components/Orders";
+import DeliveryLayout from "./delivery.components/deliveryLayout";
+import Account from "./account.components/Account";
+import OrderLayout from "./order.components/ordersLayout";
 
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
@@ -51,19 +54,13 @@ const route = createBrowserRouter([
     element: (
       <QueryClientProvider client={queryClient}>
         <ProtectedRoute>
-          <Account />
+          <AccountLayout />
         </ProtectedRoute>
       </QueryClientProvider>
     ),
     children: [
-      {
-        path: "cart",
-        element: <Cart />,
-      },
-      { path: "order", element: <Orders /> },
-      { path: "favorites", element: <div>fav</div> },
-      { path: "recieved", element: <div>recieved</div> },
-      { path: "cancelled", element: <div>cancelled</div> },
+      { index: true, element: <Account /> },
+      { path: "info", element: <Account /> },
     ],
   },
   {
@@ -90,11 +87,30 @@ const route = createBrowserRouter([
   },
   {
     path: "Signin",
-    element: <SignIn />,
+    element: <LoginSigninLayout />,
   },
   {
+    path: "order",
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <OrderLayout />
+      </QueryClientProvider>
+    ),
+    children: [
+      {
+        path: "cart",
+        element: <Cart />,
+      },
+
+      { path: "order", element: <Orders /> },
+      { path: "favorites", element: <div>fav</div> },
+      { path: "recieved", element: <div>recieved</div> },
+    ],
+  },
+  { path: "deliver", element: <DeliveryLayout /> },
+  {
     path: "Faqs",
-    element: <Faqs />,
+    element: <Info />,
   },
 ]);
 

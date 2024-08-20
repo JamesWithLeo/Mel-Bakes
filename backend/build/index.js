@@ -146,7 +146,7 @@ app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0,
 app
     .route("/melbake/account/:id")
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.fetchDocuments)(ACCOUNT_COLLECTION).then((value) => {
+    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
     });
 }))
@@ -242,7 +242,6 @@ app.route("/melbake/cart").get((req, res) => __awaiter(void 0, void 0, void 0, f
         res.status(500).json(error);
     }
 }));
-// routes for single request
 app
     .route("/melbake/cart/:id")
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {

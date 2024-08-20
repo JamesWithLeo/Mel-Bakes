@@ -95,7 +95,7 @@ export default function ModalCart() {
               </>
             ) : null}
             <Link
-              to="/account/cart"
+              to="/order/order"
               onClick={() => {
                 document.body.style.overflowY = "scroll";
               }}

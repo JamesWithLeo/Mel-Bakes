@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isRejected } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
-type IAccountEditableFields = "CartQuantity";
+type IAccountEditableFields = "FirstName" | "LastName" | "Contact" | "Address";
 
 export type IAccount = {
   Type: "admin" | "user";
@@ -14,7 +14,6 @@ export type IAccount = {
   LastName: string;
   Contact: string;
   Address: string;
-  CartQuantity: number;
 };
 export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
 interface IUserInit {
@@ -54,11 +53,17 @@ const authSlice = createSlice({
       state.User = action.payload.User;
       localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
+    builder.addCase(DeleteAccount.fulfilled, (state, action) => {
+      console.log(action.payload);
+      if (action.payload) {
+        state.User = null;
+      }
+    });
   },
 });
 const LoginRequest = async (email: string) => {
   return axios
-    .get("melbake/login/" + email)
+    .get("/melbake/login/" + email)
     .then((response) => {
       return response.data;
     })
@@ -105,16 +110,65 @@ export const Logout = createAsyncThunk("auth/Logout", async () => {
   return;
 });
 
+const DeleteAccountRequest = async (id: string) => {
+  const account = await axios.get("/melbake/account/" + id);
+  if (account.data) return account;
+};
+
+export const DeleteAccount = createAsyncThunk(
+  "auth/deleteAccount",
+  async ({ id, password }: { id: string; password: string }) => {
+    try {
+      const response = await DeleteAccountRequest(id);
+      console.log(response);
+
+      if (
+        response &&
+        response.status === 200 &&
+        response.data.Password === password
+      ) {
+        const deleteResponse = await axios.delete(
+          "/melbake/accounts/" + response.data._id,
+        );
+        console.log(deleteResponse);
+        return deleteResponse;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  },
+);
+
 const updateRequest = async (
   id: string,
   fieldToUpdate: IAccountEditableFields,
   updatedValue: string | number,
 ) => {
   switch (fieldToUpdate) {
-    case "CartQuantity":
+    case "FirstName":
       return axios
         .put(`/melbake/account/` + id, {
-          CartQuantity: updatedValue,
+          FirstName: updatedValue,
+        })
+        .then((response) => response.data);
+    case "LastName":
+      return axios
+        .put(`/melbake/account/` + id, {
+          LastName: updatedValue,
+        })
+        .then((response) => response.data);
+    case "Contact":
+      return axios
+        .put(`/melbake/account/` + id, {
+          Contact: updatedValue,
+        })
+        .then((response) => response.data);
+    case "Address":
+      return axios
+        .put(`/melbake/account/` + id, {
+          Address: updatedValue,
         })
         .then((response) => response.data);
   }

@@ -13,12 +13,12 @@ module.exports = {
         darker: '#393646',
         warning: '#fca5a5'
       },
-    },
-    fontFamily: {
-      "advent": "Advent",
-      "lobster": "Lobster",
-      "raleway": "Raleway",
-      "redhat": "Redhat"
+      fontFamily: {
+        "advent": "Advent",
+        "lobster": "Lobster",
+        "raleway": "Raleway",
+        "redhat": "Redhat"
+      },
     }
   },
   plugins: [

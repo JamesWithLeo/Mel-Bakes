@@ -98,7 +98,7 @@ export default function CartCard({
 
         // click is not on div element, exit funtion
         const target = e.target as HTMLElement;
-        if (target.nodeName !== e.currentTarget.nodeName) return;
+        if (target.nodeName === "BUTTON") return;
 
         // the click will change the value of the checbox, then synchonize the state
         // the state will decide if the checbox is check or not.

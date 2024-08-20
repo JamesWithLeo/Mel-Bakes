@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import LoginPage from "./Login";
 import Sign from "./sign";
 
-function SignIn() {
+function LoginSigninLayout() {
   const [log, setLog] = useState(false);
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
@@ -43,4 +43,4 @@ function SignIn() {
     </div>
   );
 }
-export default SignIn;
+export default LoginSigninLayout;

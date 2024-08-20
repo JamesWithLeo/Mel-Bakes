@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 interface ISign {
   setVisibility: React.Dispatch<React.SetStateAction<boolean>>;
 }
 function Sign({ setVisibility }: ISign) {
   const navigate = useNavigate();
+
   async function writeUser(userAccount: BodyInit) {
     await fetch("/melbake/signin/create/", {
       method: "POST",
@@ -49,11 +50,12 @@ function Sign({ setVisibility }: ISign) {
       LastName: lastname.value,
       Gmail: gmail.value,
       Password: password.value,
-      CartQuantity: null,
+      Type: "user",
+      Contact: null,
+      Address: null,
     });
     writeUser(body);
     navigate("/", { replace: true });
-    console.log(body);
   };
   return (
     <div className="flex h-full w-full max-w-7xl flex-col items-center gap-4 self-center px-4 py-4">
