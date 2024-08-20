@@ -23,7 +23,6 @@ function LoginPage({ setVisibility }: ILogin) {
     const password: string = passwordElement.value;
     if (gmail) {
       dispatch(Login({ Gmail: gmail, Password: password }));
-      // navigate("/", { replace: true });
     } else {
       event.preventDefault();
     }

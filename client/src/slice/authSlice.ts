@@ -1,21 +1,11 @@
-import { createAsyncThunk, createSlice, isRejected } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { IAccount, IAuthMessage } from "../AppDataTypes";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
 type IAccountEditableFields = "FirstName" | "LastName" | "Contact" | "Address";
 
-export type IAccount = {
-  Type: "admin" | "user";
-  _id: string;
-  Gmail: string;
-  Password: string;
-  FirstName: string;
-  LastName: string;
-  Contact: string;
-  Address: string;
-};
-export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
 interface IUserInit {
   User: IAccount | null;
   AuthMessage: null | string;

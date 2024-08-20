@@ -3,7 +3,7 @@ import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IOrder } from "../slice/orderSlice";
+import { IOrder } from "../AppDataTypes";
 
 function Product() {
   const [cupcakesElement, setCupcakesElement] = useState<JSX.Element[]>([]);

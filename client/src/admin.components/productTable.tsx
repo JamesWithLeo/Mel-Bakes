@@ -5,7 +5,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { IProduct } from "../slice/orderSlice";
+import { IProduct } from "../AppDataTypes";
 import { Public } from "@mui/icons-material";
 
 export default function ProductTable({

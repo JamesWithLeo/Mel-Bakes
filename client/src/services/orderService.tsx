@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IOrder } from "../slice/orderSlice";
+import { IOrder } from "../AppDataTypes";
 import axios from "axios";
 
 // for admin

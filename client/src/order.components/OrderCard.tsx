@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 
-import { IOrder } from "../slice/orderSlice";
+import { IOrder } from "../AppDataTypes";
 import { useCancelOrder } from "../services/orderService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";

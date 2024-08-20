@@ -4,7 +4,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { IOrder } from "../slice/orderSlice";
+import { IOrder } from "../AppDataTypes";
 
 export default function OrderTable({
   data,

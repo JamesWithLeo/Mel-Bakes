@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IOrder, IProduct } from "../slice/orderSlice";
+import { IOrder, IProduct } from "../AppDataTypes";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { useDeleteCart } from "../services/cartService";

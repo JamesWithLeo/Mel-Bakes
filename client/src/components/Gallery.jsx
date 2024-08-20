@@ -1,5 +1,4 @@
 import ccg3 from "../assets/images/ccg3.jpg";
-import React, { useEffect, useState, useRef } from "react";
 import ccg1 from "../assets/images/ccG1.jpg";
 import ccg2 from "../assets/images/ccG2.jpg";
 import Slider from "react-slick";

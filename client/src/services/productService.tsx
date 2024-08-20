@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IProduct } from "../slice/orderSlice";
+import { IProduct } from "../AppDataTypes";
 import axios from "axios";
 
 export function useCreateProduct() {

@@ -6,7 +6,7 @@ import {
   type MRT_ColumnDef,
   MRT_TableOptions,
 } from "material-react-table";
-import { IAccount } from "../slice/authSlice";
+import { IAccount } from "../AppDataTypes";
 export default function AccountTable({
   data,
   addRow,

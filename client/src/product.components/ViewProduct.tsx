@@ -10,7 +10,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { IProduct } from "../slice/orderSlice";
+import { IProduct } from "../AppDataTypes";
 import axios from "axios";
 import Notify from "../components/notify";
 
