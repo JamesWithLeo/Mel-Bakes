@@ -25,13 +25,13 @@ export type IOrder = IProduct & {
 };
 
 export type IAccount = {
-  Type: "admin" | "user";
+  type: "admin" | "user";
   _id: string;
-  Gmail: string;
-  Password: string;
-  FirstName: string;
-  LastName: string;
-  Contact: string;
-  Address: string;
+  gmail: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  contact: string;
+  address: string;
 };
 export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";
