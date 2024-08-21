@@ -142,7 +142,7 @@ export default function Account() {
         </section>
         <div>
           <h1 className="text-sm sm:text-base">
-            {user.FirstName} {user.LastName}
+            {user.firstName} {user.lastName}
           </h1>
           <h1 className="text-xs">{user._id}</h1>
         </div>
@@ -154,7 +154,7 @@ export default function Account() {
               <span className="flex w-full items-center gap-4">
                 <input
                   readOnly
-                  defaultValue={user.Gmail}
+                  defaultValue={user.gmail}
                   className="w-full border-b border-gray-100 text-gray-600 outline-none focus:border-gray-500"
                 />
               </span>
@@ -166,7 +166,7 @@ export default function Account() {
                 <input
                   id="FirstName"
                   readOnly
-                  defaultValue={user.FirstName}
+                  defaultValue={user.firstName}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
                 <button id="FirstNameEdit" onClick={HandleEdit}>
@@ -191,7 +191,7 @@ export default function Account() {
                 <input
                   readOnly
                   id="LastName"
-                  defaultValue={user.LastName}
+                  defaultValue={user.lastName}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
                 <button id="LastNameEdit" onClick={HandleEdit}>
@@ -217,7 +217,7 @@ export default function Account() {
                 <input
                   readOnly
                   id="Contact"
-                  defaultValue={user.Contact}
+                  defaultValue={user.contact}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
                 <button id="ContactEdit" onClick={HandleEdit}>
@@ -243,7 +243,7 @@ export default function Account() {
                 <input
                   readOnly
                   id="Address"
-                  defaultValue={user.Address}
+                  defaultValue={user.address}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
                 <button onClick={HandleEdit} id="AddressEdit">

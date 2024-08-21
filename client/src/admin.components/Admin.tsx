@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 function Admin() {
   const User = useSelector((state: AppState) => state.auth.User);
   const [isAsideVisible, setIsAsideVisible] = useState<boolean>(false);
-  if (User && User.Type !== "admin") {
+  if (User && User.type !== "admin") {
     return <Navigate to={"/"} />;
   }
   document.body.style.overflowY = "scroll";

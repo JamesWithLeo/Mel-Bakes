@@ -34,7 +34,7 @@ function HeaderComponent() {
           {auth.User ? (
             <div className="hidden gap-8 md:flex">
               <>
-                {auth.User.Type === "admin" ? (
+                {auth.User.type === "admin" ? (
                   <Link
                     to={"Admin"}
                     className="flex items-center justify-center gap-1"
@@ -145,7 +145,7 @@ function HeaderComponent() {
             </a>
 
             <>
-              {auth.User && auth.User.Type === "admin" ? (
+              {auth.User && auth.User.type === "admin" ? (
                 <Link
                   to={"Admin"}
                   className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
