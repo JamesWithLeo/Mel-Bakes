@@ -34,6 +34,7 @@ function App() {
   const [isFilterModalVisible, setFilterModalVisible] =
     useState<boolean>(false);
   const [productId, SetProductId] = useState(0);
+
   return (
     <div id="bodyWrapper" style={{ backgroundImage: `url(${plaidPattern})` }}>
       {ViewProductDisplay ? (
