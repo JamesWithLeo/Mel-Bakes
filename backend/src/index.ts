@@ -13,6 +13,7 @@ if (
 const port = process.env.PORT || 2024;
 
 import express, { Request, Response } from "express";
+import cors from "cors";
 
 // database for images
 import cloudinaryConfigure, { getAssetInfo } from "./cloudinary.js";
@@ -46,7 +47,7 @@ const CART_COLLECTION = DATABASE.collection("CART");
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 // get all cupcakes in the db
 interface IProduct {
   _id: string;

@@ -47,6 +47,7 @@ if (!process.env.DB_USER ||
 }
 const port = process.env.PORT || 2024;
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 // database for images
 const cloudinary_js_1 = __importStar(require("./cloudinary.js"));
 (0, cloudinary_js_1.default)();
@@ -66,6 +67,7 @@ const ORDER_COLLECTION = DATABASE.collection("ORDER");
 const CART_COLLECTION = DATABASE.collection("CART");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
 app.get("/melbake", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield DATABASE.admin()
         .ping()
