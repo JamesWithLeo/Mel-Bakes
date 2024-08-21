@@ -16,7 +16,7 @@ export default function OrderDashboard() {
     useDeleteOrder();
 
   const HandleDeleteOrder = (id: string) => {
-    deleteOrder(id);
+    if (!isDeletingOrder) deleteOrder(id);
   };
   if (query.isLoading) return <LoadingPage />;
   return (

@@ -139,8 +139,8 @@ app
     });
 }));
 // fetch user
-app.get("/melbake/login/:gmail", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUser)(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
+app.get("/melbake/login/:email", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.findUserByEmail)(ACCOUNT_COLLECTION, req.params.email).then((value) => {
         res.status(200).json(value);
     });
 }));

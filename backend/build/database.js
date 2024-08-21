@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancellOrder = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUser = void 0;
+exports.cancellOrder = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUserByEmail = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -29,17 +29,17 @@ const mongoDB = (uri) => {
     }
 };
 exports.default = mongoDB;
-function findUser(coll, value) {
+function findUserByEmail(coll, value) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield coll.findOne({ Gmail: value });
+            return yield coll.findOne({ email: value });
         }
         catch (error) {
             console.error(error);
         }
     });
 }
-exports.findUser = findUser;
+exports.findUserByEmail = findUserByEmail;
 function findUserById(coll, value) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

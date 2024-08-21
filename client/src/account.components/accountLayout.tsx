@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { Navigate, Outlet, Link } from "react-router-dom";
-import plaidPattern from "../assets/images/pattern.svg";
 
 export default function AccountLayout() {
   const auth = useSelector((state: AppState) => state.auth);

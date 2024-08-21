@@ -19,10 +19,10 @@ function LoginPage({
     const passwordElement = document.getElementById(
       "passwordLoginTB",
     ) as HTMLInputElement;
-    const gmail: string = gmailElement.value;
+    const email: string = gmailElement.value;
     const password: string = passwordElement.value;
-    if (gmail && password) {
-      dispatch(Login({ Gmail: gmail, Password: password }));
+    if (email && password) {
+      dispatch(Login({ email: email, password: password }));
     } else {
       event.preventDefault();
     }

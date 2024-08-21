@@ -4,8 +4,6 @@ import ProductCard from "./ProductCard";
 import axios from "axios";
 import { IProduct } from "../AppDataTypes";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate } from "react-router-dom";
-import { error } from "console";
 import { faFaceFrown } from "@fortawesome/free-regular-svg-icons";
 
 function Product() {

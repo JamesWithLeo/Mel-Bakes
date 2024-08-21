@@ -26,7 +26,7 @@ const cluster = process.env.DB_CLUSTER;
 const DB_URI = `mongodb+srv://${user}:${password}@${cluster}.wadd7q8.mongodb.net/?authMechanism=SCRAM-SHA-1`;
 
 import mongoDB, {
-  findUser,
+  findUserByEmail,
   fetchCupcake,
   fetchDocuments,
   insertDocument,
@@ -130,8 +130,8 @@ app
   });
 
 // fetch user
-app.get("/melbake/login/:gmail", async (req: Request, res: Response) => {
-  await findUser(ACCOUNT_COLLECTION, req.params.gmail).then((value) => {
+app.get("/melbake/login/:email", async (req: Request, res: Response) => {
+  await findUserByEmail(ACCOUNT_COLLECTION, req.params.email).then((value) => {
     res.status(200).json(value);
   });
 });

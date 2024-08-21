@@ -65,14 +65,14 @@ const LoginRequest = async (email: string) => {
 export const Login = createAsyncThunk(
   "auth/Login",
   async (
-    { Gmail, Password }: { Gmail: string; Password: string },
+    { email, password }: { email: string; password: string },
     thunkApi,
   ) => {
     type returnType = {
       User: null | IAccount;
       AuthMessage: IAuthMessage | null;
     };
-    const document = await LoginRequest(Gmail);
+    const document = await LoginRequest(email);
     if (!document) {
       const authloginResult: returnType = {
         User: null,
@@ -80,7 +80,7 @@ export const Login = createAsyncThunk(
       };
       return authloginResult;
     }
-    if (document.Password && document.Password !== Password) {
+    if (document.Password && document.Password !== password) {
       const authloginResult: returnType = {
         User: null,
         AuthMessage: "Wrong Password",

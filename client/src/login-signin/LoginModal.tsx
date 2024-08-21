@@ -19,17 +19,17 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     loginButton.disabled = true;
     loginButton.style.cursor = "wait";
 
-    const gmailElement = document.getElementById(
+    const emailElement = document.getElementById(
       "gmailLoginTB",
     ) as HTMLInputElement;
     const passwordElement = document.getElementById(
       "passwordLoginTB",
     ) as HTMLInputElement;
-    const gmail: string = gmailElement.value;
+    const email: string = emailElement.value;
     const password: string = passwordElement.value;
 
-    if (gmail && password) {
-      dispatch(Login({ Gmail: gmail, Password: password }))
+    if (email && password) {
+      dispatch(Login({ email: email, password: password }))
         .unwrap()
         .then((value) => {
           setTimeout(() => {
@@ -37,7 +37,7 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
             loginButton.style.cursor = "pointer";
           }, 3000);
           if (value.AuthMessage === "Account doesn't exist") {
-            gmailElement.value = "";
+            emailElement.value = "";
             passwordElement.value = "";
           } else if (value.AuthMessage === "Wrong Password") {
             passwordElement.style.outlineColor = "red";

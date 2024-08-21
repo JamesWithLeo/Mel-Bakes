@@ -1,24 +1,24 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import "dotenv/config";
+import * as dotenv from "dotenv";
+dotenv.config({ debug: false });
 const firebaseConfig = {
-  apiKey: "AIzaSyBnwQW4BYUAdZUUHyaNF1V_pX9VnrWi_64",
-  authDomain: "mel-bakes.firebaseapp.com",
-  projectId: "mel-bakes",
-  storageBucket: "mel-bakes.appspot.com",
-  messagingSenderId: "355063997264",
-  appId: "1:355063997264:web:4cb61f65338a35ce6fc255",
-  measurementId: "G-1KRVGRN6TT",
+  apiKey: process.env.apikey,
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const auth = getAuth(app);
-
-export const createUser = (email: string, password: string) => {
+const auth = getAuth();
+console.log(auth.currentUser);
+export const createUser = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((value) => {
       const user = value.user;
@@ -29,7 +29,7 @@ export const createUser = (email: string, password: string) => {
     });
 };
 
-export const loginUser = (email: string, password: string) => {
+export const loginUser = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((value) => {
       const user = value.user;
