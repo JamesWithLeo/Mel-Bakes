@@ -9,7 +9,14 @@ export type IProduct = {
   Price: number;
   Stock: number;
 };
-
+export type FlavorTypes =
+  | "Chocolate"
+  | "Strawberry"
+  | "Vanilla"
+  | "Cherry"
+  | "Coffee"
+  | "Milk"
+  | null;
 export type IOrder = IProduct & {
   U_id: string;
   Quantity: number;

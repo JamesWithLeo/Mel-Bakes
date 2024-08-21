@@ -7,9 +7,20 @@
 
 # testing
 /coverage
+**/test
+jest.config.js
+babel.config.js
+
+compose.yaml
+.dockerignore
+Dockerfile
+**/docker-compose*
+**/compose.y*ml
+**/Dockerfile*
 
 # production
 /build
+
 
 # misc
 .DS_Store

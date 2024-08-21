@@ -137,9 +137,9 @@ export default function ModalCart() {
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-end sm:gap-4">
           {selectedProducts.length ? (
             <>
-              <button className="rounded border bg-primarylight px-3 py-1 text-white shadow">
+              {/* <button className="rounded border bg-primarylight px-3 py-1 text-white shadow">
                 Check Out
-              </button>
+              </button> */}
               <button
                 onClick={removeProduct}
                 className="rounded border bg-red-300 px-3 py-1 text-red-500 shadow"

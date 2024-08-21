@@ -126,13 +126,21 @@ export default function CartCard({
             }}
           />
         ) : null}
-        {OrderObj.Url ? (
-          <div className="group col-span-2 flex flex-col items-center text-center">
-            <img
-              src={OrderObj.Url}
-              alt="cupcake"
-              className="h-14 w-14 group-[]:select-none sm:h-20 sm:w-20 md:h-24 md:w-24"
-            />
+        <div className="group col-span-2 flex flex-col items-center text-center">
+          <>
+            {OrderObj.Url ? (
+              <>
+                <img
+                  src={OrderObj.Url}
+                  alt="cupcake"
+                  className="h-14 w-14 group-[]:select-none sm:h-20 sm:w-20 md:h-24 md:w-24"
+                />
+              </>
+            ) : (
+              <div className="col-span-2 flex h-14 w-14 animate-pulse select-none items-center justify-center rounded bg-slate-100 text-xl text-primarylight group-[]:select-none sm:h-20 sm:w-20 md:h-20 md:w-20">
+                <FontAwesomeIcon icon={faImage} />
+              </div>
+            )}
             <div className="group col-span-2 sm:hidden">
               <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
                 {OrderObj.Name}
@@ -141,12 +149,8 @@ export default function CartCard({
                 {OrderObj.Flavor}
               </h1>
             </div>
-          </div>
-        ) : (
-          <div className="flex h-14 w-14 animate-pulse select-none items-center justify-center rounded bg-slate-100 text-xl text-primarylight sm:h-16 sm:w-16">
-            <FontAwesomeIcon icon={faImage} />
-          </div>
-        )}
+          </>
+        </div>
 
         <div className="col-span-2 hidden sm:block">
           <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">

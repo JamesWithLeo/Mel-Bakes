@@ -30,7 +30,11 @@ const queryClient = new QueryClient();
 const route = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    ),
     errorElement: <ErrorPage />,
     loader: async () => {
       return axios.get("/melbake").then((res) => {

@@ -71,7 +71,7 @@ function HeaderComponent() {
                   icon={faUser}
                   className="text-primary sm:text-base lg:text-base"
                 />
-                <h1 className="px-3 py-1 text-primary">account</h1>
+                <h1 className="px-3 py-1 text-primary">Account</h1>
               </Link>
             </div>
           ) : null}
@@ -80,7 +80,11 @@ function HeaderComponent() {
             className="flex w-max items-center justify-center gap-2 sm:gap-4"
           >
             {" "}
-            <a href="#footer" className="hidden w-max lg:flex">
+            <a
+              className="hidden h-full items-center justify-center gap-4 text-left font-redhat text-primary md:flex"
+              href="#footer"
+              onClick={closeMenu}
+            >
               Contact us
             </a>
             <button
@@ -132,7 +136,7 @@ function HeaderComponent() {
             ) : null}
 
             <a
-              className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
+              className="flex h-full items-center justify-center gap-4 text-left font-redhat text-primary hover:animate-pulse"
               href="#footer"
               onClick={closeMenu}
             >

@@ -80,9 +80,9 @@ export default function Cart() {
             <div className="flex flex-row gap-2 md:gap-4">
               {selectedProducts.length ? (
                 <>
-                  <button className="rounded bg-primary px-3 py-1 text-white shadow">
+                  {/* <button className="rounded bg-primary px-3 py-1 text-white shadow">
                     Check Out
-                  </button>
+                  </button> */}
                   <button
                     onClick={removeProduct}
                     className="rounded bg-red-300 px-3 py-1 text-red-500 shadow"

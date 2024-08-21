@@ -1,16 +1,16 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-// import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
 import { Login } from "../slice/authSlice";
-interface ILogin {
+
+function LoginPage({
+  setVisibility,
+}: {
   setVisibility: React.Dispatch<React.SetStateAction<Boolean>>;
-}
-function LoginPage({ setVisibility }: ILogin) {
+}) {
   const AuthMessage = useSelector((state: AppState) => state.auth.AuthMessage);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
   const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const gmailElement = document.getElementById(
@@ -21,12 +21,13 @@ function LoginPage({ setVisibility }: ILogin) {
     ) as HTMLInputElement;
     const gmail: string = gmailElement.value;
     const password: string = passwordElement.value;
-    if (gmail) {
+    if (gmail && password) {
       dispatch(Login({ Gmail: gmail, Password: password }));
     } else {
       event.preventDefault();
     }
   };
+
   return (
     <div className="flex h-full w-full max-w-7xl flex-col items-center self-center px-4 py-4">
       <h1 className="my-8 text-3xl font-bold text-primary">Login Account</h1>

@@ -3,7 +3,7 @@ import AccountTable from "./accountTable";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
 import LoadingPage from "../components/loadingPage";
-import { IAccount } from "../slice/authSlice";
+import { IAccount } from "../AppDataTypes";
 import {
   useCreateAccount,
   useDeleteAccount,

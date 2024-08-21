@@ -161,12 +161,12 @@ function ViewProduct({
   return (
     <>
       <div
-        className="fixed z-20 flex h-svh w-full items-center justify-center bg-[#393664] opacity-70"
+        className="fixed z-40 flex h-svh w-full items-center justify-center bg-[#393664] opacity-70"
         id="ViewProduct__OutsideWrapper"
       ></div>
 
       <PanelGroup
-        className="fixed inset-x-0 bottom-0 z-20 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto"
+        className="fixed inset-x-0 bottom-0 z-40 mx-auto flex w-full flex-col bg-transparent sm:bottom-auto"
         direction="vertical"
       >
         <Panel

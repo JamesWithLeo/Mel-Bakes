@@ -1,45 +1,36 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import ProductCard from "./ProductCard";
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { IOrder } from "../AppDataTypes";
+import { IProduct } from "../AppDataTypes";
+import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "react-router-dom";
 
 function Product() {
-  const [cupcakesElement, setCupcakesElement] = useState<JSX.Element[]>([]);
-  async function fetchCupcakes() {
-    await axios
-      .get("melbake/cupcakes")
-      .then((value) => {
-        if (value.data) {
-          const cupcakes = value.data.map((cupcake: IOrder) => {
-            return (
-              <>
-                <ProductCard key={cupcake._id} productObj={cupcake} />
-              </>
-            );
-          });
-          setCupcakesElement(cupcakes);
-        }
-      })
-      .catch((reason) => {
-        console.log(reason);
-      });
-  }
+  const productQuery = useQuery({
+    queryKey: ["product"],
+    queryFn: async () => {
+      const response = await axios.get("melbake/cupcakes");
+      return await response.data;
+    },
+  });
 
-  useEffect(() => {
-    fetchCupcakes();
-  }, []);
-
+  if (productQuery.error) return <Navigate to={"/"} />;
   return (
     <>
-      {cupcakesElement.length ? (
-        <div
-          id="productContainer"
-          className="row-span-2 flex flex-row flex-wrap justify-center gap-4 sm:gap-5 md:gap-6"
-        >
-          {cupcakesElement}
-        </div>
+      {productQuery.fetchStatus !== "fetching" ? (
+        <>
+          <div
+            id="productContainer"
+            className="row-span-2 flex min-h-96 flex-row flex-wrap justify-center gap-4 sm:gap-5 md:gap-6"
+          >
+            {productQuery.data.length
+              ? productQuery.data.map((product: IProduct) => {
+                  return <ProductCard key={product._id} productObj={product} />;
+                })
+              : ""}
+          </div>
+        </>
       ) : (
         <div
           id="productContainer"

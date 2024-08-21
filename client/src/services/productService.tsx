@@ -1,6 +1,98 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IProduct } from "../AppDataTypes";
+import { FlavorTypes, IProduct } from "../AppDataTypes";
 import axios from "axios";
+
+export const useFilterFlavor = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (filt: FlavorTypes) => {
+      const response = await axios.get("melbake/cupcakes");
+      return response.data;
+    },
+    onMutate(variables) {
+      if (variables)
+        queryClient.setQueryData(["product"], (prevProducts: IProduct[]) => {
+          if (prevProducts) {
+            return prevProducts.filter((value: IProduct) =>
+              value.Flavor.split(" ").includes(variables),
+            );
+          }
+        });
+    },
+    onSuccess(data, variables, context) {
+      if (
+        (queryClient.getQueryData(["product"]) as IProduct[]).length === 0 ||
+        !variables
+      ) {
+        queryClient.setQueryData(["product"], () => data);
+      }
+    },
+  });
+};
+
+export const useSortFlavor = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (filt: FlavorTypes) => {
+      const response = await axios.get("melbake/cupcakes");
+      return response.data;
+    },
+    onMutate(variables) {
+      if (variables)
+        queryClient.setQueryData(["product"], (prevProducts: IProduct[]) => {
+          if (prevProducts) {
+            let remainingProduct: IProduct[] = [];
+            const sortedProduct = prevProducts.filter((value) => {
+              if (value.Flavor.split(" ").includes(variables)) return value;
+              remainingProduct.push(value);
+            });
+            sortedProduct.push(...remainingProduct);
+            return sortedProduct;
+          }
+        });
+    },
+    onSuccess(data, variables, context) {
+      if (!variables) queryClient.setQueryData(["product"], () => data);
+    },
+  });
+};
+
+export const useSortPrice = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (sort: "ascending" | "descending") => {
+      return sort;
+    },
+    onMutate(variables) {
+      queryClient.setQueryData(["product"], (prevProducts: IProduct[]) => {
+        if (prevProducts) {
+          const products = prevProducts;
+          let productsLength = products.length;
+          for (let i = 0; i < productsLength - 1; i++) {
+            for (let j = 0; j < productsLength - i - 1; j++) {
+              if (variables === "descending") {
+                if (products[j].Price < products[j + 1].Price) {
+                  // Swap the elements
+                  let temp = products[j];
+                  products[j] = products[j + 1];
+                  products[j + 1] = temp;
+                }
+              } else {
+                if (products[j].Price > products[j + 1].Price) {
+                  // Swap the elements
+                  let temp = products[j];
+                  products[j] = products[j + 1];
+                  products[j + 1] = temp;
+                }
+              }
+            }
+          }
+          return products;
+        }
+      });
+    },
+  });
+};
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();

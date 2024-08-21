@@ -3,6 +3,8 @@ import { AppDispatch, AppState } from "../store";
 import { Navigate } from "react-router-dom";
 import { DeleteAccount, Logout, update } from "../slice/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import plaidPattern from "../assets/images/pattern.svg";
 import { useState } from "react";
 import {
   faPenToSquare,
@@ -121,9 +123,12 @@ export default function Account() {
           }}
         />
       ) : null}
-      <main className="flex h-full flex-col items-center gap-4 py-16">
-        <section className="flex flex-col items-center">
-          <div className="flex w-full justify-center">
+      <main className="flex h-full flex-col items-center gap-4">
+        <section
+          className="mb-8 grid h-36 w-full grid-cols-1 grid-rows-3 flex-col items-center shadow"
+          style={{ backgroundImage: `url(${plaidPattern})` }}
+        >
+          <div className="row-start-3 flex w-full flex-col items-center">
             {user ? (
               <div className="row-start-2 h-28 w-28 bg-white drop-shadow">
                 .
@@ -134,11 +139,13 @@ export default function Account() {
               </div>
             )}
           </div>
+        </section>
+        <div>
           <h1 className="text-sm sm:text-base">
             {user.FirstName} {user.LastName}
           </h1>
           <h1 className="text-xs">{user._id}</h1>
-        </section>
+        </div>
 
         <section className="flex w-full flex-col items-center gap-4 px-2 lg:flex-row lg:items-start lg:justify-center">
           <section className="flex w-full max-w-sm flex-col items-center gap-2 rounded bg-white p-4 shadow md:p-8">
