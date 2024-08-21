@@ -36,12 +36,6 @@ const route = createBrowserRouter([
       </QueryClientProvider>
     ),
     errorElement: <ErrorPage />,
-    loader: async () => {
-      return axios.get("/melbake").then((res) => {
-        console.log(res.data);
-        return res.data;
-      });
-    },
     children: [
       {
         path: "/minicart",
