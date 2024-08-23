@@ -12,7 +12,7 @@ if (
 }
 const port = process.env.PORT || 2024;
 
-import express, { Request, Response } from "express";
+import express, { request, Request, Response } from "express";
 import cors from "cors";
 
 // database for images
@@ -44,6 +44,7 @@ const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
 const CART_COLLECTION = DATABASE.collection("CART");
+const RECEIVED_COLLECTION = DATABASE.collection("RECEIVED");
 const app = express();
 
 app.use(express.json());
@@ -128,6 +129,12 @@ app
       },
     );
   });
+
+app.route("/melbake/received/:id").get(async (req: Request, res: Response) => {
+  await findByU_Id(RECEIVED_COLLECTION, req.params.id).then((value) => {
+    res.status(200).json(value);
+  });
+});
 
 // fetch user
 app.get("/melbake/login/:email", async (req: Request, res: Response) => {
@@ -217,28 +224,43 @@ app
   });
 
 app.get("/melbake/profile/:id", async (req: Request, res: Response) => {
-  await findUserById(ACCOUNT_COLLECTION, req.params.id).then((account) => {
+  await findByU_Id(ACCOUNT_COLLECTION, req.params.id).then((account) => {
     res.status(200).json(account);
   });
 });
-/// order middlewware
-// get product
-app.get("/melbake/order", async (req: Request, res: Response) => {
-  try {
-    await fetchDocuments(ORDER_COLLECTION).then((value) => {
+
+// admin
+app
+  .route("/melbake/order/")
+  .get(async (req: Request, res: Response) => {
+    try {
+      await fetchDocuments(ORDER_COLLECTION).then((value) => {
+        res.status(200).json(value);
+      });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  })
+  .put(async (req: Request, res: Response) => {
+    const oid = req.query.oid as string;
+    await updateDocumentById(ORDER_COLLECTION, oid, req.body).then((value) => {
       res.status(200).json(value);
     });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
-
-app.get("/melbake/order/delete/:id", async (req: Request, res: Response) => {
-  await deleteDocumentById(ORDER_COLLECTION, req.params.id).then((value) => {
-    res.status(200).json(value);
+  })
+  .delete(async (req: Request, res: Response) => {
+    const oid = req.query.id as string;
+    await deleteDocumentById(ORDER_COLLECTION, oid).then((value) => {
+      res.status(200).json(value);
+    });
   });
+
+app.route("/melbake/c/order/:oid").get(async (req: Request, res: Response) => {
+  await ORDER_COLLECTION.findOne({ _id: new ObjectId(req.params.oid) }).then(
+    (value) => {
+      res.status(200).json(value);
+    },
+  );
 });
-/// order middleware
 
 /// cart middleware
 // get all in the cart
@@ -295,8 +317,6 @@ app.route("/melbake/carts").delete(async (req: Request, res: Response) => {
     console.error(error);
   }
 });
-
-/// cart middleware
 
 // add account to database
 app.post("/melbake/signin/create", async (req: Request, res: Response) => {

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 import CartCard from "../cart.components/cartCard";
 import { Navigate } from "react-router-dom";
 import { useState } from "react";

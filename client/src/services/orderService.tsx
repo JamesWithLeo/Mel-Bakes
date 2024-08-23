@@ -1,19 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 import axios from "axios";
 
 // for admin
 export function useDeleteOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (_id: string) => {
-      const response = await axios.get("/melbake/order/delete/" + _id);
+    mutationFn: async (oid: string) => {
+      console.log(oid);
+      const response = await axios.delete("/melbake/order/", {
+        params: { id: oid },
+      });
       console.log(response);
       return response;
     },
-    onMutate: (_id: string) => {
+    onMutate: (variables) => {
       queryClient.setQueryData(["order"], (prevOrder: any) =>
-        prevOrder?.filter((order: IOrder) => order._id !== _id),
+        prevOrder?.filter((order: IOrder) => order._id !== variables),
       );
     },
   });

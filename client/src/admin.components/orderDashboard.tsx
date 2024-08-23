@@ -15,8 +15,8 @@ export default function OrderDashboard() {
   const { mutateAsync: deleteOrder, isPending: isDeletingOrder } =
     useDeleteOrder();
 
-  const HandleDeleteOrder = (id: string) => {
-    if (!isDeletingOrder) deleteOrder(id);
+  const HandleDeleteOrder = (oid: string) => {
+    if (!isDeletingOrder) deleteOrder(oid);
   };
   if (query.isLoading) return <LoadingPage />;
   return (

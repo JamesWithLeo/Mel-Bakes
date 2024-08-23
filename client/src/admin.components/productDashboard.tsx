@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IProduct } from "../AppDataTypes";
+import { IProduct } from "../appTypes";
 import ProductTable from "./productTable";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";

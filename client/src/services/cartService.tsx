@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { IProduct } from "../AppDataTypes";
+import { IProduct } from "../appTypes";
 
 export const useDeleteCart = () => {
   const queryClient = useQueryClient();

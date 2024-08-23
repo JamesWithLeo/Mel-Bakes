@@ -1,9 +1,14 @@
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
 function LoadingComponents() {
   return (
     <>
-      <div className="fixed z-50 flex h-svh w-full items-center justify-center bg-primary opacity-70">
-        <h1 className="text-base text-white md:text-2xl">LOADING..</h1>
+      <div className="fixed z-50 flex h-svh w-full items-center justify-center">
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="animate-spin text-6xl text-primary"
+        />
       </div>
     </>
   );

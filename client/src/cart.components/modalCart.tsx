@@ -4,7 +4,7 @@ import CartCard from "./cartCard";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import axios from "axios";
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 import { useQuery } from "@tanstack/react-query";
 import { useMultiDeleteCart } from "../services/cartService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

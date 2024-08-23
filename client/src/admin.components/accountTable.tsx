@@ -6,7 +6,7 @@ import {
   type MRT_ColumnDef,
   MRT_TableOptions,
 } from "material-react-table";
-import { IAccount } from "../AppDataTypes";
+import { IAccount } from "../appTypes";
 export default function AccountTable({
   data,
   addRow,
@@ -52,6 +52,7 @@ export default function AccountTable({
         size: 100,
         enableClickToCopy: true,
         maxSize: 200,
+        enableSorting: false,
       },
       {
         accessorKey: "lastName",
@@ -59,6 +60,7 @@ export default function AccountTable({
         enableClickToCopy: true,
         size: 100,
         maxSize: 200,
+        enableSorting: false,
       },
       {
         accessorKey: "type",
@@ -66,7 +68,7 @@ export default function AccountTable({
         size: 80,
         maxSize: 100,
         editVariant: "select",
-        editSelectOptions: ["user", "admin"],
+        editSelectOptions: ["user", "admin", "courier"],
       },
       {
         accessorKey: "contact",

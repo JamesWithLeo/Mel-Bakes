@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IAccount, IAuthMessage } from "../AppDataTypes";
+import { IAccount, IAuthMessage } from "../appTypes";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
-type IAccountEditableFields = "FirstName" | "LastName" | "Contact" | "Address";
+type IAccountEditableFields = "firstName" | "lastName" | "contact" | "address";
 
 interface IUserInit {
   User: IAccount | null;
@@ -137,28 +137,28 @@ const updateRequest = async (
   updatedValue: string | number,
 ) => {
   switch (fieldToUpdate) {
-    case "FirstName":
+    case "firstName":
       return axios
         .put(`/melbake/account/` + id, {
-          FirstName: updatedValue,
+          firstName: updatedValue,
         })
         .then((response) => response.data);
-    case "LastName":
+    case "lastName":
       return axios
         .put(`/melbake/account/` + id, {
-          LastName: updatedValue,
+          lastName: updatedValue,
         })
         .then((response) => response.data);
-    case "Contact":
+    case "contact":
       return axios
         .put(`/melbake/account/` + id, {
-          Contact: updatedValue,
+          contact: updatedValue,
         })
         .then((response) => response.data);
-    case "Address":
+    case "address":
       return axios
         .put(`/melbake/account/` + id, {
-          Address: updatedValue,
+          address: updatedValue,
         })
         .then((response) => response.data);
   }

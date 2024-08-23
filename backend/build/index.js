@@ -65,6 +65,7 @@ const ACCOUNT_COLLECTION = DATABASE.collection("ACCOUNT");
 const CUPCAKE_COLLECTION = DATABASE.collection("CUPCAKES");
 const ORDER_COLLECTION = DATABASE.collection("ORDER");
 const CART_COLLECTION = DATABASE.collection("CART");
+const RECEIVED_COLLECTION = DATABASE.collection("RECEIVED");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -136,6 +137,11 @@ app
     const OrderId = req.query.OrderId;
     yield (0, database_js_1.cancellOrder)(ORDER_COLLECTION, OrderId, req.params.id).then((response) => {
         res.status(200).json(response);
+    });
+}));
+app.route("/melbake/received/:id").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, database_js_1.findByU_Id)(RECEIVED_COLLECTION, req.params.id).then((value) => {
+        res.status(200).json(value);
     });
 }));
 // fetch user
@@ -210,13 +216,14 @@ app
     });
 }));
 app.get("/melbake/profile/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUserById)(ACCOUNT_COLLECTION, req.params.id).then((account) => {
+    yield (0, database_js_1.findByU_Id)(ACCOUNT_COLLECTION, req.params.id).then((account) => {
         res.status(200).json(account);
     });
 }));
-/// order middlewware
-// get product
-app.get("/melbake/order", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// admin
+app
+    .route("/melbake/order/")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, database_js_1.fetchDocuments)(ORDER_COLLECTION).then((value) => {
             res.status(200).json(value);
@@ -225,13 +232,24 @@ app.get("/melbake/order", (req, res) => __awaiter(void 0, void 0, void 0, functi
     catch (error) {
         res.status(500).json(error);
     }
-}));
-app.get("/melbake/order/delete/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.deleteDocumentById)(ORDER_COLLECTION, req.params.id).then((value) => {
+}))
+    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const oid = req.query.oid;
+    yield (0, database_js_1.updateDocumentById)(ORDER_COLLECTION, oid, req.body).then((value) => {
+        res.status(200).json(value);
+    });
+}))
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const oid = req.query.id;
+    yield (0, database_js_1.deleteDocumentById)(ORDER_COLLECTION, oid).then((value) => {
         res.status(200).json(value);
     });
 }));
-/// order middleware
+app.route("/melbake/c/order/:oid").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield ORDER_COLLECTION.findOne({ _id: new mongodb_1.ObjectId(req.params.oid) }).then((value) => {
+        res.status(200).json(value);
+    });
+}));
 /// cart middleware
 // get all in the cart
 app.route("/melbake/cart").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -289,7 +307,6 @@ app.route("/melbake/carts").delete((req, res) => __awaiter(void 0, void 0, void 
         console.error(error);
     }
 }));
-/// cart middleware
 // add account to database
 app.post("/melbake/signin/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {

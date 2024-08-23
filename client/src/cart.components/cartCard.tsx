@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IOrder, IProduct } from "../AppDataTypes";
+import { IOrder, IProduct } from "../appTypes";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { useDeleteCart } from "../services/cartService";
@@ -25,18 +25,18 @@ export default function CartCard({
   const { mutateAsync: DeleteCart, isPending: isDeletingCart } =
     useDeleteCart();
   const handleRemove = async () => {
-    if (!isDeletingCart) DeleteCart(OrderObj._id);
+    if (!isDeletingCart && OrderObj._id) DeleteCart(OrderObj._id);
   };
 
   const HandleCheckOut = async () => {
-    if (!user) return;
+    if (!user || !cupcakeObj) return;
     OrderObj.U_id = user._id;
-    OrderObj.Amount = OrderObj.Quantity * OrderObj.Price;
+    OrderObj.Amount = OrderObj.Quantity * cupcakeObj.Price;
     OrderObj.DateOrdered = new Date().toLocaleString();
+    OrderObj.IsShipping = false;
     await axios
       .post("/melbake/order/" + user._id, OrderObj)
       .then(async (response) => {
-        console.log(response);
         if (response.data.acknowledged) {
           DeleteCart(OrderObj._id);
         }
@@ -143,10 +143,10 @@ export default function CartCard({
             )}
             <div className="group col-span-2 sm:hidden">
               <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
-                {OrderObj.Name}
+                {cupcakeObj?.Name}
               </h1>
               <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
-                {OrderObj.Flavor}
+                {cupcakeObj?.Flavor}
               </h1>
             </div>
           </>
@@ -154,10 +154,10 @@ export default function CartCard({
 
         <div className="col-span-2 hidden sm:block">
           <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
-            {OrderObj.Name}
+            {cupcakeObj?.Name}
           </h1>
           <h1 className="col-span-3 select-none font-[Raleway] text-xs text-gray-700 sm:text-sm">
-            {OrderObj.Flavor}
+            {cupcakeObj?.Flavor}
           </h1>
         </div>
 
@@ -165,7 +165,7 @@ export default function CartCard({
           <h1 className="select-none text-end font-[Raleway] text-xs text-gray-700">
             Quantity : {OrderObj.Quantity}
           </h1>
-          {OrderObj.Price ? (
+          {cupcakeObj?.Price ? (
             <h1 className="select-none text-end font-[Raleway] text-xs text-gray-700">
               Price : &#8369;{cupcakeObj?.Price}.00
             </h1>

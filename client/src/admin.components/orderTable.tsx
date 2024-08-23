@@ -4,14 +4,14 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 
 export default function OrderTable({
   data,
   deleteRow,
 }: {
   data: IOrder[];
-  deleteRow: (id: string) => void;
+  deleteRow: (oid: string) => void;
 }) {
   const columns = useMemo<MRT_ColumnDef<IOrder>[]>(
     () => [
@@ -40,6 +40,15 @@ export default function OrderTable({
         accessorKey: "DateOrdered",
         header: "DateOrdered",
         enableSorting: false,
+      },
+      {
+        id: "IsShipping",
+        accessorFn: (row) => {
+          return String(row.IsShipping);
+        },
+        accessorKey: "IsShipping",
+        header: "IsShipping",
+        size: 100,
       },
     ],
     [],

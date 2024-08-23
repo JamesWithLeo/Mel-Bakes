@@ -24,6 +24,7 @@ import Orders from "./order.components/Orders";
 import DeliveryLayout from "./delivery.components/deliveryLayout";
 import Account from "./account.components/account";
 import OrderLayout from "./order.components/ordersLayout";
+import RecievedLayout from "./order.components/recievedLayout";
 
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
@@ -100,11 +101,17 @@ const route = createBrowserRouter([
       },
 
       { path: "order", element: <Orders /> },
-      { path: "favorites", element: <div>fav</div> },
-      { path: "recieved", element: <div>recieved</div> },
+      { path: "recieved", element: <RecievedLayout /> },
     ],
   },
-  { path: "deliver", element: <DeliveryLayout /> },
+  {
+    path: "deliver",
+    element: (
+      <QueryClientProvider client={queryClient}>
+        <DeliveryLayout />
+      </QueryClientProvider>
+    ),
+  },
   {
     path: "Faqs",
     element: <Info />,

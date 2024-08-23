@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FlavorTypes, IProduct } from "../AppDataTypes";
+import { FlavorTypes, IProduct } from "../appTypes";
 import axios from "axios";
 
 export const useFilterFlavor = () => {

@@ -5,7 +5,7 @@ import {
   useMaterialReactTable,
 } from "material-react-table";
 import { useMemo } from "react";
-import { IProduct } from "../AppDataTypes";
+import { IProduct } from "../appTypes";
 
 export default function ProductTable({
   data,

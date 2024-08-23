@@ -10,7 +10,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
-import { IProduct } from "../AppDataTypes";
+import { IOrder, IProduct } from "../appTypes";
 import axios from "axios";
 import Notify from "../components/notify";
 
@@ -77,36 +77,28 @@ function ViewProduct({
 
   async function AddToOrder() {
     if (cupcakeObj && user) {
-      let Name = cupcakeObj.Name;
-      let Quantity = quantity;
-      let U_id = user._id;
-      let C_id = cupcakeObj._id;
-      let Price = cupcakeObj.Price;
-      let Url = cupcakeObj.Url;
-      let Amount = quantity * cupcakeObj.Price;
-      let DateOrdered = new Date().toLocaleString();
-      axios
-        .post("/melbake/order/" + user._id, {
-          Name,
-          Quantity,
-          C_id,
-          U_id,
-          Url,
-          Price,
-          Amount,
-          DateOrdered,
-        })
-        .then((response) => {
-          if (response.data.insertedId) {
-            setQuantity(1);
-            setIsPurchase("Purchased");
-          } else {
-            setIsPurchase("Can't purchase right now.");
-          }
-          setTimeout(() => {
-            setIsPurchase(null);
-          }, 3000);
-        });
+      const OrderObj: IOrder = {
+        _id: "",
+        Name: cupcakeObj.Name,
+        Quantity: quantity,
+        U_id: user._id,
+        C_id: cupcakeObj._id,
+        Url: cupcakeObj.Url,
+        Amount: quantity * cupcakeObj.Price,
+        DateOrdered: new Date().toLocaleString(),
+        IsShipping: false,
+      };
+      axios.post("/melbake/order/" + user._id, OrderObj).then((response) => {
+        if (response.data.insertedId) {
+          setQuantity(1);
+          setIsPurchase("Purchased");
+        } else {
+          setIsPurchase("Can't purchase right now.");
+        }
+        setTimeout(() => {
+          setIsPurchase(null);
+        }, 3000);
+      });
     }
   }
 

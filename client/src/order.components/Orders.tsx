@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import axios from "axios";
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 import { useQuery } from "@tanstack/react-query";
 import LoadingComponents from "../components/LoadingComponent";
 import { Link, Navigate } from "react-router-dom";

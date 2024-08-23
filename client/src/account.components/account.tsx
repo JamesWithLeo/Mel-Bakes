@@ -11,6 +11,7 @@ import {
   faSquareCheck,
 } from "@fortawesome/free-regular-svg-icons";
 import Confimation from "../components/confimation";
+
 export default function Account() {
   const user = useSelector((state: AppState) => state.auth.User);
   const dispatch = useDispatch<AppDispatch>();
@@ -73,22 +74,22 @@ export default function Account() {
     switch (e.currentTarget.id) {
       case "FirstNameButton":
         dispatch(
-          update({ id: user._id, field: "FirstName", value: FirstName.value }),
+          update({ id: user._id, field: "firstName", value: FirstName.value }),
         );
         break;
       case "LastNameButton":
         dispatch(
-          update({ id: user._id, field: "LastName", value: LastName.value }),
+          update({ id: user._id, field: "lastName", value: LastName.value }),
         );
         break;
       case "ContactButton":
         dispatch(
-          update({ id: user._id, field: "Contact", value: Contact.value }),
+          update({ id: user._id, field: "contact", value: Contact.value }),
         );
         break;
       case "AddressButton":
         dispatch(
-          update({ id: user._id, field: "Address", value: Address.value }),
+          update({ id: user._id, field: "address", value: Address.value }),
         );
         break;
     }
@@ -154,7 +155,7 @@ export default function Account() {
               <span className="flex w-full items-center gap-4">
                 <input
                   readOnly
-                  defaultValue={user.gmail}
+                  defaultValue={user.email}
                   className="w-full border-b border-gray-100 text-gray-600 outline-none focus:border-gray-500"
                 />
               </span>

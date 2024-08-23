@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import ProductCard from "./ProductCard";
 import axios from "axios";
-import { IProduct } from "../AppDataTypes";
+import { IProduct } from "../appTypes";
 import { useQuery } from "@tanstack/react-query";
 import { faFaceFrown } from "@fortawesome/free-regular-svg-icons";
 

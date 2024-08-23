@@ -1,5 +1,5 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { IAccount } from "../AppDataTypes";
+import { IAccount } from "../appTypes";
 import axios from "axios";
 
 export function useCreateAccount() {

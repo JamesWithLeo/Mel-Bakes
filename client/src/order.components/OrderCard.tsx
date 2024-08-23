@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 
-import { IOrder } from "../AppDataTypes";
+import { IOrder } from "../appTypes";
 import { useCancelOrder } from "../services/orderService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,7 @@ import { faCopy } from "@fortawesome/free-solid-svg-icons";
 export const OrderCard = ({ orderObj }: { orderObj: IOrder }) => {
   const auth = useSelector((state: AppState) => state.auth);
   const { mutateAsync: CancelOrder } = useCancelOrder();
+
   async function HandleCancel() {
     if (auth.User) {
       const id = auth.User._id;
@@ -46,18 +47,24 @@ export const OrderCard = ({ orderObj }: { orderObj: IOrder }) => {
         </span>
         <h1 className="font-redhat text-sm">Quantity: {orderObj.Quantity}</h1>
         <h1 className="font-redhat text-sm">
-          Total Price: &#8369;{orderObj.Price}.00
+          Total Price: &#8369;{orderObj.Amount}.00
         </h1>
 
         <h1 className="font-redhat text-sm">
           Date Ordered : {orderObj.DateOrdered}
         </h1>
-        <button
-          onClick={HandleCancel}
-          className="mt-4 select-none self-end rounded bg-red-200 px-2 py-1 text-sm text-red-500 ring-red-300 active:ring"
-        >
-          Cancel Order
-        </button>
+        {orderObj.IsShipping ? (
+          <h1 className="self-end rounded bg-white px-2 py-1 text-sm">
+            Shipping
+          </h1>
+        ) : (
+          <button
+            onClick={HandleCancel}
+            className="mt-4 select-none self-end rounded bg-red-200 px-2 py-1 text-sm text-red-500 ring-red-300 active:ring"
+          >
+            Cancel Order
+          </button>
+        )}
       </div>
     </div>
   );
