@@ -9,7 +9,6 @@ import { faCode } from "@fortawesome/free-solid-svg-icons";
 import App from "./app";
 import "./index.css";
 import ErrorPage from "./components/ErrorPage";
-import LoginSigninLayout from "./login-signin/loginSigninLayout";
 import Admin from "./admin.components/Admin";
 import ModalCart from "./cart.components/modalCart";
 import CustomerService from "./components/CustomerService";
@@ -25,6 +24,8 @@ import DeliveryLayout from "./delivery.components/deliveryLayout";
 import Account from "./account.components/account";
 import OrderLayout from "./order.components/ordersLayout";
 import RecievedLayout from "./order.components/recievedLayout";
+import SignPage from "./login-signin/sign";
+import LoginPage from "./login-signin/Login";
 
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
@@ -85,7 +86,11 @@ const route = createBrowserRouter([
   },
   {
     path: "Signin",
-    element: <LoginSigninLayout />,
+    element: <SignPage />,
+  },
+  {
+    path: "login",
+    element: <LoginPage />,
   },
   {
     path: "order",

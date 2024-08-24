@@ -127,7 +127,7 @@ export default function Account() {
     setEditingContact(false);
     setEditingAddress(false);
   };
-  const HandleDeleteAccount = (value: string) => {
+  const HandleDeleteAccount = (value: string | undefined) => {
     if (user?._id && value)
       dispatch(DeleteAccount({ id: user._id, password: value.trim() }));
     setDeleteAccountVisible(true);
@@ -140,9 +140,9 @@ export default function Account() {
         <Confimation
           title={"Delete confirmation"}
           context={"Are you sure you want to delete your account?"}
-          withInputBox={true}
           label={"Enter your password."}
           icon="danger"
+          modalType="text"
           onConfirm={HandleDeleteAccount}
           closeModal={() => {
             setDeleteAccountVisible(false);

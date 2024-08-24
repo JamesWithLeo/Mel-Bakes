@@ -68,7 +68,6 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     ) as HTMLButtonElement;
     emailElement.style.outlineColor = "";
     passwordElement.style.outlineColor = "";
-    passwordElement.style.color = "black";
   }
   function exitModal() {
     document.body.style.overflowY = "scroll";

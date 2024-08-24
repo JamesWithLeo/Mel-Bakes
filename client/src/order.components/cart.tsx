@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IOrder } from "../appTypes";
 import CartCard from "../cart.components/cartCard";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useMultiDeleteCart } from "../services/cartService";
 
@@ -54,7 +56,7 @@ export default function Cart() {
 
   return (
     <>
-      <main className="flex h-full flex-col items-center py-2 pb-4">
+      <main className="flex h-full flex-col items-center">
         {cartQuery.data && cartQuery.data.length ? (
           <div className="flex w-full justify-end gap-2 px-2 md:gap-4">
             {isSelecting ? (
@@ -80,9 +82,6 @@ export default function Cart() {
             <div className="flex flex-row gap-2 md:gap-4">
               {selectedProducts.length ? (
                 <>
-                  {/* <button className="rounded bg-primary px-3 py-1 text-white shadow">
-                    Check Out
-                  </button> */}
                   <button
                     onClick={removeProduct}
                     className="rounded bg-red-300 px-3 py-1 text-red-500 shadow"
@@ -111,14 +110,16 @@ export default function Cart() {
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-2">
             <h1 className="text-gray-300">No cupcakes yet?</h1>
+            <Link
+              to={"/"}
+              replace
+              className="flex items-center gap-1 rounded px-3 py-1 font-raleway text-primary shadow active:shadow-primary"
+            >
+              Start ordering
+              <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
+            </Link>
           </div>
         )}
-        {/* <a
-          className="w-max font-mono text-sm text-primary hover:underline hover:underline-offset-2"
-          href="#top"
-        >
-          scroll to top
-        </a> */}
       </main>
     </>
   );

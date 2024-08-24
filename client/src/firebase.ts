@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import firebaseConfig from "../config";
+import firebaseConfig from "./config";
 
 import {
   createUserWithEmailAndPassword,
@@ -39,10 +39,7 @@ export const logoutUser = () => {
   localStorage.removeItem("melbakesUser");
 };
 
-onAuthStateChanged(auth, (user) => {
-  console.log(auth.currentUser);
-  console.log(user?.uid);
-});
+onAuthStateChanged(auth, (user) => {});
 
 export const updateUser = ({
   DisplayName,

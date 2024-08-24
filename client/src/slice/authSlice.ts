@@ -43,27 +43,6 @@ const authSlice = createSlice({
     builder.addCase(Login.rejected, (state) => {
       localStorage.removeItem("melbakesUser");
     });
-    builder.addCase(
-      Signin.fulfilled,
-      (state, action: PayloadAction<IAccount>) => {
-        // const payload = action.payload;
-        // localStorage.setItem("melbakesUser", JSON.stringify(payload));
-        // return {
-        //   ...state,
-        //   User: {
-        //     email: payload.email,
-        //     phoneNumber: payload.phoneNumber,
-        //     displayName: payload.displayName,
-        //     uid: payload.uid,
-        //     _id: payload._id,
-        //     role: payload.role,
-        //     firstName: payload.firstName,
-        //     lastName: payload.lastName,
-        //     address: payload.address,
-        //   },
-        // };
-      },
-    );
     builder.addCase(update.fulfilled, (state, action) => {
       // state.User = action.payload.User;
       localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
@@ -107,9 +86,8 @@ export const Login = createAsyncThunk(
     thunkApi,
   ) => {
     const document = await LoginRequest(Email, Uid);
-    console.log(document);
     if (!document) {
-      return Promise.reject(null);
+      return Promise.reject("Account doesn't exist in database");
     }
     document.displayName = DisplayName;
     document.phoneNumber = PhoneNumber;
