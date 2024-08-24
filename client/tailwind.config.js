@@ -15,9 +15,9 @@ module.exports = {
       },
       fontFamily: {
         "advent": "Advent",
-        "lobster": "Lobster",
+        "Lobster": "Lobster",
         "raleway": "Raleway",
-        "redhat": "Redhat"
+        "Redhat": "Redhat"
       },
     }
   },

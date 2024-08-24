@@ -36,7 +36,8 @@ import mongoDB, {
   findByU_Id,
   cancellOrder,
 } from "./database.js";
-import { ObjectId, WithId } from "mongodb";
+
+import { ObjectId } from "mongodb";
 const CLIENT = mongoDB(DB_URI);
 // reference access to the database and collection
 const DATABASE = CLIENT.db("MelBake");

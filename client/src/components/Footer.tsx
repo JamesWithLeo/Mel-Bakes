@@ -41,36 +41,24 @@ function FooterComponent() {
                 www.facebook.com/MelBakes
               </a>
               <h3 className="">(+63) 091223456789</h3>
-              <a href="/" className="">
-                Branches
-              </a>
             </div>
             <div className="flex flex-col gap-2 font-[Redhat] text-sm text-white md:gap-3">
-              <Link
-                className="text-xl text-[goldenrod] hover:underline"
-                to={"Faqs"}
-              >
-                FAQ`S
-              </Link>
-              <Link to={"Faqs"} className="hover:underline">
+              <h1 className="text-xl text-[goldenrod]">Customers service</h1>
+              <Link className="hover:underline" to={"service"}>
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
-                Order Process
+                Faq`s
               </Link>
-              <Link to={"Faqs"} className="hover:underline">
-                <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
-                Payment Methods
-              </Link>
-              <Link to={"Faqs"} className="hover:underline">
-                <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
-                Returns and Refund
-              </Link>
-              <Link to={"Faqs"} className="hover:underline">
+              <Link to={"service"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Allergy Information
               </Link>
-              <Link to={"Faqs"} className="hover:underline">
+              <Link to={"service"} className="hover:underline">
                 <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
                 Privacy Policy
+              </Link>
+              <Link to={"service"} className="hover:underline">
+                <FontAwesomeIcon icon={faLink} className="linkIcon mr-2" />
+                Returns and Refund
               </Link>
             </div>
           </div>

@@ -12,7 +12,7 @@ import ErrorPage from "./components/ErrorPage";
 import LoginSigninLayout from "./login-signin/loginSigninLayout";
 import Admin from "./admin.components/Admin";
 import ModalCart from "./cart.components/modalCart";
-import Info from "./components/info";
+import CustomerService from "./components/CustomerService";
 import AccountLayout from "./account.components/accountLayout";
 import { store } from "./store";
 import ProtectedRoute from "./protectedRoute";
@@ -113,8 +113,8 @@ const route = createBrowserRouter([
     ),
   },
   {
-    path: "Faqs",
-    element: <Info />,
+    path: "service",
+    element: <CustomerService />,
   },
 ]);
 
