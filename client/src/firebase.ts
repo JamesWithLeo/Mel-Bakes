@@ -1,6 +1,4 @@
 import { initializeApp } from "firebase/app";
-import firebaseConfig from "./config";
-
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -9,6 +7,17 @@ import {
   updateProfile,
 } from "firebase/auth";
 
+const firebaseConfig = {
+  apiKey: "AIzaSyAOekwW7CjBennsqE7aI2GHmcGFyT6vwcY",
+  authDomain: "project-job-4f95d.firebaseapp.com",
+  databaseURL:
+    "https://project-job-4f95d-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "project-job-4f95d",
+  storageBucket: "project-job-4f95d.appspot.com",
+  messagingSenderId: "709214072766",
+  appId: "1:709214072766:web:9b2b524ca4679fd48a93ef",
+  measurementId: "G-X444K97LSX",
+};
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 

@@ -50,6 +50,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
 // get all cupcakes in the db
 interface IProduct {
   _id: string;
