@@ -308,7 +308,7 @@ app.route("/melbake/carts").delete((req, res) => __awaiter(void 0, void 0, void 
     }
 }));
 // add account to database
-app.post("/melbake/signin/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/melbake/signin/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
         res.status(200).json(value);
     });

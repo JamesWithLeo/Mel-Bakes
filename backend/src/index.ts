@@ -319,7 +319,7 @@ app.route("/melbake/carts").delete(async (req: Request, res: Response) => {
 });
 
 // add account to database
-app.post("/melbake/signin/create", async (req: Request, res: Response) => {
+app.post("/melbake/signin/", async (req: Request, res: Response) => {
   insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
     res.status(200).json(value);
   });

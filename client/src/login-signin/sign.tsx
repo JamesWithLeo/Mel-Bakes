@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 interface ISign {
@@ -6,16 +7,31 @@ interface ISign {
 function Sign({ setVisibility }: ISign) {
   const navigate = useNavigate();
 
-  async function writeUser(userAccount: BodyInit) {
-    await fetch("/melbake/signin/create/", {
-      method: "POST",
-      body: userAccount,
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    }).then((response) => {
-      console.log(response);
-    });
+  async function writeUser({
+    firstName,
+    lastName,
+    email,
+    password,
+  }: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }) {
+    await axios
+      .post("/melbake/signin/", {
+        firstName,
+        lastName,
+        email,
+        password,
+        type: "user",
+        contact: null,
+        address: null,
+      })
+      .then((value) => {
+        console.log(value);
+        navigate("/", { replace: true });
+      });
   }
   const handleCreateAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
     // fetch the value from input fields
@@ -25,7 +41,9 @@ function Sign({ setVisibility }: ISign) {
     const lastname = document.getElementById(
       "lastnameSigninTB",
     ) as HTMLInputElement;
-    const gmail = document.getElementById("gmailSigninTB") as HTMLInputElement;
+    const emailElement = document.getElementById(
+      "gmailSigninTB",
+    ) as HTMLInputElement;
     const passwordConfirm = document.getElementById(
       "passwordSigninTBConfirm",
     ) as HTMLInputElement;
@@ -37,7 +55,7 @@ function Sign({ setVisibility }: ISign) {
     if (!firstname.value && !lastname.value) {
       event.preventDefault();
       return;
-    } else if (!gmail.value) {
+    } else if (!emailElement.value) {
       event.preventDefault();
       return;
     } else if (password.value !== passwordConfirm.value) {
@@ -45,17 +63,13 @@ function Sign({ setVisibility }: ISign) {
       return;
     }
 
-    const body = JSON.stringify({
-      FirstName: firstname.value,
-      LastName: lastname.value,
-      Gmail: gmail.value,
-      Password: password.value,
-      Type: "user",
-      Contact: null,
-      Address: null,
-    });
+    const body = {
+      firstName: firstname.value,
+      lastName: lastname.value,
+      email: emailElement.value,
+      password: password.value,
+    };
     writeUser(body);
-    navigate("/", { replace: true });
   };
   return (
     <div className="flex h-full w-full max-w-7xl flex-col items-center gap-4 self-center px-4 py-4">
