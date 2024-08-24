@@ -1,23 +1,17 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import "dotenv/config";
-import * as dotenv from "dotenv";
-dotenv.config({ debug: false });
-const firebaseConfig = {
-  apiKey: process.env.apikey,
-  authDomain: process.env.authDomain,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
-  measurementId: process.env.measurementId,
-};
+import firebaseConfig from "../config";
+
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth();
-console.log(auth.currentUser);
+const auth = getAuth(app);
+
 export const createUser = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((value) => {
@@ -25,17 +19,39 @@ export const createUser = async (email: string, password: string) => {
       return user;
     })
     .catch((error) => {
-      return error.code;
+      return Promise.resolve(error.code);
     });
 };
 
 export const loginUser = async (email: string, password: string) => {
-  return createUserWithEmailAndPassword(auth, email, password)
+  return signInWithEmailAndPassword(auth, email, password)
     .then((value) => {
       const user = value.user;
       return user;
     })
     .catch((error) => {
-      return error.code;
+      return Promise.reject(error.code);
     });
+};
+
+export const logoutUser = () => {
+  auth.signOut();
+  localStorage.removeItem("melbakesUser");
+};
+
+onAuthStateChanged(auth, (user) => {
+  console.log(auth.currentUser);
+  console.log(user?.uid);
+});
+
+export const updateUser = ({
+  DisplayName,
+  PhotoUrl,
+}: {
+  DisplayName?: string;
+  PhotoUrl?: string;
+}) => {
+  if (!auth.currentUser) return;
+  const user = auth.currentUser;
+  updateProfile(user, { displayName: DisplayName, photoURL: PhotoUrl });
 };

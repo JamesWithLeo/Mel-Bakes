@@ -144,12 +144,6 @@ app.route("/melbake/received/:id").get((req, res) => __awaiter(void 0, void 0, v
         res.status(200).json(value);
     });
 }));
-// fetch user
-app.get("/melbake/login/:email", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, database_js_1.findUserByEmail)(ACCOUNT_COLLECTION, req.params.email).then((value) => {
-        res.status(200).json(value);
-    });
-}));
 // fetch accounts
 app
     .route("/melbake/account/:id")
@@ -307,10 +301,24 @@ app.route("/melbake/carts").delete((req, res) => __awaiter(void 0, void 0, void 
         console.error(error);
     }
 }));
-// add account to database
 app.post("/melbake/signin/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
+    if (req.body && req.body.uid && req.body.email)
+        yield (0, database_js_1.insertDocument)(ACCOUNT_COLLECTION, req.body).then((value) => {
+            res.status(200).json(value);
+        });
+    else {
+        res.status(500).json("Can't insert user account");
+    }
+}));
+app.get("/melbake/login/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const uid = req.query.uid;
+    const email = req.query.email;
+    (0, database_js_1.findUserByEmail)(ACCOUNT_COLLECTION, email, uid)
+        .then((value) => {
         res.status(200).json(value);
+    })
+        .catch((reason) => {
+        res.status(500).json("Can't find document");
     });
 }));
 app.listen(port, () => {

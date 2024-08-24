@@ -8,9 +8,9 @@ import { AppDispatch, AppState } from "../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Navigate } from "react-router-dom";
-import { Logout } from "../slice/authSlice";
 import { useShipping } from "../services/deliveryService";
 import { ResetDelivery, SetDelivery } from "../slice/deliverySlice";
+import { logoutUser } from "../firebase";
 
 export default function DeliveryLayout() {
   const dispatch = useDispatch<AppDispatch>();
@@ -73,11 +73,11 @@ export default function DeliveryLayout() {
   };
 
   const HandleLogout = () => {
-    dispatch(Logout());
+    logoutUser();
   };
 
   if (!user) return <Navigate to={"/"} replace />;
-  else if (user.type === "user") return <Navigate to={"/"} replace />;
+  else if (user.role === "user") return <Navigate to={"/"} replace />;
 
   return (
     <>
@@ -101,11 +101,9 @@ export default function DeliveryLayout() {
               <h1 className="text-md mt-2 font-semibold text-gray-400">
                 Reciever Info
               </h1>
-              <h1>
-                reciever : {reciever?.firstName} {reciever?.lastName}
-              </h1>
-              <h1>address : {reciever?.address}</h1>
-              <h1>contact : {reciever?.contact}</h1>
+              <h1>reciever : {reciever?.displayName}</h1>
+              {/* <h1>address : {reciever?.address}</h1>
+              <h1>contact : {reciever?.contact}</h1> */}
               <h1>email : {reciever?.email}</h1>
               <span className="mt-2 flex gap-2 self-end">
                 <button
@@ -131,7 +129,7 @@ export default function DeliveryLayout() {
           <div className="flex w-full flex-col rounded bg-gradient-to-br from-primarylight from-50% p-4 shadow sm:max-w-md">
             <span className="flex justify-between">
               <h1 className="font-redhat font-medium text-darker">
-                {user.firstName} {user.lastName}
+                {/* {user.firstName} {user.lastName} */}
               </h1>
               <button
                 className="w-max rounded bg-white px-2 font-redhat text-sm active:scale-105"
@@ -141,7 +139,7 @@ export default function DeliveryLayout() {
               </button>
             </span>
             <h1 className="font-redhat font-medium text-darker">
-              {user.contact}
+              {user.phoneNumber}
             </h1>
             <span className="flex gap-2 font-redhat font-medium text-darker">
               <h1>status: active</h1>

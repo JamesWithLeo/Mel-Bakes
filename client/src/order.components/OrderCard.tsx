@@ -11,7 +11,7 @@ export const OrderCard = ({ orderObj }: { orderObj: IOrder }) => {
   const { mutateAsync: CancelOrder } = useCancelOrder();
 
   async function HandleCancel() {
-    if (auth.User) {
+    if (auth.User?._id) {
       const id = auth.User._id;
       const orderId = orderObj._id;
       CancelOrder({ _id: id, OrderId: orderId });

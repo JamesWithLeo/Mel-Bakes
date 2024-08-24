@@ -2,23 +2,17 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
-import { Login, ResetAuthMessage } from "../slice/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, AppState } from "../store";
+import { Login } from "../slice/authSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store";
+import { loginUser } from "../firebase";
+import { IAccount } from "../appTypes";
 
 export default function LoginModal({ onClose }: { onClose: () => void }) {
-  const AuthMessage = useSelector((state: AppState) => state.auth.AuthMessage);
-  const navigate = useNavigate();
+  const [error, setError] = React.useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
   const checkAccount = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const loginButton = document.getElementById(
-      "loginButton",
-    ) as HTMLButtonElement;
-    loginButton.disabled = true;
-    loginButton.style.cursor = "wait";
-
     const emailElement = document.getElementById(
       "gmailLoginTB",
     ) as HTMLInputElement;
@@ -29,40 +23,56 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
     const password: string = passwordElement.value;
 
     if (email && password) {
-      dispatch(Login({ email: email, password: password }))
-        .unwrap()
+      const user = loginUser(email, password);
+      user
         .then((value) => {
-          setTimeout(() => {
-            loginButton.disabled = false;
-            loginButton.style.cursor = "pointer";
-          }, 3000);
-          if (value.AuthMessage === "Account doesn't exist") {
-            emailElement.value = "";
-            passwordElement.value = "";
-          } else if (value.AuthMessage === "Wrong Password") {
-            passwordElement.style.outlineColor = "red";
-            passwordElement.style.color = "red";
-          } else if (value.User && value.AuthMessage === null) {
-            exitModal();
-            navigate("/", { replace: true });
+          const email = value.email;
+          const uid = value.uid;
+          const displayName = value.displayName;
+          const phoneNumber = value.phoneNumber;
+          if (!email || !uid) return;
+          dispatch(
+            Login({
+              Email: email,
+              Uid: uid,
+              PhoneNumber: phoneNumber,
+              DisplayName: displayName,
+            }),
+          )
+            .unwrap()
+            .then((data: IAccount) => {
+              if (data._id) exitModal();
+            });
+        })
+        .catch((reason) => {
+          if (reason === "auth/invalid-email")
+            emailElement.style.outline = "solid";
+          else {
+            emailElement.style.outline = "solid";
+            emailElement.style.outlineColor = "#ef4444";
+            passwordElement.style.outline = "solid";
+            passwordElement.style.outlineColor = "#ef4444";
           }
+          setError(reason);
         });
     }
   };
+
   function handleFocusInput() {
+    setError("");
+    const emailElement = document.getElementById(
+      "gmailLoginTB",
+    ) as HTMLInputElement;
     const passwordElement = document.getElementById(
       "passwordLoginTB",
     ) as HTMLButtonElement;
+    emailElement.style.outlineColor = "";
     passwordElement.style.outlineColor = "";
     passwordElement.style.color = "black";
-    setTimeout(() => {
-      dispatch(ResetAuthMessage());
-    }, 3000);
   }
   function exitModal() {
-    onClose();
-    dispatch(ResetAuthMessage());
     document.body.style.overflowY = "scroll";
+    onClose();
   }
   return (
     <>
@@ -83,7 +93,8 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           <h1 className="mb-12 mt-4 text-3xl font-bold text-primary">
             Login Account
           </h1>
-          <h1 className="mb-3 font-sans text-sm text-red-500">{AuthMessage}</h1>
+
+          <h1 className="mb-3 font-sans text-sm text-red-500">{error}</h1>
           <input
             onFocus={handleFocusInput}
             className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"

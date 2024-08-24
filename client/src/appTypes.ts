@@ -31,14 +31,15 @@ export type IOrder = {
 };
 
 export type IAccount = {
-  type: "admin" | "user" | "courier";
-  _id: string;
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  contact: string;
-  address: string;
+  role: "admin" | "user" | "courier" | "guest" | null;
+  _id: string | null;
+  displayName: string | null;
+  uid: string | null;
+  phoneNumber: string | null;
+  gender: "male" | "female" | "othher";
+  dateOfBirth: "string";
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  address: string | null;
 };
-
-export type IAuthMessage = "Account doesn't exist" | null | "Wrong Password";

@@ -2,19 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faLink } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, AppState } from "../store";
-import { Logout } from "../slice/authSlice";
+import { useSelector } from "react-redux";
+import { AppState } from "../store";
+import { logoutUser } from "../firebase";
+import LogutButton from "./LogoutButton";
 
 function FooterComponent() {
   const Auth = useSelector((state: AppState) => state.auth);
-  const dispatch = useDispatch<AppDispatch>();
   const about: string =
     "Your one-stop destination for delectable, handcrafted cupcakes that are as beautiful as they are delicious. At Mel Bakes, we believe in the magic of baking and the joy it brings to every celebration. Our cupcakes are made with the finest ingredients, from rich, creamy butter to fresh, seasonal fruits, ensuring every bite is a burst of flavor. Whether you're looking for classic vanilla, decadent chocolate, or unique seasonal creations, our cupcakes are perfect for any occasion. Join us at Mel Bakes, where every cupcake is a sweet masterpiece baked with love and passion.";
-
-  const handleLogout = async () => {
-    dispatch(Logout());
-  };
 
   return (
     <div
@@ -34,6 +30,7 @@ function FooterComponent() {
           <div className="mb-8 flex h-max w-auto flex-col gap-4 sm:flex-row sm:gap-8">
             <div className="md flex flex-col gap-2 font-[Redhat] text-sm text-white md:gap-3">
               <h1 className="text-xl text-[goldenrod]">Contact Us</h1>
+
               <a className="" href="/">
                 MelBakes@gmail.com
               </a>
@@ -64,14 +61,8 @@ function FooterComponent() {
           </div>
         </div>
         {Auth.User ? (
-          <div className="flex flex-col">
-            <button
-              className="w-max self-end rounded-md bg-primary px-3 py-1 align-middle text-sm text-gray-300 hover:text-white hover:shadow-lg hover:shadow-primary"
-              id="logoutButton"
-              onClick={handleLogout}
-            >
-              Log out
-            </button>
+          <div className="flex flex-col items-end">
+            <LogutButton />
           </div>
         ) : null}
 

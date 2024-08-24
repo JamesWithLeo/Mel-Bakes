@@ -18,9 +18,13 @@ const mongoDB = (uri: string) => {
 };
 export default mongoDB;
 
-export async function findUserByEmail(coll: Collection, value: string) {
+export async function findUserByEmail(
+  coll: Collection,
+  Email: string,
+  Uid: string,
+) {
   try {
-    return await coll.findOne({ email: value });
+    return await coll.findOne({ email: Email, uid: Uid });
   } catch (error) {
     console.error(error);
   }

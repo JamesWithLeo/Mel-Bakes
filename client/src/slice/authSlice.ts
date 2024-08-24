@@ -1,63 +1,91 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IAccount, IAuthMessage } from "../appTypes";
+import { IAccount } from "../appTypes";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
-type IAccountEditableFields = "firstName" | "lastName" | "contact" | "address";
+type IAccountEditableFields = "firstName" | "lastName" | "address";
 
 interface IUserInit {
   User: IAccount | null;
-  AuthMessage: null | string;
-  LoginTriesCount: number;
 }
 const userInit: IUserInit = {
-  User: user ? user : null,
-  AuthMessage: null,
-  LoginTriesCount: 0,
+  User: user,
 };
 const authSlice = createSlice({
   initialState: userInit,
   name: "auth",
-  reducers: {
-    ResetAuthMessage: (state) => {
-      state.AuthMessage = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(Login.fulfilled, (state, action) => {
-      state.User = action.payload.User;
-      state.AuthMessage = action.payload.AuthMessage;
-      localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
-    });
+    builder.addCase(
+      Login.fulfilled,
+      (state, action: PayloadAction<IAccount>) => {
+        const payload = action.payload;
+        localStorage.setItem("melbakesUser", JSON.stringify(payload));
+        return {
+          ...state,
+          User: {
+            email: payload.email,
+            phoneNumber: payload.phoneNumber,
+            displayName: payload.displayName,
+            uid: payload.uid,
+            _id: payload._id,
+            role: payload.role,
+            gender: payload.gender,
+            dateOfBirth: payload.dateOfBirth,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            address: payload.address,
+          },
+        };
+      },
+    );
     builder.addCase(Login.rejected, (state) => {
-      state.User = null;
       localStorage.removeItem("melbakesUser");
     });
-    builder.addCase(Logout.fulfilled, (state, action) => {
-      state.User = null;
-      state.AuthMessage = null;
-      localStorage.removeItem("melbakesUser");
-    });
+    builder.addCase(
+      Signin.fulfilled,
+      (state, action: PayloadAction<IAccount>) => {
+        // const payload = action.payload;
+        // localStorage.setItem("melbakesUser", JSON.stringify(payload));
+        // return {
+        //   ...state,
+        //   User: {
+        //     email: payload.email,
+        //     phoneNumber: payload.phoneNumber,
+        //     displayName: payload.displayName,
+        //     uid: payload.uid,
+        //     _id: payload._id,
+        //     role: payload.role,
+        //     firstName: payload.firstName,
+        //     lastName: payload.lastName,
+        //     address: payload.address,
+        //   },
+        // };
+      },
+    );
     builder.addCase(update.fulfilled, (state, action) => {
-      state.User = action.payload.User;
+      // state.User = action.payload.User;
       localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
     builder.addCase(DeleteAccount.fulfilled, (state, action) => {
       console.log(action.payload);
       if (action.payload) {
-        state.User = null;
       }
     });
   },
 });
-const LoginRequest = async (email: string) => {
+const LoginRequest = async (email: string, uid: string) => {
   return axios
-    .get("/melbake/login/" + email)
+    .get("/melbake/login/", {
+      params: { uid: uid, email: email },
+    })
     .then((response) => {
+      console.log(response);
       return response.data;
     })
     .catch((response) => {
+      console.log(response);
       return response;
     });
 };
@@ -65,40 +93,82 @@ const LoginRequest = async (email: string) => {
 export const Login = createAsyncThunk(
   "auth/Login",
   async (
-    { email, password }: { email: string; password: string },
+    {
+      Email,
+      Uid,
+      DisplayName,
+      PhoneNumber,
+    }: {
+      Email: string;
+      Uid: string;
+      DisplayName: string | null;
+      PhoneNumber: string | null;
+    },
     thunkApi,
   ) => {
-    type returnType = {
-      User: null | IAccount;
-      AuthMessage: IAuthMessage | null;
-    };
-    const document = await LoginRequest(email);
+    const document = await LoginRequest(Email, Uid);
+    console.log(document);
     if (!document) {
-      const authloginResult: returnType = {
-        User: null,
-        AuthMessage: "Account doesn't exist",
-      };
-      return authloginResult;
+      return Promise.reject(null);
     }
-    if (document.Password && document.Password !== password) {
-      const authloginResult: returnType = {
-        User: null,
-        AuthMessage: "Wrong Password",
-      };
-      return authloginResult;
-    }
-    delete document.Password;
-    const authloginResult: returnType = {
-      User: document,
-      AuthMessage: null,
-    };
-    return authloginResult;
+    document.displayName = DisplayName;
+    document.phoneNumber = PhoneNumber;
+    return document;
   },
 );
 
-export const Logout = createAsyncThunk("auth/Logout", async () => {
-  return;
-});
+const SigninRequest = async (
+  email: string,
+  uid: string,
+  firstName: string,
+  lastName: string,
+  address: string,
+  gender: string,
+  dateOfBirth: string,
+) => {
+  return axios.post("/melbake/signin/", {
+    email: email,
+    uid: uid,
+    role: "user",
+    firstName: firstName,
+    lastName: lastName,
+    address: address,
+    gender: gender,
+    dateOfBirth: dateOfBirth,
+  });
+};
+export const Signin = createAsyncThunk(
+  "auth/Signin",
+  async ({
+    Email,
+    Uid,
+    FirstName,
+    LastName,
+    Address,
+    Gender,
+    DateOfBirth,
+  }: {
+    Email: string;
+    Uid: string;
+    Address: string;
+    FirstName: string;
+    LastName: string;
+    Gender: string;
+    DateOfBirth: string;
+  }) => {
+    const document = await SigninRequest(
+      Email,
+      Uid,
+      FirstName,
+      LastName,
+      Address,
+      Gender,
+      DateOfBirth,
+    );
+    console.log(document);
+    return document.data;
+  },
+);
 
 const DeleteAccountRequest = async (id: string) => {
   const account = await axios.get("/melbake/account/" + id);
@@ -149,12 +219,6 @@ const updateRequest = async (
           lastName: updatedValue,
         })
         .then((response) => response.data);
-    case "contact":
-      return axios
-        .put(`/melbake/account/` + id, {
-          contact: updatedValue,
-        })
-        .then((response) => response.data);
     case "address":
       return axios
         .put(`/melbake/account/` + id, {
@@ -185,5 +249,4 @@ export const update = createAsyncThunk(
     }
   },
 );
-export const { ResetAuthMessage } = { ...authSlice.actions };
 export default authSlice.reducer;

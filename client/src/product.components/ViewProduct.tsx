@@ -76,7 +76,7 @@ function ViewProduct({
   }
 
   async function AddToOrder() {
-    if (cupcakeObj && user) {
+    if (cupcakeObj && user?._id) {
       const OrderObj: IOrder = {
         _id: "",
         Name: cupcakeObj.Name,

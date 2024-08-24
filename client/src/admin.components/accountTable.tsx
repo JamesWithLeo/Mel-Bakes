@@ -22,7 +22,17 @@ export default function AccountTable({
     () => [
       {
         accessorKey: "_id",
-        header: "Id",
+        header: "MongoDb id",
+        size: 100,
+        maxSize: 250,
+        enableGrouping: false,
+        enableSorting: false,
+        enableColumnDragging: false,
+        enableEditing: false,
+      },
+      {
+        accessorKey: "uid",
+        header: "Firebase Id",
         size: 100,
         maxSize: 250,
         enableGrouping: false,
@@ -38,14 +48,10 @@ export default function AccountTable({
         enableColumnDragging: false,
         enableClickToCopy: true,
         enableGrouping: false,
+        enableSorting: false,
+        enableEditing: false,
       },
-      {
-        accessorKey: "password",
-        header: "Passowrd",
-        size: 100,
-        maxSize: 200,
-        enableHiding: false,
-      },
+
       {
         accessorKey: "firstName",
         header: "First Name",
@@ -63,20 +69,12 @@ export default function AccountTable({
         enableSorting: false,
       },
       {
-        accessorKey: "type",
-        header: "Type",
+        accessorKey: "role",
+        header: "role",
         size: 80,
         maxSize: 100,
         editVariant: "select",
         editSelectOptions: ["user", "admin", "courier"],
-      },
-      {
-        accessorKey: "contact",
-        header: "Contact no.",
-        enableGrouping: false,
-        size: 100,
-        maxSize: 200,
-        enableClickToCopy: true,
       },
       {
         accessorKey: "address",
@@ -85,6 +83,14 @@ export default function AccountTable({
         maxSize: 200,
         enableClickToCopy: true,
       },
+      {
+        accessorKey: "gender",
+        header: "gender",
+        size: 100,
+        maxSize: 150,
+        editVariant: "select",
+        editSelectOptions: ["male", "female", "other"],
+      },
     ],
     [],
   );
@@ -92,11 +98,10 @@ export default function AccountTable({
   const handleSaveAccount: MRT_TableOptions<IAccount>["onCreatingRowSave"] =
     async ({ values, table }) => {
       if (
-        !values.FirstName ||
-        !values.LastName ||
-        !values.Gmail ||
-        !values.Password ||
-        !values.Type
+        !values.firstName ||
+        !values.lastName ||
+        !values.address ||
+        !values.role
       )
         return;
 
@@ -133,10 +138,7 @@ export default function AccountTable({
         left: ["mrt-row-expand", "mrt-row-select"],
         right: ["mrt-row-actions"],
       },
-      columnVisibility: {
-        type: false,
-        password: false,
-      },
+      columnVisibility: {},
     },
     paginationDisplayMode: "pages",
     createDisplayMode: "modal",
@@ -176,7 +178,7 @@ export default function AccountTable({
     },
     renderRowActionMenuItems: ({ closeMenu, row }) => {
       const onDelete = () => {
-        deleteRow(row.original._id);
+        if (row.original._id) deleteRow(row.original._id);
       };
       return [
         <div className="flex flex-col gap-2 py-2">

@@ -30,6 +30,7 @@ export default function CartCard({
 
   const HandleCheckOut = async () => {
     if (!user || !cupcakeObj) return;
+    if (!user._id) return;
     OrderObj.U_id = user._id;
     OrderObj.Amount = OrderObj.Quantity * cupcakeObj.Price;
     OrderObj.DateOrdered = new Date().toLocaleString();

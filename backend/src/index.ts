@@ -137,13 +137,6 @@ app.route("/melbake/received/:id").get(async (req: Request, res: Response) => {
   });
 });
 
-// fetch user
-app.get("/melbake/login/:email", async (req: Request, res: Response) => {
-  await findUserByEmail(ACCOUNT_COLLECTION, req.params.email).then((value) => {
-    res.status(200).json(value);
-  });
-});
-
 // fetch accounts
 app
   .route("/melbake/account/:id")
@@ -319,13 +312,27 @@ app.route("/melbake/carts").delete(async (req: Request, res: Response) => {
   }
 });
 
-// add account to database
 app.post("/melbake/signin/", async (req: Request, res: Response) => {
-  insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
-    res.status(200).json(value);
-  });
+  if (req.body && req.body.uid && req.body.email)
+    await insertDocument(ACCOUNT_COLLECTION, req.body).then((value) => {
+      res.status(200).json(value);
+    });
+  else {
+    res.status(500).json("Can't insert user account");
+  }
 });
 
+app.get("/melbake/login/", async (req: Request, res: Response) => {
+  const uid = req.query.uid as string;
+  const email = req.query.email as string;
+  findUserByEmail(ACCOUNT_COLLECTION, email, uid)
+    .then((value) => {
+      res.status(200).json(value);
+    })
+    .catch((reason) => {
+      res.status(500).json("Can't find document");
+    });
+});
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });

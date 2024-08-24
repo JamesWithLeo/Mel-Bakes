@@ -75,7 +75,7 @@ function App() {
       ) : null}
 
       <HeaderComponent />
-      {auth.User ? (
+      {auth.User && auth.User._id ? (
         <>
           <Homepage />
         </>

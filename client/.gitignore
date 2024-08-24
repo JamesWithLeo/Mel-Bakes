@@ -8,6 +8,7 @@
 # testing
 /coverage
 **/test
+config.ts
 jest.config.js
 babel.config.js
 

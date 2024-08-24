@@ -29,10 +29,10 @@ const mongoDB = (uri) => {
     }
 };
 exports.default = mongoDB;
-function findUserByEmail(coll, value) {
+function findUserByEmail(coll, Email, Uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield coll.findOne({ email: value });
+            return yield coll.findOne({ email: Email, uid: Uid });
         }
         catch (error) {
             console.error(error);
