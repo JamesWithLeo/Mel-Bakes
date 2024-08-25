@@ -81,7 +81,7 @@ export default function OrderTable({
     },
     renderRowActionMenuItems: ({ closeMenu, row }) => {
       const onDelete = () => {
-        deleteRow(row.original._id);
+        if (row.original._id) deleteRow(row.original._id);
       };
       return [
         <div className="flex flex-col gap-2">

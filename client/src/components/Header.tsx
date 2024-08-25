@@ -6,6 +6,7 @@ import {
   faBars,
   faHome,
   faPhone,
+  faTruck,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Link } from "react-router-dom";
@@ -18,11 +19,7 @@ function HeaderComponent() {
   const auth = useSelector((state: AppState) => state.auth);
   const closeMenu = () => {
     setIsMenuVisible(false);
-    document.body.style.overflowY = "true";
-  };
-  const closeMenuGotoCart = () => {
-    setIsMenuVisible(false);
-    document.body.style.overflowY = "false";
+    document.body.style.overflowY = "scroll";
   };
 
   return (
@@ -33,46 +30,64 @@ function HeaderComponent() {
 
           {auth.User ? (
             <div className="hidden gap-8 md:flex">
-              <>
-                {auth.User.role === "admin" ? (
-                  <Link
-                    to={"Admin"}
-                    className="flex items-center justify-center gap-1"
-                  >
-                    <FontAwesomeIcon
-                      icon={faCode}
-                      id="Admin"
-                      className="lg:base text-primary sm:text-base"
-                    />
-                    <h1 className="px-3 py-1 text-primary">Admin</h1>
-                  </Link>
-                ) : null}
-              </>
-
               <Link
                 to={"/minicart"}
-                onClick={closeMenuGotoCart}
-                className="flex items-center justify-center gap-1"
+                onClick={closeMenu}
+                className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
               >
                 <FontAwesomeIcon
                   icon={faShoppingCart}
                   id="cart"
                   className="lg:base text-primary sm:text-base"
                 />
-                <h1 className="px-3 py-1 text-primary">Cart</h1>
+                Cart
               </Link>
 
               <Link
-                className="flex items-center justify-center gap-1"
+                className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
                 to={"account/info"}
-                replace={false}
+                onClick={closeMenu}
+                replace
               >
                 <FontAwesomeIcon
                   icon={faUser}
                   className="text-primary sm:text-base lg:text-base"
                 />
-                <h1 className="px-3 py-1 text-primary">Account</h1>
+                Account
               </Link>
+              <>
+                {auth.User.role === "admin" ? (
+                  <Link
+                    to={"Admin"}
+                    onClick={closeMenu}
+                    replace
+                    className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
+                  >
+                    <FontAwesomeIcon
+                      icon={faCode}
+                      id="Admin"
+                      className="lg:base text-primary sm:text-base"
+                    />
+                    Admin
+                  </Link>
+                ) : null}
+              </>
+              <>
+                {auth.User.role === "courier" || auth.User.role === "admin" ? (
+                  <Link
+                    to={"deliver"}
+                    onClick={closeMenu}
+                    replace
+                    className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
+                  >
+                    <FontAwesomeIcon
+                      icon={faTruck}
+                      className="lg:base text-primary sm:text-base"
+                    />
+                    delivery
+                  </Link>
+                ) : null}
+              </>
             </div>
           ) : null}
           <div
@@ -81,7 +96,7 @@ function HeaderComponent() {
           >
             {" "}
             <a
-              className="hidden h-full items-center justify-center gap-4 text-left font-redhat text-primary md:flex"
+              className="font-redhat hidden h-full items-center justify-center gap-4 text-left text-primary md:flex"
               href="#footer"
               onClick={closeMenu}
             >
@@ -90,6 +105,8 @@ function HeaderComponent() {
             <button
               onClick={() => {
                 setIsMenuVisible(!isMenuVisible);
+                if (isMenuVisible) document.body.style.overflowY = "scroll";
+                else document.body.style.overflowY = "hidden";
               }}
             >
               <FontAwesomeIcon
@@ -105,9 +122,7 @@ function HeaderComponent() {
           <div className="fixed z-10 flex h-full w-full grid-cols-1 flex-col items-center justify-evenly gap-8 bg-secondarylight pb-16 text-left text-xl sm:text-2xl md:hidden">
             <Link
               to={"/"}
-              onClick={() => {
-                setIsMenuVisible(false);
-              }}
+              onClick={closeMenu}
               className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
             >
               <FontAwesomeIcon icon={faHome} id="cart" className="" />
@@ -118,7 +133,8 @@ function HeaderComponent() {
               <>
                 <Link
                   to={"/minicart"}
-                  onClick={closeMenuGotoCart}
+                  onClick={closeMenu}
+                  replace
                   className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                 >
                   <FontAwesomeIcon icon={faShoppingCart} id="cart" />
@@ -126,8 +142,9 @@ function HeaderComponent() {
                 </Link>
 
                 <Link
-                  className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                   to={"account"}
+                  onClick={closeMenu}
+                  className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                 >
                   <FontAwesomeIcon icon={faUser} />
                   Account
@@ -135,26 +152,43 @@ function HeaderComponent() {
               </>
             ) : null}
 
+            <>
+              {auth.User && auth.User.role === "admin" ? (
+                <Link
+                  to={"Admin"}
+                  onClick={closeMenu}
+                  className="flex h-full items-center justify-center gap-4 px-3 py-1 text-left text-primary hover:animate-pulse"
+                >
+                  <FontAwesomeIcon icon={faCode} id="Admin" />
+                  Admin
+                </Link>
+              ) : null}
+            </>
+            <>
+              {auth.User &&
+              (auth.User.role === "courier" || auth.User.role === "admin") ? (
+                <Link
+                  to={"deliver"}
+                  onClick={closeMenu}
+                  replace
+                  className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
+                >
+                  <FontAwesomeIcon
+                    icon={faTruck}
+                    className="lg:base text-primary sm:text-base"
+                  />
+                  delivery
+                </Link>
+              ) : null}
+            </>
             <a
-              className="flex h-full items-center justify-center gap-4 text-left font-redhat text-primary hover:animate-pulse"
+              className="font-redhat flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
               href="#footer"
               onClick={closeMenu}
             >
               <FontAwesomeIcon icon={faPhone} />
               Contact us
             </a>
-
-            <>
-              {auth.User && auth.User.role === "admin" ? (
-                <Link
-                  to={"Admin"}
-                  className="flex h-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
-                >
-                  <FontAwesomeIcon icon={faCode} id="Admin" />
-                  <h1 className="px-3 py-1 text-primary">Admin</h1>
-                </Link>
-              ) : null}
-            </>
           </div>
         </>
       ) : null}

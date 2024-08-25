@@ -1,45 +1,100 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
 import { IOrder } from "../appTypes";
-const deliverInit: IOrder = {
-  Amount: 0,
-  C_id: "",
-  DateOrdered: "",
-  IsShipping: false,
-  Name: "",
-  Quantity: 0,
-  U_id: "",
-  Url: "",
-  _id: "",
+
+interface IDeliveryInit {
+  current: IOrder | null;
+}
+const deliverInit: IDeliveryInit = {
+  current: null,
 };
+
 const deliverySlice = createSlice({
   initialState: deliverInit,
   name: "deliver",
-
   reducers: {
-    SetDelivery: (state, action) => {
-      state._id = action.payload._id;
-      state.U_id = action.payload.U_id;
-      state.Quantity = action.payload.Quantity;
-      state.Name = action.payload.Name;
-      state.Amount = action.payload.Amount;
-      state.C_id = action.payload.C_id;
-      state.DateOrdered = action.payload.DateOrdered;
-      state.Url = action.payload.Url;
+    SetDelivery: (state, action: PayloadAction<IOrder>) => {
+      const payload = action.payload;
+      return {
+        ...state,
+        current: {
+          ...payload,
+        },
+      };
     },
     ResetDelivery: (state) => {
-      state.Amount = 0;
-      state.C_id = "";
-      state.DateOrdered = "";
-      state.IsShipping = false;
-      state.Name = "";
-      state.Quantity = 0;
-      state.U_id = "";
-      state.Url = "";
-      state._id = "";
-      return state;
+      return {
+        ...state,
+        current: {
+          Amount: 0,
+          C_id: "",
+          IsShipping: false,
+          Name: "",
+          Quantity: 0,
+          U_id: "",
+          Url: "",
+          DateOrdered: "",
+          _id: "",
+          courierId: "",
+        },
+      };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      ShipDelivery.fulfilled,
+      (state, action: PayloadAction<IOrder>) => {
+        const payload = action.payload;
+        return {
+          ...state,
+          current: {
+            ...payload,
+          },
+        };
+      },
+    );
+    builder.addCase(AbortDelivery.fulfilled, (state) => {
+      return {
+        ...state,
+        current: null,
+      };
+    });
   },
 });
 
-export const { SetDelivery, ResetDelivery } = deliverySlice.actions;
+export const ShipDelivery = createAsyncThunk(
+  "deliver/SetDelivery",
+  async ({
+    Oid,
+    CourierId,
+    isShipping,
+  }: {
+    Oid: string;
+    CourierId: string;
+    isShipping: boolean;
+  }) => {
+    const response = await axios.put(
+      "/melbake/order/",
+      { IsShipping: isShipping, courierId: CourierId },
+      {
+        params: { oid: Oid },
+      },
+    );
+    return response.data;
+  },
+);
+
+export const AbortDelivery = createAsyncThunk(
+  "deliver/AbortDelivery",
+  async ({ Oid }: { Oid: string }) => {
+    const response = await axios.put(
+      "melbake/order/",
+      { IsShipping: false, courierId: null },
+      { params: { oid: Oid } },
+    );
+    return response.data;
+  },
+);
+
+export const { ResetDelivery, SetDelivery } = deliverySlice.actions;
 export default deliverySlice.reducer;

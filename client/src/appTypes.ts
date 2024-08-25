@@ -28,6 +28,7 @@ export type IOrder = {
   Url: string;
   Amount: number;
   DateOrdered: string;
+  courierId: string;
 };
 
 export type IAccount = {

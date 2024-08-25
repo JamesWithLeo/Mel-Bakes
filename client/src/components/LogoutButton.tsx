@@ -10,7 +10,7 @@ export default function LogutButton() {
   };
   return (
     <button
-      className="w-max rounded-md bg-red-400 px-3 py-1 align-middle text-sm text-gray-300 hover:text-white hover:shadow-lg hover:shadow-red-400"
+      className="w-max rounded-md bg-red-400 px-3 py-1 align-middle text-sm text-gray-200 hover:text-white hover:shadow-lg hover:shadow-red-400"
       id="logoutButton"
       onClick={HandleLogout}
     >

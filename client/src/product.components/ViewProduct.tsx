@@ -84,6 +84,7 @@ function ViewProduct({
         U_id: user._id,
         C_id: cupcakeObj._id,
         Url: cupcakeObj.Url,
+        courierId: "",
         Amount: quantity * cupcakeObj.Price,
         DateOrdered: new Date().toLocaleString(),
         IsShipping: false,

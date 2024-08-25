@@ -4,7 +4,7 @@ import deliveryReducer from "./slice/deliverySlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    delivery: deliveryReducer,
+    deliver: deliveryReducer,
   },
 });
 
