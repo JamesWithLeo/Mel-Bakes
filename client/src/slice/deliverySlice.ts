@@ -28,7 +28,6 @@ const deliverySlice = createSlice({
         current: {
           Amount: 0,
           C_id: "",
-          IsShipping: false,
           Name: "",
           Quantity: 0,
           U_id: "",
@@ -36,6 +35,11 @@ const deliverySlice = createSlice({
           DateOrdered: "",
           _id: "",
           courierId: "",
+          packedDate: "",
+          shipDate: "",
+          IsPacked: false,
+          IsShipping: false,
+          IsReceived: false,
         },
       };
     },
@@ -59,6 +63,12 @@ const deliverySlice = createSlice({
         current: null,
       };
     });
+    builder.addCase(HandOverDelivery.fulfilled, (state) => {
+      return {
+        ...state,
+        current: null,
+      };
+    });
   },
 });
 
@@ -75,7 +85,11 @@ export const ShipDelivery = createAsyncThunk(
   }) => {
     const response = await axios.put(
       "/melbake/order/",
-      { IsShipping: isShipping, courierId: CourierId },
+      {
+        IsShipping: isShipping,
+        courierId: CourierId,
+        shipDate: new Date().toLocaleString(),
+      },
       {
         params: { oid: Oid },
       },
@@ -89,10 +103,30 @@ export const AbortDelivery = createAsyncThunk(
   async ({ Oid }: { Oid: string }) => {
     const response = await axios.put(
       "melbake/order/",
-      { IsShipping: false, courierId: null },
+      { IsShipping: false, courierId: null, shipDate: "" },
       { params: { oid: Oid } },
     );
     return response.data;
+  },
+);
+
+export const HandOverDelivery = createAsyncThunk(
+  "delivery/HandOverDelivery",
+  async ({ Order }: { Order: IOrder }) => {
+    const response = await axios.post("/melbake/received/" + Order._id, Order);
+
+    console.log(response);
+    if (response.data.insertedId) {
+      return await axios
+        .delete("/melbake/order/" + Order.U_id, {
+          params: { OrderId: Order._id },
+        })
+        .then((value) => {
+          console.log(value);
+          return Promise.resolve();
+        });
+    }
+    return Promise.reject("cant order to received collection insert document");
   },
 );
 

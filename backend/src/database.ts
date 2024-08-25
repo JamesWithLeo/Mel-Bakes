@@ -95,7 +95,7 @@ export async function updateDocumentById(
   }
 }
 
-export async function cancellOrder(coll: Collection, id: string, uid: string) {
+export async function removeOrder(coll: Collection, id: string, uid: string) {
   try {
     return await coll.deleteOne({
       _id: new ObjectId(id),

@@ -87,7 +87,11 @@ function ViewProduct({
         courierId: "",
         Amount: quantity * cupcakeObj.Price,
         DateOrdered: new Date().toLocaleString(),
+        IsPacked: false,
         IsShipping: false,
+        IsReceived: false,
+        shipDate: "",
+        packedDate: "",
       };
       axios.post("/melbake/order/" + user._id, OrderObj).then((response) => {
         if (response.data.insertedId) {

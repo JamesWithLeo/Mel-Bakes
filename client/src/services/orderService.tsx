@@ -3,6 +3,27 @@ import { IOrder } from "../appTypes";
 import axios from "axios";
 
 // for admin
+export function useUpdateOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (document: IOrder) => {
+      const _id = document._id;
+      const response = await axios.put("/melbake/order/" + _id, document);
+      console.log(response);
+      return response;
+    },
+    onMutate: (variables: IOrder) => {
+      queryClient.setQueryData(["order"], (prevOrders: IOrder[]) => {
+        prevOrders.map((prevOrder: IOrder) => {
+          if (prevOrder._id === variables._id) {
+            return variables;
+          }
+          return prevOrder;
+        });
+      });
+    },
+  });
+}
 export function useDeleteOrder() {
   const queryClient = useQueryClient();
   return useMutation({

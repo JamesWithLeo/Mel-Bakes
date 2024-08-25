@@ -34,7 +34,7 @@ import mongoDB, {
   deleteDocumentById,
   updateDocumentById,
   findByU_Id,
-  cancellOrder,
+  removeOrder,
 } from "./database.js";
 
 import { ObjectId } from "mongodb";
@@ -116,6 +116,17 @@ app
       res.status(200).json(value);
     });
   })
+  .put(async (req: Request, res: Response) => {
+    delete req.body._id;
+    req.body.U_id = new ObjectId(req.body.U_id);
+    await updateDocumentById(ORDER_COLLECTION, req.params.id, req.body)
+      .then((value) => {
+        res.status(200).json(value);
+      })
+      .catch((reason) => {
+        res.status(500).json(reason);
+      });
+  })
   .post(async (req: Request, res: Response) => {
     req.body._id = new ObjectId();
     req.body.U_id = new ObjectId(req.body.U_id);
@@ -125,18 +136,33 @@ app
   })
   .delete(async (req: Request, res: Response) => {
     const OrderId = req.query.OrderId as string;
-    await cancellOrder(ORDER_COLLECTION, OrderId, req.params.id).then(
+    await removeOrder(ORDER_COLLECTION, OrderId, req.params.id).then(
       (response) => {
         res.status(200).json(response);
       },
     );
   });
 
-app.route("/melbake/received/:id").get(async (req: Request, res: Response) => {
-  await findByU_Id(RECEIVED_COLLECTION, req.params.id).then((value) => {
-    res.status(200).json(value);
+app
+  .route("/melbake/received/:id")
+  .get(async (req: Request, res: Response) => {
+    await findByU_Id(RECEIVED_COLLECTION, req.params.id).then((value) => {
+      res.status(200).json(value);
+    });
+  })
+  .post(async (req: Request, res: Response) => {
+    req.body._id = new ObjectId(req.body._id);
+    req.body.U_id = new ObjectId(req.body.U_id);
+    req.body.courierId = new ObjectId(req.body.courierId);
+    req.body.dateReceived = new Date().toLocaleString();
+    await insertDocument(RECEIVED_COLLECTION, req.body)
+      .then((value) => {
+        res.status(200).json(value);
+      })
+      .catch((reason) => {
+        res.status(500).json(reason);
+      });
   });
-});
 
 // fetch accounts
 app

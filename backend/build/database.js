@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cancellOrder = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUserByEmail = void 0;
+exports.removeOrder = exports.updateDocumentById = exports.deleteDocumentById = exports.insertDocument = exports.fetchDocuments = exports.fetchCupcake = exports.findByU_Id = exports.findUserById = exports.findUserByEmail = void 0;
 const mongodb_1 = require("mongodb");
 const mongoDB = (uri) => {
     try {
@@ -118,7 +118,7 @@ function updateDocumentById(coll, id, document) {
     });
 }
 exports.updateDocumentById = updateDocumentById;
-function cancellOrder(coll, id, uid) {
+function removeOrder(coll, id, uid) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             return yield coll.deleteOne({
@@ -131,4 +131,4 @@ function cancellOrder(coll, id, uid) {
         }
     });
 }
-exports.cancellOrder = cancellOrder;
+exports.removeOrder = removeOrder;

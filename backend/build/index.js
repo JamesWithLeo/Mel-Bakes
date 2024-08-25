@@ -126,6 +126,17 @@ app
         res.status(200).json(value);
     });
 }))
+    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    delete req.body._id;
+    req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
+    yield (0, database_js_1.updateDocumentById)(ORDER_COLLECTION, req.params.id, req.body)
+        .then((value) => {
+        res.status(200).json(value);
+    })
+        .catch((reason) => {
+        res.status(500).json(reason);
+    });
+}))
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.body._id = new mongodb_1.ObjectId();
     req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
@@ -135,13 +146,28 @@ app
 }))
     .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const OrderId = req.query.OrderId;
-    yield (0, database_js_1.cancellOrder)(ORDER_COLLECTION, OrderId, req.params.id).then((response) => {
+    yield (0, database_js_1.removeOrder)(ORDER_COLLECTION, OrderId, req.params.id).then((response) => {
         res.status(200).json(response);
     });
 }));
-app.route("/melbake/received/:id").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app
+    .route("/melbake/received/:id")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, database_js_1.findByU_Id)(RECEIVED_COLLECTION, req.params.id).then((value) => {
         res.status(200).json(value);
+    });
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    req.body._id = new mongodb_1.ObjectId(req.body._id);
+    req.body.U_id = new mongodb_1.ObjectId(req.body.U_id);
+    req.body.courierId = new mongodb_1.ObjectId(req.body.courierId);
+    req.body.dateReceived = new Date().toLocaleString();
+    yield (0, database_js_1.insertDocument)(RECEIVED_COLLECTION, req.body)
+        .then((value) => {
+        res.status(200).json(value);
+    })
+        .catch((reason) => {
+        res.status(500).json(reason);
     });
 }));
 // fetch accounts

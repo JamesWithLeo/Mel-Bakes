@@ -34,7 +34,9 @@ export default function CartCard({
     OrderObj.U_id = user._id;
     OrderObj.Amount = OrderObj.Quantity * cupcakeObj.Price;
     OrderObj.DateOrdered = new Date().toLocaleString();
+    OrderObj.IsPacked = false;
     OrderObj.IsShipping = false;
+    OrderObj.IsReceived = false;
     await axios
       .post("/melbake/order/" + user._id, OrderObj)
       .then(async (response) => {

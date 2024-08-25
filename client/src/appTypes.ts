@@ -22,15 +22,34 @@ export type IOrder = {
   _id: string;
   Name: string;
   C_id: string;
-  IsShipping: boolean;
   U_id: string;
   Quantity: number;
   Url: string;
   Amount: number;
   DateOrdered: string;
   courierId: string;
+  IsPacked: boolean;
+  packedDate: string;
+  shipDate: string;
+  IsShipping: boolean;
+  IsReceived: Boolean;
 };
 
+export type IReceived = IOrder & {
+  _id: string;
+  Name: string;
+  C_id: string;
+  U_id: string;
+  Quantity: number;
+  Url: string;
+  Amount: number;
+  DateOrdered: string;
+  courierId: string;
+  IsPacked: boolean;
+  IsShipping: boolean;
+  IsReceived: Boolean;
+  dateReceived: string;
+};
 export type IAccount = {
   role: "admin" | "user" | "courier" | "guest" | null;
   _id: string | null;

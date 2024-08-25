@@ -53,7 +53,7 @@ function HeaderComponent() {
                   icon={faUser}
                   className="text-primary sm:text-base lg:text-base"
                 />
-                Account
+                Profile
               </Link>
               <>
                 {auth.User.role === "admin" ? (
@@ -147,7 +147,7 @@ function HeaderComponent() {
                   className="flex h-full w-full items-center justify-center gap-4 text-left text-primary hover:animate-pulse"
                 >
                   <FontAwesomeIcon icon={faUser} />
-                  Account
+                  Profile
                 </Link>
               </>
             ) : null}

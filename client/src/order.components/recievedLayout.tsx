@@ -6,6 +6,8 @@ import { Navigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import LoadingComponents from "../components/LoadingComponent";
+import ReceivedCard from "./receivedCard";
+import { IReceived } from "../appTypes";
 
 export default function RecievedLayout() {
   const user = useSelector((state: AppState) => state.auth.User);
@@ -22,7 +24,15 @@ export default function RecievedLayout() {
     <main className="h-full w-full">
       {query.isLoading ? <LoadingComponents /> : null}
 
-      {query.data && query.data.lenght ? null : (
+      {query.data && query.data.length ? (
+        <>
+          <div className="grid h-max w-full max-w-7xl flex-col gap-4 p-4 md:grid-cols-2">
+            {query.data.map((value: IReceived) => {
+              return <ReceivedCard receivedOrder={value} />;
+            })}
+          </div>
+        </>
+      ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-2">
           <h1 className="text-gray-300">No cupcakes yet?</h1>
           <Link

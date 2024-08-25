@@ -69,6 +69,7 @@ export default function ProductTable({
     enableExpandAll: true,
     enableColumnDragging: true,
     initialState: {
+      density: "compact",
       showColumnFilters: true,
       showGlobalFilter: true,
       columnPinning: {

@@ -9,4 +9,4 @@ export declare function fetchDocuments(coll: Collection): Promise<import("mongod
 export declare function insertDocument(coll: Collection, documentObject: Document): Promise<import("mongodb").InsertOneResult<import("bson").Document> | undefined>;
 export declare function deleteDocumentById(coll: Collection, id: string): Promise<import("mongodb").WithId<import("bson").Document> | null | undefined>;
 export declare function updateDocumentById(coll: Collection, id: string, document: any): Promise<import("mongodb").WithId<import("bson").Document> | null | undefined>;
-export declare function cancellOrder(coll: Collection, id: string, uid: string): Promise<import("mongodb").DeleteResult | undefined>;
+export declare function removeOrder(coll: Collection, id: string, uid: string): Promise<import("mongodb").DeleteResult | undefined>;

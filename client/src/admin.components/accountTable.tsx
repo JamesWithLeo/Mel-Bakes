@@ -132,6 +132,7 @@ export default function AccountTable({
     enableExpandAll: false,
     enableColumnDragging: true,
     initialState: {
+      density: "compact",
       showColumnFilters: true,
       showGlobalFilter: true,
       columnPinning: {

@@ -121,7 +121,7 @@ export default function DeliveryLayout() {
             {query.data && query.data.length ? (
               <>
                 {query.data.map((value: IOrder) => {
-                  if (value && !value.courierId)
+                  if (value && value.IsPacked && !value.IsShipping)
                     return (
                       <DeliverCard
                         key={value._id}

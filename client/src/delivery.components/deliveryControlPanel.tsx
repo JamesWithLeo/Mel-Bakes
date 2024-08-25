@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
-import { AbortDelivery } from "../slice/deliverySlice";
+import { AbortDelivery, HandOverDelivery } from "../slice/deliverySlice";
 import LogutButton from "../components/LogoutButton";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +23,12 @@ export default function DeliveryControlPanel({
   const delivery = useSelector((state: AppState) => state.deliver.current);
   const [isHiding, setIsHiding] = useState<boolean>(false);
   const [receiver, setReciever] = useState<RecieverType | null>(null);
+
+  const HandleHandOver = () => {
+    if (!delivery) return;
+    dispatch(HandOverDelivery({ Order: delivery }));
+  };
+
   const HandleAbort = async () => {
     if (!delivery?._id || !user?._id) return;
     dispatch(AbortDelivery({ Oid: delivery._id }));
@@ -92,12 +98,20 @@ export default function DeliveryControlPanel({
                 </h1>
                 <h1>{receiver?.email}</h1>
                 <h1>{receiver?.address}</h1>
-                <button
-                  onClick={HandleAbort}
-                  className="w-max self-end rounded-md bg-gray-100 px-3 py-1 align-middle font-Redhat text-base text-primary hover:bg-white active:ring"
-                >
-                  abort
-                </button>
+                <span className="flex justify-between rounded-md bg-white p-1">
+                  <button
+                    className="w-max rounded-md px-3 py-1 align-middle font-Redhat text-base text-primary hover:bg-primarylight active:ring"
+                    onClick={HandleHandOver}
+                  >
+                    Hand Over
+                  </button>
+                  <button
+                    onClick={HandleAbort}
+                    className="w-max rounded-md px-3 py-1 align-middle font-Redhat text-base text-primary hover:bg-red-400 hover:text-red-800 active:ring"
+                  >
+                    abort
+                  </button>
+                </span>
               </>
             )}
           </div>
