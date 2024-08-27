@@ -85,14 +85,16 @@ app.get("/melbake/cupcakes", (req, res) => __awaiter(void 0, void 0, void 0, fun
             // destribute img from cloudinary
             let i;
             let cups = [];
-            for (i = 0; i <= array.length; i++) {
-                if (i === array.length) {
-                    return cups;
+            if (array && array.length) {
+                for (i = 0; i <= array.length; i++) {
+                    if (i === array.length) {
+                        return cups;
+                    }
+                    yield (0, cloudinary_js_1.getAssetInfo)(array[i].PublicId).then((url) => {
+                        array[i].Url = url;
+                        cups.push(array[i]);
+                    });
                 }
-                yield (0, cloudinary_js_1.getAssetInfo)(array[i].PublicId).then((url) => {
-                    array[i].Url = url;
-                    cups.push(array[i]);
-                });
             }
         });
     }

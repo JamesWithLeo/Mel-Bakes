@@ -6,7 +6,7 @@ import { IProduct } from "../appTypes";
 import { useQuery } from "@tanstack/react-query";
 import { faFaceFrown } from "@fortawesome/free-regular-svg-icons";
 
-function Product() {
+function Product({ openCard }: { openCard: (id: string) => void }) {
   const productQuery = useQuery({
     queryKey: ["product"],
     queryFn: async () => {
@@ -27,13 +27,27 @@ function Product() {
                 className="row-span-2 flex min-h-96 flex-row flex-wrap justify-center gap-4 sm:gap-5 md:gap-6"
               >
                 <>
-                  {productQuery.data && productQuery.data.length !== 0
-                    ? productQuery.data.map((product: IProduct) => {
-                        return (
-                          <ProductCard key={product._id} productObj={product} />
-                        );
-                      })
-                    : "hello"}
+                  {productQuery.data && productQuery.data.length !== 0 ? (
+                    productQuery.data.map((product: IProduct) => {
+                      return (
+                        <ProductCard
+                          key={product._id}
+                          productObj={product}
+                          setId={openCard}
+                        />
+                      );
+                    })
+                  ) : (
+                    <div className="row-span-2 flex h-96 flex-col flex-wrap items-center justify-center gap-4 sm:gap-5 md:gap-6">
+                      <FontAwesomeIcon
+                        icon={faFaceFrown}
+                        className="ml-2 text-3xl text-secondarylight"
+                      />
+                      <h1 className="text-middle font-[Redhat] text-secondarylight">
+                        Cupcakes not found
+                      </h1>
+                    </div>
+                  )}
                 </>
               </div>
             </>

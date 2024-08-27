@@ -28,7 +28,7 @@ export default function RecievedLayout() {
         <>
           <div className="grid h-max w-full max-w-7xl flex-col gap-4 p-4 md:grid-cols-2">
             {query.data.map((value: IReceived) => {
-              return <ReceivedCard receivedOrder={value} />;
+              return <ReceivedCard receivedOrder={value} key={value._id} />;
             })}
           </div>
         </>

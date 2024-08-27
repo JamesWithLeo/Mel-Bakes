@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
-import { ViewProductContext, ProductIdContext } from "../app";
+import { IProduct } from "../appTypes";
 
-function ProductCard({ productObj }) {
-  const ViewProduct = useContext(ViewProductContext);
-  const productId = useContext(ProductIdContext);
+function ProductCard({
+  productObj,
+  setId,
+}: {
+  productObj: IProduct;
+  setId: (id: string) => void;
+}) {
   function onOpen() {
-    ViewProduct(true);
-    // once the card is click, Save the Id of that product to
-    // context then if can be use later on the View product;
-    productId(productObj._id);
+    setId(productObj._id);
     document.body.style.overflowY = "hidden";
   }
 

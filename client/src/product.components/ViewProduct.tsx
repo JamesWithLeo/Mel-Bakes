@@ -1,4 +1,4 @@
-import { useState, useContext, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faXmark,
@@ -7,7 +7,6 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ProductIdContext } from "../app";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 import { IOrder, IProduct } from "../appTypes";
@@ -15,14 +14,15 @@ import axios from "axios";
 import Notify from "../components/notify";
 
 function ViewProduct({
-  setDisplay,
-  setLoginModalVisibility,
+  variable,
+  closeViewProduct,
+  openLoginModal,
 }: {
-  setDisplay: () => void;
-  setLoginModalVisibility: () => void;
+  variable: string | null;
+  closeViewProduct: () => void;
+  openLoginModal: () => void;
 }) {
   const user = useSelector((state: AppState) => state.auth.User);
-  const id = useContext(ProductIdContext);
 
   const [cupcakeObj, setCupcakeObj] = useState<null | IProduct>(null);
   const [flavors, setFlavors] = useState<JSX.Element[]>([]);
@@ -109,7 +109,7 @@ function ViewProduct({
 
   useLayoutEffect(() => {
     async function fetchCupcake() {
-      const destinationUrl = "melbake/cupcake/" + id;
+      const destinationUrl = "melbake/cupcake/" + variable;
       const response = await fetch(destinationUrl);
       await response.json().then((value) => {
         const cupcake = value;
@@ -145,16 +145,12 @@ function ViewProduct({
             </h1>
           );
         });
-        setFlavors(flavorElements);
+        if (variable) setFlavors(flavorElements);
       });
     }
     fetchCupcake();
-  }, [id]);
-
-  const exitViewProduct = () => {
-    setDisplay();
-    document.body.style.overflowY = "scroll";
-  };
+  }, [variable]);
+  if (!variable) return null;
   return (
     <>
       <div
@@ -168,7 +164,10 @@ function ViewProduct({
       >
         <Panel
           className="h-full bg-transparent"
-          onClick={exitViewProduct}
+          onClick={() => {
+            closeViewProduct();
+            document.body.style.overflowY = "scroll";
+          }}
           defaultSize={25}
         ></Panel>
         <PanelResizeHandle className="h-4 w-full self-center rounded bg-gray-100" />
@@ -197,7 +196,10 @@ function ViewProduct({
           <div className="flex w-full max-w-7xl flex-col">
             <button
               className="m-1 w-max self-end text-gray-300"
-              onClick={exitViewProduct}
+              onClick={() => {
+                closeViewProduct();
+                document.body.style.overflowY = "scroll";
+              }}
             >
               <FontAwesomeIcon
                 icon={faXmark}
@@ -379,9 +381,9 @@ function ViewProduct({
                           <button
                             className="h-8 w-full bg-secondarylight text-xs text-primary sm:text-sm md:w-1/2 md:text-base"
                             onClick={() => {
-                              exitViewProduct();
+                              closeViewProduct();
                               document.body.style.overflowY = "hidden";
-                              setLoginModalVisibility();
+                              openLoginModal();
                             }}
                           >
                             Add to Cart
@@ -389,9 +391,9 @@ function ViewProduct({
                           <button
                             className="h-8 w-full bg-primary text-xs text-white sm:text-sm md:w-1/2 md:text-base"
                             onClick={() => {
-                              exitViewProduct();
+                              closeViewProduct();
                               document.body.style.overflowY = "hidden";
-                              setLoginModalVisibility();
+                              openLoginModal();
                             }}
                           >
                             Buy Now

@@ -14,10 +14,11 @@ const queryClient = new QueryClient();
 function Admin() {
   const User = useSelector((state: AppState) => state.auth.User);
   const [isAsideVisible, setIsAsideVisible] = useState<boolean>(false);
+  document.body.style.overflowY = "scroll";
+
   if (User && User.role !== "admin") {
     return <Navigate to={"/"} />;
   }
-  document.body.style.overflowY = "scroll";
 
   return (
     <main className="flex h-dvh max-h-max w-full flex-col items-center">

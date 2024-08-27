@@ -12,9 +12,7 @@ import ErrorPage from "./components/ErrorPage";
 import Admin from "./admin.components/Admin";
 import ModalCart from "./cart.components/modalCart";
 import CustomerService from "./components/CustomerService";
-import AccountLayout from "./account.components/accountLayout";
 import { store } from "./store";
-import ProtectedRoute from "./protectedRoute";
 import AccountDashboard from "./admin.components/acccountDashboard";
 import ProductDashboard from "./admin.components/productDashboard";
 import OrderDashboard from "./admin.components/orderDashboard";
@@ -26,6 +24,7 @@ import OrderLayout from "./order.components/ordersLayout";
 import RecievedLayout from "./order.components/recievedLayout";
 import SignPage from "./login-signin/sign";
 import LoginPage from "./login-signin/Login";
+import ForgetLayout from "./components/forgetLayout";
 
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
@@ -52,23 +51,13 @@ const route = createBrowserRouter([
     path: "account",
     element: (
       <QueryClientProvider client={queryClient}>
-        <ProtectedRoute>
-          <AccountLayout />
-        </ProtectedRoute>
+        <Account />
       </QueryClientProvider>
     ),
-    children: [
-      { index: true, element: <Account /> },
-      { path: "info", element: <Account /> },
-    ],
   },
   {
     path: "admin",
-    element: (
-      <ProtectedRoute>
-        <Admin />
-      </ProtectedRoute>
-    ),
+    element: <Admin />,
 
     children: [
       {
@@ -91,6 +80,10 @@ const route = createBrowserRouter([
   {
     path: "login",
     element: <LoginPage />,
+  },
+  {
+    path: "forget",
+    element: <ForgetLayout />,
   },
   {
     path: "order",

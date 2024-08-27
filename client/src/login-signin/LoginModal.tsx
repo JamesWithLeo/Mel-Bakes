@@ -97,19 +97,25 @@ export default function LoginModal({ onClose }: { onClose: () => void }) {
           <input
             onFocus={handleFocusInput}
             className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
-            placeholder="Enter gmail"
+            placeholder="Enter your email"
             id="gmailLoginTB"
             type="gmail"
           />
           <input
             onFocus={handleFocusInput}
             className="mt-4 h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
-            placeholder="Enter password"
+            placeholder="Enter your password"
             id="passwordLoginTB"
             type="password"
           />
           <div className="mt-2 flex w-full flex-col">
-            <Link className="self-end text-xs text-warning" to={"/forget"}>
+            <Link
+              className="self-end text-xs text-warning underline-offset-1 hover:underline"
+              to={"/forget"}
+              onClick={() => {
+                document.body.style.overflowY = "scroll";
+              }}
+            >
               Forget Password
             </Link>
           </div>

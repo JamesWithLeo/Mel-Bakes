@@ -3,9 +3,15 @@ import { AppDispatch, AppState } from "../store";
 import { Navigate } from "react-router-dom";
 import { DeleteAccount, update } from "../slice/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import {
+  CreatePhoneAuthProvider,
+  CreateRecaptchaVerifier,
+  updateUserPhoneNumber,
+} from "../firebase";
 import plaidPattern from "../assets/images/pattern.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { RecaptchaVerifier } from "firebase/auth";
 import {
   faPenToSquare,
   faSquareCheck,
@@ -14,18 +20,91 @@ import Confimation from "../components/confimation";
 import { updateUser } from "../firebase";
 import LogutButton from "../components/LogoutButton";
 
+declare global {
+  interface Window {
+    grecaptcha?: typeof grecaptcha;
+    recaptchaVerifier: RecaptchaVerifier;
+  }
+}
 export default function Account() {
   const user = useSelector((state: AppState) => state.auth.User);
   const dispatch = useDispatch<AppDispatch>();
   const [isEditingFirstName, setEditingFirstName] = useState<boolean>(false);
   const [isEditingLastName, setEditingLastName] = useState<boolean>(false);
-  const [isEditingContact, setEditingContact] = useState<boolean>(false);
+
   const [isEditingAddress, setEditingAddress] = useState<boolean>(false);
   const [isEditingDisplayName, setEditingDisplayName] =
     useState<boolean>(false);
-
   const [isDeleteAccountVisible, setDeleteAccountVisible] =
     useState<boolean>(false);
+
+  const [recaptchaVerifier, setRecaptchaVerifier] =
+    useState<RecaptchaVerifier | null>(null);
+  const [verficationId, setVerificationId] = useState<string>("");
+  const [isEditingPhoneNumber, setIsEditingPhoneNumber] =
+    useState<boolean>(false);
+  const [phoneCodeError, setPhoneCodeError] = useState<string>("");
+
+  const HandleCancelPhoneVerification = () => {
+    const phoneNumber = document.getElementById(
+      "phoneNumber",
+    ) as HTMLInputElement;
+    phoneNumber.value = phoneNumber.defaultValue;
+    phoneNumber.readOnly = true;
+    setIsEditingPhoneNumber(false);
+    setVerificationId("");
+    // const recaptchaContainer = document.getElementById(
+    //   "recaptcha-container",
+    // ) as HTMLInputElement;
+    window.grecaptcha.reset();
+  };
+  const HandleSavePhoneNumber = async () => {
+    const phoneNumber = document.getElementById(
+      "phoneNumber",
+    ) as HTMLInputElement;
+    if (!user?.email || !phoneNumber || !recaptchaVerifier) return;
+    const provider = CreatePhoneAuthProvider();
+    const verfication = await provider.verifyPhoneNumber(
+      phoneNumber.value,
+      recaptchaVerifier,
+    );
+    console.log("Verification Id: ", verfication);
+    setVerificationId(verfication);
+    document.body.style.overflowY = "hidden";
+  };
+  const SendVerificationCodePhoneNumber = () => {
+    const verificationCode = document.getElementById(
+      "verificationCode",
+    ) as HTMLInputElement;
+    if (!verificationCode.value) return;
+    updateUserPhoneNumber(verficationId, verificationCode.value)
+      .then(() => {
+        HandleCancelPhoneVerification();
+      })
+      .catch((error) => {
+        console.error(error);
+        if (error.code) setPhoneCodeError(error.code);
+      });
+  };
+  const HandleRenderCaptcha = () => {
+    function HandleCaptchaSolve(response: any) {
+      console.log("reCAPTCHA solved:", response);
+      const phoneNumber = document.getElementById(
+        "phoneNumber",
+      ) as HTMLInputElement;
+      phoneNumber.readOnly = false;
+      phoneNumber.focus();
+      setIsEditingPhoneNumber(true);
+    }
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = CreateRecaptchaVerifier(HandleCaptchaSolve);
+      window.recaptchaVerifier.render().then((widgetId: number) => {
+        console.log("reCAPTCHA rendered with widgetId:", widgetId);
+      });
+    }
+    setRecaptchaVerifier(window.recaptchaVerifier);
+  };
+
   const HandleEditDisplayName = () => {
     const DisplayName = document.getElementById(
       "DisplayName",
@@ -48,7 +127,6 @@ export default function Account() {
   const HandleEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const FirstName = document.getElementById("FirstName") as HTMLInputElement;
     const LastName = document.getElementById("LastName") as HTMLInputElement;
-    const Contact = document.getElementById("Contact") as HTMLInputElement;
     const Address = document.getElementById("Address") as HTMLInputElement;
     const DisplayName = document.getElementById(
       "DisplayName",
@@ -60,7 +138,6 @@ export default function Account() {
         setEditingDisplayName(true);
         setEditingFirstName(false);
         setEditingLastName(false);
-        setEditingContact(false);
         setEditingAddress(false);
         break;
       case "FirstNameEdit":
@@ -68,7 +145,6 @@ export default function Account() {
         FirstName.focus();
         setEditingFirstName(true);
         setEditingLastName(false);
-        setEditingContact(false);
         setEditingAddress(false);
         break;
       case "LastNameEdit":
@@ -76,15 +152,6 @@ export default function Account() {
         LastName.focus();
         setEditingLastName(true);
         setEditingFirstName(false);
-        setEditingContact(false);
-        setEditingAddress(false);
-        break;
-      case "ContactEdit":
-        Contact.readOnly = false;
-        Contact.focus();
-        setEditingContact(true);
-        setEditingFirstName(false);
-        setEditingLastName(false);
         setEditingAddress(false);
         break;
       case "AddressEdit":
@@ -93,7 +160,6 @@ export default function Account() {
         setEditingAddress(true);
         setEditingFirstName(false);
         setEditingLastName(false);
-        setEditingContact(false);
         break;
     }
   };
@@ -124,7 +190,6 @@ export default function Account() {
 
     setEditingFirstName(false);
     setEditingLastName(false);
-    setEditingContact(false);
     setEditingAddress(false);
   };
   const HandleDeleteAccount = (value: string | undefined) => {
@@ -132,7 +197,9 @@ export default function Account() {
       dispatch(DeleteAccount({ id: user._id, password: value.trim() }));
     setDeleteAccountVisible(true);
   };
-
+  useEffect(() => {
+    HandleRenderCaptcha();
+  }, []);
   if (!user) return <Navigate to={"/"} />;
   return (
     <>
@@ -149,7 +216,37 @@ export default function Account() {
           }}
         />
       ) : null}
+      {verficationId ? (
+        <>
+          <div className="fixed z-10 h-screen w-full bg-primary opacity-70" />
+          <div className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4">
+            <h1>Verification Code</h1>
+            <h1>{phoneCodeError}</h1>
+            <input
+              id="verificationCode"
+              className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
+            />
+            <span className="flex gap-2">
+              <button onClick={HandleCancelPhoneVerification}>cancel</button>
+              <button onClick={SendVerificationCodePhoneNumber}>send</button>
+            </span>
+          </div>
+        </>
+      ) : null}
+      <div id="recaptcha-container" className=""></div>
       <main className="flex h-full flex-col items-center gap-4">
+        <section className="flex w-full flex-col items-center bg-secondarylight shadow drop-shadow">
+          <header className="flex h-16 max-h-max w-full max-w-7xl items-center gap-2 px-4">
+            <Link
+              className="font-[Lobster] text-3xl text-primary"
+              to={"/"}
+              replace
+            >
+              Mel Bakes
+            </Link>
+          </header>
+        </section>
+
         <section
           className="mb-8 grid h-36 w-full grid-cols-1 grid-rows-3 flex-col items-center shadow"
           style={{ backgroundImage: `url(${plaidPattern})` }}
@@ -262,19 +359,25 @@ export default function Account() {
               <label className="text-sm text-darker">Phone Number</label>
               <span className="flex items-center gap-4">
                 <input
+                  id="phoneNumber"
                   readOnly
-                  id="Contact"
                   defaultValue={user.phoneNumber ?? ""}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
-                <button id="ContactEdit" onClick={HandleEdit}>
+                <button
+                  id="phoneNumberEdit"
+                  onClick={() => {
+                    if (recaptchaVerifier) recaptchaVerifier.verify();
+                    else HandleRenderCaptcha();
+                  }}
+                >
                   <FontAwesomeIcon
                     icon={faPenToSquare}
                     className="text-gray-500"
                   />
                 </button>
-                {isEditingContact ? (
-                  <button onClick={HandleSubmit} id="ContactButton">
+                {isEditingPhoneNumber ? (
+                  <button onClick={HandleSavePhoneNumber}>
                     <FontAwesomeIcon
                       icon={faSquareCheck}
                       className="text-gray-500"

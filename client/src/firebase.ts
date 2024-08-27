@@ -5,6 +5,10 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   updateProfile,
+  sendPasswordResetEmail,
+  RecaptchaVerifier,
+  PhoneAuthProvider,
+  updatePhoneNumber,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -19,7 +23,8 @@ const firebaseConfig = {
   measurementId: "G-X444K97LSX",
 };
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+export const auth = getAuth(app);
+auth.useDeviceLanguage();
 
 export const createUser = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password)
@@ -48,7 +53,9 @@ export const logoutUser = () => {
   localStorage.removeItem("melbakesUser");
 };
 
-onAuthStateChanged(auth, (user) => {});
+onAuthStateChanged(auth, (user) => {
+  // console.log(user?.email);
+});
 
 export const updateUser = ({
   DisplayName,
@@ -60,4 +67,38 @@ export const updateUser = ({
   if (!auth.currentUser) return;
   const user = auth.currentUser;
   updateProfile(user, { displayName: DisplayName, photoURL: PhotoUrl });
+};
+
+export const paswordReset = async (email: string) => {
+  return await sendPasswordResetEmail(auth, email)
+    .then(() => {
+      return Promise.resolve();
+    })
+    .catch((reason) => {
+      return Promise.reject(reason.code);
+    });
+};
+
+export const updateUserPhoneNumber = async (
+  verificationId: string,
+  code: string,
+) => {
+  if (!auth.currentUser) return;
+  try {
+    const phoneCredential = PhoneAuthProvider.credential(verificationId, code);
+    await updatePhoneNumber(auth.currentUser, phoneCredential);
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const CreatePhoneAuthProvider = () => {
+  return new PhoneAuthProvider(auth);
+};
+export const CreateRecaptchaVerifier = (onSolved: (response: any) => void) => {
+  return new RecaptchaVerifier(auth, "recaptcha-container", {
+    size: "invisible", // Set the size to 'normal' to make it visible.
+    callback: onSolved,
+  });
 };

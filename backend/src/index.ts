@@ -77,14 +77,16 @@ app.get("/melbake/cupcakes", async (req: Request, res: Response) => {
     // destribute img from cloudinary
     let i: number;
     let cups: IProduct[] = [];
-    for (i = 0; i <= array.length; i++) {
-      if (i === array.length) {
-        return cups;
+    if (array && array.length) {
+      for (i = 0; i <= array.length; i++) {
+        if (i === array.length) {
+          return cups;
+        }
+        await getAssetInfo(array[i].PublicId).then((url) => {
+          array[i].Url = url;
+          cups.push(array[i]);
+        });
       }
-      await getAssetInfo(array[i].PublicId).then((url) => {
-        array[i].Url = url;
-        cups.push(array[i]);
-      });
     }
   }
   await fetchDocuments(CUPCAKE_COLLECTION).then(async (cupcakes) => {

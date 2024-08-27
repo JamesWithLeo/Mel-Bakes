@@ -77,7 +77,7 @@ function LoginPage() {
         </div>
 
         <div
-          className="max-h-screen-lg flex h-screen max-h-[1000px] w-full items-center justify-center"
+          className="max-h-screen-lg flex h-dvh w-full items-center justify-center"
           id="mainWrapper"
         >
           <main className="flex h-full w-full flex-col bg-white p-4">
