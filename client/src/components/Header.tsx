@@ -14,7 +14,11 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { AppState } from "../store";
 
-function HeaderComponent() {
+function HeaderComponent({
+  withNavigation = true,
+}: {
+  withNavigation?: boolean;
+}) {
   const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
   const auth = useSelector((state: AppState) => state.auth);
   const closeMenu = () => {
@@ -26,95 +30,101 @@ function HeaderComponent() {
     <>
       <div className="sticky top-0 z-10 flex w-full justify-center bg-secondarylight drop-shadow-lg">
         <header className="flex h-16 max-h-max w-full max-w-7xl items-center justify-between px-4">
-          <h1 className="font-[Lobster] text-3xl text-primary">Mel Bakes</h1>
-
-          {auth.User ? (
-            <div className="hidden gap-8 md:flex">
-              <Link
-                to={"/minicart"}
-                onClick={closeMenu}
-                className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
-              >
-                <FontAwesomeIcon
-                  icon={faShoppingCart}
-                  id="cart"
-                  className="lg:base text-primary sm:text-base"
-                />
-                Cart
-              </Link>
-
-              <Link
-                className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
-                to={"account"}
-                onClick={closeMenu}
-                replace
-              >
-                <FontAwesomeIcon
-                  icon={faUser}
-                  className="text-primary sm:text-base lg:text-base"
-                />
-                Profile
-              </Link>
-              <>
-                {auth.User.role === "admin" ? (
+          <Link to={"/"} className="font-[Lobster] text-3xl text-primary">
+            Mel Bakes
+          </Link>
+          {withNavigation ? (
+            <>
+              {auth.User ? (
+                <div className="hidden gap-8 md:flex">
                   <Link
-                    to={"Admin"}
+                    to={"/minicart"}
                     onClick={closeMenu}
-                    replace
                     className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
                   >
                     <FontAwesomeIcon
-                      icon={faCode}
-                      id="Admin"
+                      icon={faShoppingCart}
+                      id="cart"
                       className="lg:base text-primary sm:text-base"
                     />
-                    Admin
+                    Cart
                   </Link>
-                ) : null}
-              </>
-              <>
-                {auth.User.role === "courier" || auth.User.role === "admin" ? (
+
                   <Link
-                    to={"deliver"}
+                    className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
+                    to={"account"}
                     onClick={closeMenu}
                     replace
-                    className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
                   >
                     <FontAwesomeIcon
-                      icon={faTruck}
-                      className="lg:base text-primary sm:text-base"
+                      icon={faUser}
+                      className="text-primary sm:text-base lg:text-base"
                     />
-                    delivery
+                    Profile
                   </Link>
-                ) : null}
-              </>
-            </div>
+                  <>
+                    {auth.User.role === "admin" ? (
+                      <Link
+                        to={"Admin"}
+                        onClick={closeMenu}
+                        replace
+                        className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
+                      >
+                        <FontAwesomeIcon
+                          icon={faCode}
+                          id="Admin"
+                          className="lg:base text-primary sm:text-base"
+                        />
+                        Admin
+                      </Link>
+                    ) : null}
+                  </>
+                  <>
+                    {auth.User.role === "courier" ||
+                    auth.User.role === "admin" ? (
+                      <Link
+                        to={"deliver"}
+                        onClick={closeMenu}
+                        replace
+                        className="flex items-center justify-center gap-2 px-3 py-1 text-primary"
+                      >
+                        <FontAwesomeIcon
+                          icon={faTruck}
+                          className="lg:base text-primary sm:text-base"
+                        />
+                        delivery
+                      </Link>
+                    ) : null}
+                  </>
+                </div>
+              ) : null}
+              <div
+                id="headerButton"
+                className="flex w-max items-center justify-center gap-2 sm:gap-4"
+              >
+                {" "}
+                <a
+                  className="font-redhat hidden h-full items-center justify-center gap-4 text-left text-primary md:flex"
+                  href="#footer"
+                  onClick={closeMenu}
+                >
+                  Contact us
+                </a>
+                <button
+                  onClick={() => {
+                    setIsMenuVisible(!isMenuVisible);
+                    if (isMenuVisible) document.body.style.overflowY = "scroll";
+                    else document.body.style.overflowY = "hidden";
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    className="text-xl text-primary md:hidden"
+                  />
+                </button>
+              </div>
+            </>
           ) : null}
-          <div
-            id="headerButton"
-            className="flex w-max items-center justify-center gap-2 sm:gap-4"
-          >
-            {" "}
-            <a
-              className="font-redhat hidden h-full items-center justify-center gap-4 text-left text-primary md:flex"
-              href="#footer"
-              onClick={closeMenu}
-            >
-              Contact us
-            </a>
-            <button
-              onClick={() => {
-                setIsMenuVisible(!isMenuVisible);
-                if (isMenuVisible) document.body.style.overflowY = "scroll";
-                else document.body.style.overflowY = "hidden";
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faBars}
-                className="text-xl text-primary md:hidden"
-              />
-            </button>
-          </div>
         </header>
       </div>
       {isMenuVisible ? (

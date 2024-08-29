@@ -53,11 +53,9 @@ export const logoutUser = () => {
   localStorage.removeItem("melbakesUser");
 };
 
-onAuthStateChanged(auth, (user) => {
-  // console.log(user?.email);
-});
+onAuthStateChanged(auth, (user) => {});
 
-export const updateUser = ({
+export const updateUserNameAndPhoto = ({
   DisplayName,
   PhotoUrl,
 }: {
@@ -66,7 +64,12 @@ export const updateUser = ({
 }) => {
   if (!auth.currentUser) return;
   const user = auth.currentUser;
-  updateProfile(user, { displayName: DisplayName, photoURL: PhotoUrl });
+  try {
+    updateProfile(user, { displayName: DisplayName, photoURL: PhotoUrl });
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
 export const paswordReset = async (email: string) => {
@@ -96,9 +99,13 @@ export const updateUserPhoneNumber = async (
 export const CreatePhoneAuthProvider = () => {
   return new PhoneAuthProvider(auth);
 };
-export const CreateRecaptchaVerifier = (onSolved: (response: any) => void) => {
+export const CreateRecaptchaVerifier = (
+  onSolved: (response: any) => void,
+  onExpire: () => void,
+) => {
   return new RecaptchaVerifier(auth, "recaptcha-container", {
     size: "invisible", // Set the size to 'normal' to make it visible.
     callback: onSolved,
+    "expired-callback": onExpire,
   });
 };

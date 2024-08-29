@@ -1,24 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
 import { Navigate } from "react-router-dom";
-import { DeleteAccount, update } from "../slice/authSlice";
+import {
+  DeleteAccount,
+  SetDisplayName,
+  SetPhoneNumber,
+  update,
+} from "../slice/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  auth,
   CreatePhoneAuthProvider,
   CreateRecaptchaVerifier,
   updateUserPhoneNumber,
 } from "../firebase";
 import plaidPattern from "../assets/images/pattern.svg";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { RecaptchaVerifier } from "firebase/auth";
 import {
   faPenToSquare,
   faSquareCheck,
 } from "@fortawesome/free-regular-svg-icons";
 import Confimation from "../components/confimation";
-import { updateUser } from "../firebase";
+import { updateUserNameAndPhoto } from "../firebase";
 import LogutButton from "../components/LogoutButton";
+import FooterComponent from "../components/Footer";
+import HeaderComponent from "../components/Header";
+import Notify from "../components/notify";
 
 declare global {
   interface Window {
@@ -37,12 +45,14 @@ export default function Account() {
     useState<boolean>(false);
   const [isDeleteAccountVisible, setDeleteAccountVisible] =
     useState<boolean>(false);
+  const [notificaton, setNotification] = useState<string>("");
 
-  const [recaptchaVerifier, setRecaptchaVerifier] =
-    useState<RecaptchaVerifier | null>(null);
-  const [verficationId, setVerificationId] = useState<string>("");
   const [isEditingPhoneNumber, setIsEditingPhoneNumber] =
     useState<boolean>(false);
+  const [recaptchaVerifier, setRecaptchaVerifier] =
+    useState<RecaptchaVerifier | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [verficationId, setVerificationId] = useState<string>("");
   const [phoneCodeError, setPhoneCodeError] = useState<string>("");
 
   const HandleCancelPhoneVerification = () => {
@@ -51,35 +61,50 @@ export default function Account() {
     ) as HTMLInputElement;
     phoneNumber.value = phoneNumber.defaultValue;
     phoneNumber.readOnly = true;
+
+    document.body.style.overflowY = "scroll";
     setIsEditingPhoneNumber(false);
+    setPhoneNumber("");
     setVerificationId("");
-    // const recaptchaContainer = document.getElementById(
-    //   "recaptcha-container",
-    // ) as HTMLInputElement;
     window.grecaptcha.reset();
   };
   const HandleSavePhoneNumber = async () => {
-    const phoneNumber = document.getElementById(
+    const phoneNumberElement = document.getElementById(
       "phoneNumber",
     ) as HTMLInputElement;
-    if (!user?.email || !phoneNumber || !recaptchaVerifier) return;
+    setPhoneNumber(phoneNumberElement.value);
+    if (phoneNumberElement.value === phoneNumberElement.defaultValue) return;
+    if (!user?.email || !phoneNumber || !recaptchaVerifier) {
+      phoneNumberElement.value = phoneNumberElement.defaultValue;
+      return;
+    }
     const provider = CreatePhoneAuthProvider();
-    const verfication = await provider.verifyPhoneNumber(
-      phoneNumber.value,
-      recaptchaVerifier,
-    );
-    console.log("Verification Id: ", verfication);
-    setVerificationId(verfication);
-    document.body.style.overflowY = "hidden";
+    await provider
+      .verifyPhoneNumber(phoneNumberElement.value, recaptchaVerifier)
+      .then((verfication) => {
+        console.log("Verification Id: ", verfication);
+        setVerificationId(verfication);
+        document.body.style.overflowY = "hidden";
+      })
+      .catch((error) => {
+        setNotification(error.code);
+        document.body.style.overflowY = "hidden";
+        setTimeout(() => {
+          setNotification("");
+          document.body.style.overflowY = "scroll";
+        }, 3000);
+      });
   };
   const SendVerificationCodePhoneNumber = () => {
     const verificationCode = document.getElementById(
       "verificationCode",
     ) as HTMLInputElement;
-    if (!verificationCode.value) return;
+    const recaptchaContainer = document.getElementById("recaptcha-container");
+    if (!verificationCode.value || !recaptchaContainer) return;
     updateUserPhoneNumber(verficationId, verificationCode.value)
       .then(() => {
-        HandleCancelPhoneVerification();
+        dispatch(SetPhoneNumber(phoneNumber));
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -87,6 +112,12 @@ export default function Account() {
       });
   };
   const HandleRenderCaptcha = () => {
+    const recaptchaContainer = document.getElementById("recaptcha-container");
+    if (recaptchaVerifier && recaptchaContainer?.innerHTML) {
+      recaptchaVerifier.verify();
+      return;
+    }
+
     function HandleCaptchaSolve(response: any) {
       console.log("reCAPTCHA solved:", response);
       const phoneNumber = document.getElementById(
@@ -96,8 +127,15 @@ export default function Account() {
       phoneNumber.focus();
       setIsEditingPhoneNumber(true);
     }
+    function HandleExpireCaptcha() {
+      console.log("reCAPTCHA expired");
+    }
+
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = CreateRecaptchaVerifier(HandleCaptchaSolve);
+      window.recaptchaVerifier = CreateRecaptchaVerifier(
+        HandleCaptchaSolve,
+        HandleExpireCaptcha,
+      );
       window.recaptchaVerifier.render().then((widgetId: number) => {
         console.log("reCAPTCHA rendered with widgetId:", widgetId);
       });
@@ -118,7 +156,8 @@ export default function Account() {
       "DisplayName",
     ) as HTMLInputElement;
     if (DisplayName.value !== DisplayName.defaultValue) {
-      updateUser({ DisplayName: DisplayName.value });
+      updateUserNameAndPhoto({ DisplayName: DisplayName.value });
+      dispatch(SetDisplayName(DisplayName.value));
       DisplayName.readOnly = true;
       setEditingDisplayName(false);
     }
@@ -203,6 +242,14 @@ export default function Account() {
   if (!user) return <Navigate to={"/"} />;
   return (
     <>
+      {notificaton ? (
+        <>
+          <div className="fixed z-10 h-screen w-full bg-primary bg-opacity-70" />
+          <div className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+            <Notify text={notificaton} type={"danger"} />
+          </div>
+        </>
+      ) : null}
       {isDeleteAccountVisible ? (
         <Confimation
           title={"Delete confirmation"}
@@ -219,32 +266,43 @@ export default function Account() {
       {verficationId ? (
         <>
           <div className="fixed z-10 h-screen w-full bg-primary opacity-70" />
-          <div className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded bg-white p-4">
-            <h1>Verification Code</h1>
-            <h1>{phoneCodeError}</h1>
+          <div className="fixed left-1/2 top-1/2 z-10 flex w-full max-w-sm -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white px-8 py-8">
+            <h1 className="my-2 text-center text-xl font-bold text-primary lg:text-2xl">
+              Verification Code
+            </h1>
+            <h1 className="font-raleway">
+              Please enter the six digit code that is sent to your number.
+            </h1>
+            <h1 className="text-center text-sm text-red-400">
+              {phoneCodeError}
+            </h1>
             <input
+              placeholder="ex: 123456"
               id="verificationCode"
               className="h-8 w-full rounded bg-slate-100 px-2 text-sm outline outline-1 outline-slate-300 focus:outline-2 focus:outline-slate-500"
             />
-            <span className="flex gap-2">
-              <button onClick={HandleCancelPhoneVerification}>cancel</button>
-              <button onClick={SendVerificationCodePhoneNumber}>send</button>
+            <span className="flex gap-2 self-end font-Redhat">
+              <button
+                onClick={HandleCancelPhoneVerification}
+                className="rounded px-2 py-1 hover:bg-gray-100"
+              >
+                cancel
+              </button>
+              <button
+                onClick={SendVerificationCodePhoneNumber}
+                className="rounded bg-primary px-2 py-1 text-white"
+              >
+                send
+              </button>
             </span>
           </div>
         </>
       ) : null}
+
       <div id="recaptcha-container" className=""></div>
-      <main className="flex h-full flex-col items-center gap-4">
+      <main className="flex h-full flex-col items-center bg-gradient-to-b from-secondarylight to-primarylight">
         <section className="flex w-full flex-col items-center bg-secondarylight shadow drop-shadow">
-          <header className="flex h-16 max-h-max w-full max-w-7xl items-center gap-2 px-4">
-            <Link
-              className="font-[Lobster] text-3xl text-primary"
-              to={"/"}
-              replace
-            >
-              Mel Bakes
-            </Link>
-          </header>
+          <HeaderComponent withNavigation={false} />
         </section>
 
         <section
@@ -253,17 +311,14 @@ export default function Account() {
         >
           <div className="row-start-3 flex w-full flex-col items-center">
             {user ? (
-              <div className="row-start-2 h-28 w-28 bg-white drop-shadow">
-                .
-              </div>
+              <div className="row-start-2 h-28 w-28 bg-white drop-shadow"></div>
             ) : (
-              <div className="row-start-2 h-28 w-28 bg-white drop-shadow">
-                .
-              </div>
+              <div className="row-start-2 h-28 w-28 bg-white drop-shadow"></div>
             )}
           </div>
         </section>
-        <div>
+
+        <div className="py-4">
           <span className="flex justify-between gap-4">
             <input
               id="DisplayName"
@@ -291,7 +346,7 @@ export default function Account() {
           <h1 className="text-center text-xs font-light">{user._id}</h1>
         </div>
 
-        <section className="flex w-full flex-col items-center gap-4 px-2 lg:flex-row lg:items-start lg:justify-center">
+        <section className="flex w-full flex-col items-center gap-4 px-2 py-8 lg:flex-row lg:items-start lg:justify-center">
           <section className="flex w-full max-w-sm flex-col items-center gap-2 rounded bg-white p-4 shadow md:p-8">
             <div className="flex w-full flex-col">
               <label className="text-sm text-blue-900">Email</label>
@@ -356,21 +411,22 @@ export default function Account() {
             </div>
 
             <div className="flex w-full flex-col">
-              <label className="text-sm text-darker">Phone Number</label>
+              <span className="flex items-center gap-1">
+                <label className="text-sm text-darker">Phone Number</label>
+                {!user.phoneNumber ? (
+                  <h1 className="text-xs text-red-400 underline underline-offset-1">
+                    required to purchase cupcakes.
+                  </h1>
+                ) : null}
+              </span>
               <span className="flex items-center gap-4">
                 <input
                   id="phoneNumber"
                   readOnly
-                  defaultValue={user.phoneNumber ?? ""}
+                  defaultValue={auth.currentUser?.phoneNumber ?? ""}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
-                <button
-                  id="phoneNumberEdit"
-                  onClick={() => {
-                    if (recaptchaVerifier) recaptchaVerifier.verify();
-                    else HandleRenderCaptcha();
-                  }}
-                >
+                <button id="phoneNumberEdit" onClick={HandleRenderCaptcha}>
                   <FontAwesomeIcon
                     icon={faPenToSquare}
                     className="text-gray-500"
@@ -442,7 +498,6 @@ export default function Account() {
               <button className="hover:shadowd-darker w-max rounded-md bg-darker px-3 py-1 align-middle text-sm text-gray-200 hover:text-white hover:shadow-lg">
                 Forgot Password
               </button>
-
               <button
                 className="w-max rounded-md bg-red-400 px-3 py-1 align-middle text-sm text-gray-200 hover:text-white hover:shadow-lg hover:shadow-red-400"
                 onClick={() => {
@@ -455,6 +510,8 @@ export default function Account() {
             </section>
           </section>
         </section>
+
+        <FooterComponent withLogoutButton={false} />
       </main>
     </>
   );

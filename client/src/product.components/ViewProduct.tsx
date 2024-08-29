@@ -12,6 +12,7 @@ import { AppState } from "../store";
 import { IOrder, IProduct } from "../appTypes";
 import axios from "axios";
 import Notify from "../components/notify";
+import { Link } from "react-router-dom";
 
 function ViewProduct({
   variable,
@@ -86,7 +87,8 @@ function ViewProduct({
         Url: cupcakeObj.Url,
         courierId: "",
         Amount: quantity * cupcakeObj.Price,
-        DateOrdered: new Date().toLocaleString(),
+        dateOrdered: new Date().getTime(),
+        timeOrdered: new Date().getHours() + ":" + new Date().getMinutes(),
         IsPacked: false,
         IsShipping: false,
         IsReceived: false,
@@ -148,7 +150,7 @@ function ViewProduct({
         if (variable) setFlavors(flavorElements);
       });
     }
-    fetchCupcake();
+    if (variable) fetchCupcake();
   }, [variable]);
   if (!variable) return null;
   return (
@@ -348,13 +350,26 @@ function ViewProduct({
                               >
                                 Add to Cart
                               </button>
-                              <button
-                                className="h-8 w-full bg-primary text-xs text-white active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
-                                onClick={AddToOrder}
-                                id="chechOutButton"
-                              >
-                                Buy Now
-                              </button>
+                              {user.phoneNumber ? (
+                                <button
+                                  className="h-8 w-full bg-primary text-xs text-white active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
+                                  onClick={AddToOrder}
+                                  id="chechOutButton"
+                                >
+                                  Buy Now
+                                </button>
+                              ) : (
+                                <Link
+                                  className="flex h-8 w-full flex-col items-center justify-center bg-primary text-center text-xs text-white active:bg-opacity-70 sm:text-sm md:w-1/2 md:text-base"
+                                  to="account"
+                                  onClick={() => {
+                                    closeViewProduct();
+                                    document.body.style.overflowY = "scroll";
+                                  }}
+                                >
+                                  Buy now
+                                </Link>
+                              )}
                             </>
                           ) : (
                             <>

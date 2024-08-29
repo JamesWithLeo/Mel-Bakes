@@ -16,7 +16,9 @@ export default function DeliverCard({
     >
       <h1>Cupcake : {OrderObj.Name}</h1>
       <h1>Order id :{OrderObj._id}</h1>
-      <h1>Date Ordered : {OrderObj.DateOrdered}</h1>
+      <h1>
+        Date Ordered : {new Date(OrderObj.dateOrdered).toLocaleDateString()}
+      </h1>
     </div>
   );
 }

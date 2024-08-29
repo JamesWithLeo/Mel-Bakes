@@ -68,7 +68,7 @@ function App() {
         />
       ) : null}
 
-      <HeaderComponent />
+      <HeaderComponent withNavigation={true} />
       {auth.User && auth.User._id ? (
         <>
           <Homepage />

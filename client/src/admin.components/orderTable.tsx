@@ -22,8 +22,8 @@ export default function OrderTable({
     row,
   }) => {
     values.IsPacked = values.IsPacked === "true" ? true : false;
+    values.IsShipping = values.IsShipping === "true" ? true : false;
     // values.IsShipping = values.IsShipping === "true" ? true : false;
-    // values.IsRecieved = values.IsRecieved === "true" ? true : false;
     updateRow(values);
     table.setEditingRow(null);
   };

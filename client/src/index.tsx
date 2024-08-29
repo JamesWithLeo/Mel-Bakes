@@ -25,6 +25,7 @@ import RecievedLayout from "./order.components/recievedLayout";
 import SignPage from "./login-signin/sign";
 import LoginPage from "./login-signin/Login";
 import ForgetLayout from "./components/forgetLayout";
+import New from "./admin.components/new";
 
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
@@ -68,6 +69,7 @@ const route = createBrowserRouter([
           </div>
         ),
       },
+      { path: "new", element: <New /> },
       { path: "accounts", element: <AccountDashboard /> },
       { path: "products", element: <ProductDashboard /> },
       { path: "orders", element: <OrderDashboard /> },

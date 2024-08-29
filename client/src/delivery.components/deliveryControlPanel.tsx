@@ -92,7 +92,7 @@ export default function DeliveryControlPanel({
                 <h1>Order id :{delivery._id}</h1>
                 <h1>Quantity : {delivery.Quantity}</h1>
                 <h1>Amout : {delivery.Amount}</h1>
-                <h1>Date {delivery.DateOrdered}</h1>
+                <h1>Date {delivery.dateOrdered}</h1>
                 <h1>
                   {receiver?.firstName} {receiver?.lastName}
                 </h1>
@@ -100,7 +100,7 @@ export default function DeliveryControlPanel({
                 <h1>{receiver?.address}</h1>
                 <span className="flex justify-between rounded-md bg-white p-1">
                   <button
-                    className="w-max rounded-md px-3 py-1 align-middle font-Redhat text-base text-primary hover:bg-primarylight active:ring"
+                    className="w-max rounded-md from-5% px-3 py-1 align-middle font-Redhat text-base text-primary hover:bg-gradient-to-br hover:from-primarylight active:ring"
                     onClick={HandleHandOver}
                   >
                     Hand Over

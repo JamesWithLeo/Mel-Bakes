@@ -26,7 +26,8 @@ export type IOrder = {
   Quantity: number;
   Url: string;
   Amount: number;
-  DateOrdered: string;
+  dateOrdered: number;
+  timeOrdered: string;
   courierId: string;
   IsPacked: boolean;
   packedDate: string;

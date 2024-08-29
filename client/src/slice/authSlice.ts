@@ -15,7 +15,40 @@ const userInit: IUserInit = {
 const authSlice = createSlice({
   initialState: userInit,
   name: "auth",
-  reducers: {},
+  reducers: {
+    SetPhoneNumber: (state, action: PayloadAction<string>) => {
+      if (state.User) {
+        const updatedUser: IAccount = {
+          ...state.User,
+          phoneNumber: action.payload,
+        };
+        console.log("dispatched", updatedUser);
+        localStorage.setItem("melbakesUser", JSON.stringify(updatedUser));
+        return {
+          ...state,
+          User: {
+            ...updatedUser,
+          },
+        };
+      }
+    },
+    SetDisplayName: (state, action: PayloadAction<string>) => {
+      if (state.User) {
+        const updatedUser: IAccount = {
+          ...state.User,
+          displayName: action.payload,
+        };
+        console.log("dispatched", updatedUser);
+        localStorage.setItem("melbakesUser", JSON.stringify(updatedUser));
+        return {
+          ...state,
+          User: {
+            ...updatedUser,
+          },
+        };
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(
       Login.fulfilled,
@@ -227,4 +260,5 @@ export const update = createAsyncThunk(
     }
   },
 );
+export const { SetPhoneNumber, SetDisplayName } = authSlice.actions;
 export default authSlice.reducer;

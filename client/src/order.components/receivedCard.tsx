@@ -29,7 +29,7 @@ export default function ReceivedCard({
           </h1>
           <h1>
             <span className="text-gray-600">Place order on:</span>
-            {order.DateOrdered}
+            {order.dateOrdered}
           </h1>
 
           {!isViewingDetails ? (

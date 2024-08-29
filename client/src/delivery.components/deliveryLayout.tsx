@@ -81,7 +81,7 @@ export default function DeliveryLayout() {
                 <h1>Transaction id : {order._id}</h1>
                 <h1>Amount : {order.Amount}</h1>
                 <h1>Price : {order.Quantity}</h1>
-                <h1>Date Ordered : {order.DateOrdered}</h1>
+                <h1>Date Ordered : {order.dateOrdered}</h1>
 
                 <h1 className="text-md mt-2 font-semibold text-gray-400">
                   Reciever Info

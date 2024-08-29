@@ -33,7 +33,9 @@ export default function CartCard({
     if (!user._id) return;
     OrderObj.U_id = user._id;
     OrderObj.Amount = OrderObj.Quantity * cupcakeObj.Price;
-    OrderObj.DateOrdered = new Date().toLocaleString();
+    OrderObj.dateOrdered = new Date().getTime();
+    OrderObj.timeOrdered =
+      new Date().getHours() + ":" + new Date().getMinutes();
     OrderObj.IsPacked = false;
     OrderObj.IsShipping = false;
     OrderObj.IsReceived = false;

@@ -6,7 +6,11 @@ import { AppState } from "../store";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faDatabase } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faDatabase,
+  faEnvelopeOpen,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 const queryClient = new QueryClient();
@@ -22,17 +26,17 @@ function Admin() {
 
   return (
     <main className="flex h-dvh max-h-max w-full flex-col items-center">
-      <header className="sticky z-10 flex h-16 w-full flex-col items-center justify-center bg-primary py-2 lg:hidden lg:py-4">
+      <header className="sticky z-10 flex h-16 w-full flex-col items-center justify-center bg-primarylight py-2 lg:hidden lg:py-4">
         <div className="flex h-full w-full max-w-7xl items-center justify-between px-4">
           <Link
             to={"/"}
             target="_parent"
-            className="font-[Lobster] text-3xl text-white"
+            className="font-[Lobster] text-3xl text-primary"
           >
             Mel Bakes
           </Link>
           <button
-            className="text-xl text-white lg:hidden"
+            className="text-xl text-primary lg:hidden"
             onClick={() => {
               setIsAsideVisible(!isAsideVisible);
             }}
@@ -72,7 +76,14 @@ function Admin() {
           >
             Mel Bakes
           </Link>
-          <h1 className="mt-12 flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary">
+          <Link
+            to={"new"}
+            className="mt-16 flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary"
+          >
+            <FontAwesomeIcon icon={faEnvelopeOpen} />
+            New
+          </Link>
+          <h1 className="flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary">
             <FontAwesomeIcon icon={faDatabase} />
             Database
           </h1>

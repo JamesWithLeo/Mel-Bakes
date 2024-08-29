@@ -9,7 +9,6 @@ export function useUpdateOrder() {
     mutationFn: async (document: IOrder) => {
       const _id = document._id;
       const response = await axios.put("/melbake/order/" + _id, document);
-      console.log(response);
       return response;
     },
     onMutate: (variables: IOrder) => {
@@ -32,7 +31,6 @@ export function useDeleteOrder() {
       const response = await axios.delete("/melbake/order/", {
         params: { id: oid },
       });
-      console.log(response);
       return response;
     },
     onMutate: (variables) => {
@@ -56,7 +54,6 @@ export function useCancelOrder() {
     onSuccess(data, variables, context) {
       console.log(variables);
       queryClient.setQueryData(["order"], (prevOrders: IOrder[]) => {
-        console.log(prevOrders);
         return prevOrders.filter(
           (order: IOrder) => order._id !== variables.OrderId,
         );

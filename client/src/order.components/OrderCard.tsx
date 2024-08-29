@@ -52,7 +52,7 @@ export const OrderCard = ({ orderObj }: { orderObj: IOrder }) => {
           </h1>
 
           <h1 className="font-redhat text-sm">
-            Date Ordered : {orderObj.DateOrdered}
+            Date Ordered : {orderObj.dateOrdered}
           </h1>
           {orderObj.IsPacked ? (
             <>
