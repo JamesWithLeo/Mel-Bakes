@@ -1,7 +1,7 @@
 export type IProduct = {
   _id: string;
   Name: string;
-  C_id: string;
+  C_id?: string;
   Url: string;
   Description: string;
   Flavor: string;

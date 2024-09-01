@@ -1,9 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Form, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { IAccount, IOrder } from "../appTypes";
 import NewOrderCard from "./newOrderCard";
 import NewUserCard from "./newUserCard";
+import { useState } from "react";
+import Notify from "../components/notify";
+import { useSearchProduct } from "../services/productService";
 
 export function useRemoveNewOrder() {
   const query = useQueryClient();
@@ -46,9 +49,77 @@ export default function New() {
       return await response.data;
     },
   });
+  const searchProduct = useSearchProduct();
+  const [notification, setNotification] = useState<string>("");
+  const [notificationType, setNotificationType] = useState<
+    "information" | "danger"
+  >("information");
+  function HandleSearchProduct() {
+    searchProduct.mutateAsync("667e93a3055f43825ee20dd9");
+  }
+  function HandleClearCreateProduct() {
+    const name = document.getElementById("productName") as HTMLInputElement;
+    const price = document.getElementById("productPrice") as HTMLInputElement;
+    const stock = document.getElementById("productStock") as HTMLInputElement;
+    const url = document.getElementById("productUrl") as HTMLInputElement;
+    const flavors = document.getElementById(
+      "productFlavors",
+    ) as HTMLInputElement;
+    const description = document.getElementById(
+      "productDescription",
+    ) as HTMLInputElement;
+    name.value = "";
+    price.value = "";
+    stock.value = "";
+    url.value = "";
+    flavors.value = "";
+    description.value = "";
+  }
+  async function HandleCreateProduct() {
+    const name = document.getElementById("productName") as HTMLInputElement;
+    const price = document.getElementById("productPrice") as HTMLInputElement;
+    const stock = document.getElementById("productStock") as HTMLInputElement;
+    const url = document.getElementById("productUrl") as HTMLInputElement;
+    const flavors = document.getElementById(
+      "productFlavors",
+    ) as HTMLInputElement;
+    const description = document.getElementById(
+      "productDescription",
+    ) as HTMLInputElement;
+    if (!name.value || !price.value || !stock.value || !url.value) return;
+
+    const newProduct = {
+      Name: name.value,
+      Price: Number(price.value),
+      Stock: Number(stock.value),
+      Url: url.value,
+      Description: description.value,
+      Flavor: flavors.value,
+      _id: "",
+    };
+    const response = await axios.post("/melbake/product/", newProduct);
+    if (response.data.insertedId) {
+      setNotificationType("information");
+      setNotification("A new product added!");
+      HandleClearCreateProduct();
+    } else {
+      setNotificationType("danger");
+      setNotification("failed adding product");
+    }
+    setTimeout(() => {
+      setNotification("");
+    }, 4000);
+  }
+
   if (orderQuery.isError) return <Navigate to={"/"} />;
   return (
     <>
+      {notification ? (
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Notify text={notification} type={notificationType} />
+        </div>
+      ) : null}
+
       <main className="flex h-full gap-2 p-2">
         <div>
           <h1 className="sticky my-2 font-mono text-lg text-primary">
@@ -76,7 +147,6 @@ export default function New() {
                         !value.IsShipping &&
                         !value.IsReceived
                       ) {
-                        console.log(value);
                         return <NewOrderCard order={value} />;
                       }
                       return null;
@@ -89,45 +159,86 @@ export default function New() {
 
         <div className="h-max">
           <h1 className="my-2 font-mono text-lg text-primary">Add product</h1>
-          <section className="flex h-56 flex-col justify-between overflow-y-auto rounded border p-2">
+          <section className="flex flex-col justify-between gap-4 overflow-y-auto rounded border p-2">
             <div className="flex items-center justify-between gap-2">
               <label className="text-priamry font-Redhat text-sm">id</label>
               <input className="rounded border bg-gray-100 px-1" />
-              <button className="rounded bg-primary px-2 py-1 text-xs text-white">
+              <button
+                className="rounded bg-primary px-2 py-1 text-xs text-white"
+                onClick={HandleSearchProduct}
+              >
                 search and edit
               </button>
             </div>
 
-            <Form className="flex h-max w-full flex-col gap-2 font-Redhat text-sm text-primary">
+            <div className="flex h-max w-full flex-col gap-2 font-Redhat text-xs text-primary">
               <div className="flex justify-between gap-2">
                 <label>name</label>
-                <input className="w-3/4 rounded border bg-gray-100 px-1" />
+                <input
+                  name="Name"
+                  id="productName"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
+                />
               </div>
               <div className="flex justify-between gap-2">
                 <label>stock</label>
-                <input className="w-3/4 rounded border bg-gray-100 px-1" />
+                <input
+                  name="Stock"
+                  id="productStock"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
+                />
               </div>
 
               <div className="flex justify-between gap-2">
                 <label>price</label>
                 <input
-                  className="w-3/4 rounded border bg-gray-100 px-1"
+                  name="Price"
+                  id="productPrice"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
                   placeholder="$"
                 />
               </div>
               <div className="flex justify-between gap-2">
                 <label>photo Url</label>
-                <input className="w-3/4 rounded border bg-gray-100 px-1" />
+                <input
+                  name="Url"
+                  id="productUrl"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
+                />
               </div>
+
+              <div className="flex justify-between gap-2">
+                <label>description</label>
+                <input
+                  name="Description"
+                  id="productDescription"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
+                />
+              </div>
+              <div className="flex justify-between gap-2">
+                <label>flavors</label>
+                <input
+                  name="Flavors"
+                  id="productFlavors"
+                  className="w-3/4 rounded border bg-gray-100 p-1"
+                />
+              </div>
+
               <div className="flex gap-2 self-end">
-                <button className="rounded px-2 py-1 text-sm hover:bg-gray-100">
+                <button
+                  onClick={HandleClearCreateProduct}
+                  className="rounded px-2 py-1 text-sm hover:bg-gray-100"
+                >
                   clear
                 </button>
-                <button className="rounded bg-primary px-2 py-1 text-sm text-white">
+                <button
+                  onClick={HandleCreateProduct}
+                  className="rounded bg-primary px-2 py-1 text-sm text-white"
+                >
                   save
                 </button>
               </div>
-            </Form>
+            </div>
           </section>
         </div>
       </main>

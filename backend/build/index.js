@@ -158,6 +158,24 @@ app
     yield (0, database_js_1.updateDocumentById)(ACCOUNT_COLLECTION, req.params.id, req.body).then((value) => {
         res.status(200).json(value);
     });
+}))
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, firebaseId, email } = req.body;
+    if (!id || !firebaseId || !email) {
+        res.status(400).json({ errorMessage: "missing credential" });
+    }
+    const deleteResult = ACCOUNT_COLLECTION.deleteOne({
+        _id: new mongodb_1.ObjectId(id),
+        uid: firebaseId,
+        email: email,
+    });
+    deleteResult
+        .then((value) => {
+        res.status(200).json(value);
+    })
+        .catch((reason) => {
+        res.status(500).json(reason);
+    });
 }));
 //
 // updating account. and deleting account

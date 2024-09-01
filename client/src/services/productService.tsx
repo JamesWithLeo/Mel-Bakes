@@ -110,7 +110,7 @@ export function useCreateProduct() {
     onSettled: (data, error, variables, context) => {
       queryClient.setQueryData(
         ["product"],
-        (prevProduct: any) =>
+        (prevProduct: IProduct[]) =>
           [
             ...prevProduct,
             {
@@ -156,6 +156,18 @@ export function useDeleteProduct() {
       queryClient.setQueryData(["product"], (prevProducts: IProduct[]) =>
         prevProducts?.filter((product: IProduct) => product._id !== _id),
       );
+    },
+  });
+}
+
+export function useSearchProduct() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (variables: string) => {
+      return variables;
+    },
+    onMutate: (variables) => {
+      console.log(queryClient.getQueryData(["product"]));
     },
   });
 }

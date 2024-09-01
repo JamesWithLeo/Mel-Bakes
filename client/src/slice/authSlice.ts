@@ -81,10 +81,13 @@ const authSlice = createSlice({
       localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
     builder.addCase(DeleteAccount.fulfilled, (state, action) => {
-      console.log(action.payload);
-      if (action.payload) {
-      }
+      localStorage.removeItem("melbakesUser");
+      return {
+        ...state,
+        user: null,
+      };
     });
+    builder.addCase(DeleteAccount.rejected, (state) => {});
   },
 });
 const LoginRequest = async (email: string, uid: string) => {
@@ -181,30 +184,25 @@ export const Signin = createAsyncThunk(
   },
 );
 
-const DeleteAccountRequest = async (id: string) => {
-  const account = await axios.get("/melbake/account/" + id);
-  if (account.data) return account;
-};
-
 export const DeleteAccount = createAsyncThunk(
   "auth/deleteAccount",
-  async ({ id, password }: { id: string; password: string }) => {
+  async ({
+    id,
+    firebaseId,
+    email,
+  }: {
+    id: string;
+    firebaseId: string;
+    email: string;
+  }) => {
     try {
-      const response = await DeleteAccountRequest(id);
-      console.log(response);
-
-      if (
-        response &&
-        response.status === 200 &&
-        response.data.Password === password
-      ) {
-        const deleteResponse = await axios.delete(
-          "/melbake/accounts/" + response.data._id,
-        );
-        console.log(deleteResponse);
-        return deleteResponse;
+      const deleteResponse = await axios.delete("/melbake/account/" + id, {
+        data: { id, firebaseId, email },
+      });
+      if (deleteResponse.data && deleteResponse.data.deletedCount) {
+        return Promise.resolve();
       } else {
-        return null;
+        return Promise.reject();
       }
     } catch (error) {
       return null;

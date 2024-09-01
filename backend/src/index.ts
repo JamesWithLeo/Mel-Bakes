@@ -156,6 +156,24 @@ app
         res.status(200).json(value);
       },
     );
+  })
+  .delete(async (req: Request, res: Response) => {
+    const { id, firebaseId, email } = req.body;
+    if (!id || !firebaseId || !email) {
+      res.status(400).json({ errorMessage: "missing credential" });
+    }
+    const deleteResult = ACCOUNT_COLLECTION.deleteOne({
+      _id: new ObjectId(id),
+      uid: firebaseId,
+      email: email,
+    });
+    deleteResult
+      .then((value) => {
+        res.status(200).json(value);
+      })
+      .catch((reason) => {
+        res.status(500).json(reason);
+      });
   });
 //
 

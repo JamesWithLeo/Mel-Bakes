@@ -109,3 +109,7 @@ export const CreateRecaptchaVerifier = (
     "expired-callback": onExpire,
   });
 };
+
+export const deleteUserAccount = () => {
+  auth.currentUser?.delete();
+};

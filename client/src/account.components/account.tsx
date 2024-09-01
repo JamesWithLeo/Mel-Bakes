@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
-import { Navigate } from "react-router-dom";
+import { Navigate, replace, useNavigate } from "react-router-dom";
 import {
   DeleteAccount,
   SetDisplayName,
@@ -12,6 +12,8 @@ import {
   auth,
   CreatePhoneAuthProvider,
   CreateRecaptchaVerifier,
+  deleteUserAccount,
+  loginUser,
   updateUserPhoneNumber,
 } from "../firebase";
 import plaidPattern from "../assets/images/pattern.svg";
@@ -37,6 +39,7 @@ declare global {
 export default function Account() {
   const user = useSelector((state: AppState) => state.auth.User);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const [isEditingFirstName, setEditingFirstName] = useState<boolean>(false);
   const [isEditingLastName, setEditingLastName] = useState<boolean>(false);
 
@@ -232,9 +235,37 @@ export default function Account() {
     setEditingAddress(false);
   };
   const HandleDeleteAccount = (value: string | undefined) => {
-    if (user?._id && value)
-      dispatch(DeleteAccount({ id: user._id, password: value.trim() }));
-    setDeleteAccountVisible(true);
+    if (!user?.email || !value) return;
+    const password = value;
+    const response = loginUser(user.email, password);
+    response
+      .then((value) => {
+        if (!value.uid || !value.email || !user._id) return;
+        deleteUserAccount();
+        dispatch(
+          DeleteAccount({
+            id: user._id,
+            firebaseId: value.uid,
+            email: value.email,
+          }),
+        )
+          .unwrap()
+          .then(() => {
+            document.body.style.overflowY = "auto";
+            navigate("/", { replace: true });
+          })
+          .catch(() => {
+            setNotification("failed to delete account");
+          });
+        setDeleteAccountVisible(true);
+      })
+      .catch((reason) => {
+        console.log(reason);
+        setNotification(reason);
+      });
+    setTimeout(() => {
+      setNotification("");
+    }, 4000);
   };
   useEffect(() => {
     HandleRenderCaptcha();
@@ -244,8 +275,8 @@ export default function Account() {
     <>
       {notificaton ? (
         <>
-          <div className="fixed z-10 h-screen w-full bg-primary bg-opacity-70" />
-          <div className="fixed left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+          <div className="fixed z-20 h-screen w-full bg-primary bg-opacity-70" />
+          <div className="fixed left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 shadow">
             <Notify text={notificaton} type={"danger"} />
           </div>
         </>
@@ -306,45 +337,37 @@ export default function Account() {
         </section>
 
         <section
-          className="mb-8 grid h-36 w-full grid-cols-1 grid-rows-3 flex-col items-center shadow"
+          className="mb-4 grid h-36 w-full grid-cols-1 grid-rows-3 flex-col items-center shadow"
           style={{ backgroundImage: `url(${plaidPattern})` }}
         >
-          <div className="row-start-3 flex w-full flex-col items-center">
-            {user ? (
-              <div className="row-start-2 h-28 w-28 bg-white drop-shadow"></div>
-            ) : (
-              <div className="row-start-2 h-28 w-28 bg-white drop-shadow"></div>
-            )}
+          <div className="row-start-2 flex flex-col items-center">
+            <span className="flex justify-between gap-4">
+              <input
+                id="DisplayName"
+                defaultValue={user.displayName ?? ""}
+                readOnly
+                className="w-full border-b border-primary text-center text-sm text-gray-600 shadow outline-none focus:border-gray-500"
+              />
+
+              {isEditingDisplayName ? (
+                <button onClick={HandleSaveDisplayName} id="DisplayNameButton">
+                  <FontAwesomeIcon
+                    icon={faSquareCheck}
+                    className="text-gray-500"
+                  />
+                </button>
+              ) : (
+                <button onClick={HandleEditDisplayName} id="DisplayNameEdit">
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    className="text-gray-500"
+                  />
+                </button>
+              )}
+            </span>
+            <h1 className="text-center text-xs font-light">{user._id}</h1>
           </div>
         </section>
-
-        <div className="py-4">
-          <span className="flex justify-between gap-4">
-            <input
-              id="DisplayName"
-              defaultValue={user.displayName ?? ""}
-              readOnly
-              className="w-full border-b border-gray-100 text-center text-sm text-gray-600 outline-none focus:border-gray-500"
-            />
-
-            {isEditingDisplayName ? (
-              <button onClick={HandleSaveDisplayName} id="DisplayNameButton">
-                <FontAwesomeIcon
-                  icon={faSquareCheck}
-                  className="text-gray-500"
-                />
-              </button>
-            ) : (
-              <button onClick={HandleEditDisplayName} id="DisplayNameEdit">
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
-                  className="text-gray-500"
-                />
-              </button>
-            )}
-          </span>
-          <h1 className="text-center text-xs font-light">{user._id}</h1>
-        </div>
 
         <section className="flex w-full flex-col items-center gap-4 px-2 py-8 lg:flex-row lg:items-start lg:justify-center">
           <section className="flex w-full max-w-sm flex-col items-center gap-2 rounded bg-white p-4 shadow md:p-8">
