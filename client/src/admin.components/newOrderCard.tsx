@@ -27,8 +27,8 @@ export default function NewOrderCard({ order }: { order: IOrder }) {
   }
 
   return (
-    <div className="flex w-52 flex-col rounded border border-gray-100 border-transparent p-2 hover:bg-gray-50 lg:w-96 lg:p-4">
-      <section className="flex items-center gap-2 self-end align-middle text-xs text-gray-400 lg:absolute">
+    <div className="flex w-52 flex-col rounded border border-gray-100 border-transparent p-2 text-sm hover:bg-gray-50 lg:w-56">
+      <section className="flex items-center gap-2 self-end align-middle text-[10px] text-gray-400">
         <span className="flex gap-1">
           {diffrenceInDays >= 1 ? (
             <>
@@ -64,8 +64,8 @@ export default function NewOrderCard({ order }: { order: IOrder }) {
         </button>
       </section>
       <span className="font-Redhat text-gray-400">
-        <h1 className="text-sm text-primary lg:text-base">{order.Name}</h1>
-        <h1 className="text-xs">{order._id}</h1>
+        <h1 className="text-sm text-primary">{order.Name}</h1>
+        <h1 className="text-[10px]">{order._id}</h1>
       </span>
     </div>
   );

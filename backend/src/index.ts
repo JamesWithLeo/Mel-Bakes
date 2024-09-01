@@ -73,42 +73,17 @@ app.get("/melbake", async (req: Request, res: Response) => {
     });
 });
 app.get("/melbake/cupcakes", async (req: Request, res: Response) => {
-  async function destribute(array: any) {
-    // destribute img from cloudinary
-    let i: number;
-    let cups: IProduct[] = [];
-    if (array && array.length) {
-      for (i = 0; i <= array.length; i++) {
-        if (i === array.length) {
-          return cups;
-        }
-        await getAssetInfo(array[i].PublicId).then((url) => {
-          array[i].Url = url;
-          cups.push(array[i]);
-        });
-      }
-    }
-  }
   await fetchDocuments(CUPCAKE_COLLECTION).then(async (cupcakes) => {
-    destribute(cupcakes).then((value) => {
-      res.status(200).json(value);
-    });
+    res.status(200).json(cupcakes);
   });
 });
 // get single cupcake
 app.get("/melbake/cupcake/:id", async (req: Request, res: Response) => {
   let cupcake = await fetchCupcake(CUPCAKE_COLLECTION, req.params.id);
   if (cupcake) {
-    await getAssetInfo(cupcake.PublicId).then((value) => {
-      if (cupcake) {
-        cupcake.Url = value;
-      }
-    });
-    if (cupcake) {
-      res.status(200).json(cupcake);
-    } else {
-      throw new Error("Cant find fetch document");
-    }
+    res.status(200).json(cupcake);
+  } else {
+    res.status(500).send("Can't find the cupcake document");
   }
 });
 app

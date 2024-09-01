@@ -49,7 +49,7 @@ const port = process.env.PORT || 2024;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 // database for images
-const cloudinary_js_1 = __importStar(require("./cloudinary.js"));
+const cloudinary_js_1 = __importDefault(require("./cloudinary.js"));
 (0, cloudinary_js_1.default)();
 // database . use dotenv
 const password = process.env.DB_PASSWORD;
@@ -80,45 +80,18 @@ app.get("/melbake", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     });
 }));
 app.get("/melbake/cupcakes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    function destribute(array) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // destribute img from cloudinary
-            let i;
-            let cups = [];
-            if (array && array.length) {
-                for (i = 0; i <= array.length; i++) {
-                    if (i === array.length) {
-                        return cups;
-                    }
-                    yield (0, cloudinary_js_1.getAssetInfo)(array[i].PublicId).then((url) => {
-                        array[i].Url = url;
-                        cups.push(array[i]);
-                    });
-                }
-            }
-        });
-    }
     yield (0, database_js_1.fetchDocuments)(CUPCAKE_COLLECTION).then((cupcakes) => __awaiter(void 0, void 0, void 0, function* () {
-        destribute(cupcakes).then((value) => {
-            res.status(200).json(value);
-        });
+        res.status(200).json(cupcakes);
     }));
 }));
 // get single cupcake
 app.get("/melbake/cupcake/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let cupcake = yield (0, database_js_1.fetchCupcake)(CUPCAKE_COLLECTION, req.params.id);
     if (cupcake) {
-        yield (0, cloudinary_js_1.getAssetInfo)(cupcake.PublicId).then((value) => {
-            if (cupcake) {
-                cupcake.Url = value;
-            }
-        });
-        if (cupcake) {
-            res.status(200).json(cupcake);
-        }
-        else {
-            throw new Error("Cant find fetch document");
-        }
+        res.status(200).json(cupcake);
+    }
+    else {
+        res.status(500).send("Can't find the cupcake document");
     }
 }));
 app

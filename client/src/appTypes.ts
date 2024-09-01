@@ -3,7 +3,6 @@ export type IProduct = {
   Name: string;
   C_id: string;
   Url: string;
-  PublicId: string;
   Description: string;
   Flavor: string;
   Price: number;
