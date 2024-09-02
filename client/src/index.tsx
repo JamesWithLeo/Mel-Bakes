@@ -26,7 +26,6 @@ import SignPage from "./login-signin/sign";
 import LoginPage from "./login-signin/Login";
 import ForgetLayout from "./components/forgetLayout";
 import Dashboard from "./admin.components/dashboard";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 const queryClient = new QueryClient();
 const route = createBrowserRouter([
   {
@@ -128,8 +127,3 @@ root.render(
     </Provider>
   </React.StrictMode>,
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://cra.link/PWA
-serviceWorkerRegistration.register();

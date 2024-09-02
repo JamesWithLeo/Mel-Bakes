@@ -26,6 +26,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src",
+    "../../serviceWorkerRegistration.tsx",
+    "../../service-worker.ts"
   ]
 }
