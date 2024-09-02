@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
-import { Navigate, replace, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import {
   DeleteAccount,
   SetDisplayName,
@@ -42,14 +42,13 @@ export default function Account() {
   const navigate = useNavigate();
   const [isEditingFirstName, setEditingFirstName] = useState<boolean>(false);
   const [isEditingLastName, setEditingLastName] = useState<boolean>(false);
-
   const [isEditingAddress, setEditingAddress] = useState<boolean>(false);
   const [isEditingDisplayName, setEditingDisplayName] =
     useState<boolean>(false);
   const [isDeleteAccountVisible, setDeleteAccountVisible] =
     useState<boolean>(false);
-  const [notificaton, setNotification] = useState<string>("");
 
+  const [notificaton, setNotification] = useState<string>("");
   const [isEditingPhoneNumber, setIsEditingPhoneNumber] =
     useState<boolean>(false);
   const [recaptchaVerifier, setRecaptchaVerifier] =
@@ -71,13 +70,14 @@ export default function Account() {
     setVerificationId("");
     window.grecaptcha.reset();
   };
+
   const HandleSavePhoneNumber = async () => {
     const phoneNumberElement = document.getElementById(
       "phoneNumber",
     ) as HTMLInputElement;
     setPhoneNumber(phoneNumberElement.value);
     if (phoneNumberElement.value === phoneNumberElement.defaultValue) return;
-    if (!user?.email || !phoneNumber || !recaptchaVerifier) {
+    if (!user?.email || !phoneNumberElement.value || !recaptchaVerifier) {
       phoneNumberElement.value = phoneNumberElement.defaultValue;
       return;
     }
@@ -98,6 +98,7 @@ export default function Account() {
         }, 3000);
       });
   };
+
   const SendVerificationCodePhoneNumber = () => {
     const verificationCode = document.getElementById(
       "verificationCode",
@@ -114,6 +115,7 @@ export default function Account() {
         if (error.code) setPhoneCodeError(error.code);
       });
   };
+
   const HandleRenderCaptcha = () => {
     const recaptchaContainer = document.getElementById("recaptcha-container");
     if (recaptchaVerifier && recaptchaContainer?.innerHTML) {
@@ -154,6 +156,7 @@ export default function Account() {
     DisplayName.focus();
     setEditingDisplayName(true);
   };
+
   const HandleSaveDisplayName = () => {
     const DisplayName = document.getElementById(
       "DisplayName",
@@ -234,6 +237,7 @@ export default function Account() {
     setEditingLastName(false);
     setEditingAddress(false);
   };
+
   const HandleDeleteAccount = (value: string | undefined) => {
     if (!user?.email || !value) return;
     const password = value;
@@ -251,7 +255,7 @@ export default function Account() {
         )
           .unwrap()
           .then(() => {
-            document.body.style.overflowY = "auto";
+            document.body.style.overflowY = "scroll";
             navigate("/", { replace: true });
           })
           .catch(() => {
@@ -267,10 +271,13 @@ export default function Account() {
       setNotification("");
     }, 4000);
   };
+
   useEffect(() => {
     HandleRenderCaptcha();
   }, []);
+
   if (!user) return <Navigate to={"/"} />;
+
   return (
     <>
       {notificaton ? (

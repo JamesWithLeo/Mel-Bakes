@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IOrder } from "../appTypes";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { useRemoveNewOrder } from "./new";
+import { useRemoveNewOrder } from "./dashboard";
 
 export default function NewOrderCard({ order }: { order: IOrder }) {
   const { mutateAsync, isPending } = useRemoveNewOrder();

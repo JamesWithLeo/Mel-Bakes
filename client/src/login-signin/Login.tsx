@@ -42,7 +42,8 @@ function LoginPage() {
         )
           .unwrap()
           .then((data: IAccount) => {
-            if (data._id) navigate("/");
+            document.body.style.overflowY = "scroll";
+            navigate("/", { replace: true });
           })
           .catch((reason) => {
             console.log(reason);

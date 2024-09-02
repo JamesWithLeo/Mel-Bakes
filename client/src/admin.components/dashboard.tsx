@@ -34,7 +34,7 @@ export function useRemoveNewUser() {
     },
   });
 }
-export default function New() {
+export default function Dashboard() {
   const orderQuery = useQuery({
     queryKey: ["order"],
     queryFn: async () => {
@@ -120,12 +120,12 @@ export default function New() {
         </div>
       ) : null}
 
-      <main className="flex h-full gap-2 p-2">
-        <div>
+      <main className="flex h-max flex-wrap gap-2 p-2">
+        <div className="flex w-full flex-col sm:w-max">
           <h1 className="sticky my-2 font-mono text-lg text-primary">
             New Users
           </h1>
-          <section className="h-56 overflow-y-auto overflow-x-hidden rounded border px-2">
+          <section className="h-56 w-full overflow-y-auto overflow-x-hidden rounded border px-2 sm:w-max">
             <div className="flex flex-col gap-1">
               {userQuery.data
                 ? userQuery.data.map((value: IAccount) => {
@@ -134,32 +134,30 @@ export default function New() {
                 : null}
             </div>
           </section>
-          <div>
-            <h1 className="my-2 font-mono text-lg text-primary">
-              Today Orders
-            </h1>
-            <section className="h-56 overflow-y-auto overflow-x-hidden rounded border px-2">
-              <div className="flex flex-col gap-1">
-                {orderQuery.data
-                  ? orderQuery.data.map((value: IOrder) => {
-                      if (
-                        !value.IsPacked &&
-                        !value.IsShipping &&
-                        !value.IsReceived
-                      ) {
-                        return <NewOrderCard order={value} />;
-                      }
-                      return null;
-                    })
-                  : null}
-              </div>
-            </section>
-          </div>
+        </div>
+        <div className="flex w-full flex-col sm:w-max">
+          <h1 className="my-2 font-mono text-lg text-primary">Today Orders</h1>
+          <section className="h-56 w-full overflow-y-auto overflow-x-hidden rounded border px-2 sm:w-max">
+            <div className="flex flex-col gap-1">
+              {orderQuery.data
+                ? orderQuery.data.map((value: IOrder) => {
+                    if (
+                      !value.IsPacked &&
+                      !value.IsShipping &&
+                      !value.IsReceived
+                    ) {
+                      return <NewOrderCard order={value} />;
+                    }
+                    return null;
+                  })
+                : null}
+            </div>
+          </section>
         </div>
 
-        <div className="h-max">
+        <div className="h-max w-full">
           <h1 className="my-2 font-mono text-lg text-primary">Add product</h1>
-          <section className="flex flex-col justify-between gap-4 overflow-y-auto rounded border p-2">
+          <section className="flex w-full flex-col justify-between gap-4 overflow-y-auto rounded border p-2 sm:w-max">
             <div className="flex items-center justify-between gap-2">
               <label className="text-priamry font-Redhat text-sm">id</label>
               <input className="rounded border bg-gray-100 px-1" />

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IAccount } from "../appTypes";
 import { faX } from "@fortawesome/free-solid-svg-icons";
-import { useRemoveNewUser } from "./new";
+import { useRemoveNewUser } from "./dashboard";
 
 export default function NewUserCard({ account }: { account: IAccount }) {
   const { mutateAsync, isPending } = useRemoveNewUser();

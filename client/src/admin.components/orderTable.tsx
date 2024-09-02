@@ -71,6 +71,9 @@ export default function OrderTable({
       },
       {
         accessorKey: "DateOrdered",
+        accessorFn: (row) => {
+          return new Date(row.dateOrdered).toLocaleString();
+        },
         header: "DateOrdered",
         enableSorting: false,
         enableEditing: false,

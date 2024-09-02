@@ -26,17 +26,17 @@ function Admin() {
 
   return (
     <main className="flex h-dvh max-h-max w-full flex-col items-center">
-      <header className="sticky z-10 flex h-16 w-full flex-col items-center justify-center bg-primarylight py-2 lg:hidden lg:py-4">
-        <div className="flex h-full w-full max-w-7xl items-center justify-between px-4">
+      <header className="sticky z-10 flex h-16 w-full flex-col items-center justify-center bg-primary py-2 lg:hidden lg:py-4">
+        <div className="flex h-16 w-full max-w-7xl items-center justify-between px-4">
           <Link
             to={"/"}
             target="_parent"
-            className="font-[Lobster] text-3xl text-primary"
+            className="font-[Lobster] text-3xl text-white"
           >
             Mel Bakes
           </Link>
           <button
-            className="text-xl text-primary lg:hidden"
+            className="text-xl text-white lg:hidden"
             onClick={() => {
               setIsAsideVisible(!isAsideVisible);
             }}
@@ -45,7 +45,7 @@ function Admin() {
           </button>
         </div>
       </header>
-      <main className="flex h-full w-full max-w-7xl bg-primarylight">
+      <main className="flex h-full w-full max-w-7xl bg-primary">
         {isAsideVisible === true ? (
           <>
             <div
@@ -54,15 +54,54 @@ function Admin() {
                 setIsAsideVisible(false);
               }}
             />
-            <div className="top-15 absolute right-0 z-10 flex h-max w-max flex-col gap-2 bg-gray-500 bg-opacity-80 py-4 text-white lg:hidden">
-              <NavLink to={"products"} className={"w-full px-4"}>
+            <div className="top-15 absolute right-0 z-10 flex h-max w-max flex-col gap-2 bg-gray-500 bg-opacity-80 px-4 py-4 text-center text-white lg:hidden">
+              <Link
+                to={"new"}
+                className="flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-white"
+              >
+                <FontAwesomeIcon icon={faEnvelopeOpen} />
+                New
+              </Link>
+              <h1 className="flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-white">
+                <FontAwesomeIcon icon={faDatabase} />
+                Database
+              </h1>
+              <NavLink
+                to={"products"}
+                className={({ isActive, isPending, isTransitioning }) =>
+                  [
+                    isActive
+                      ? "w-full py-2 text-white"
+                      : "w-full bg-transparent py-2 text-gray-300",
+                  ].join(" ")
+                }
+              >
+                {" "}
                 Product
               </NavLink>
-              <NavLink to={"accounts"} className={"w-full px-4"}>
+              <NavLink
+                to={"accounts"}
+                className={({ isActive, isPending, isTransitioning }) =>
+                  [
+                    isActive
+                      ? "w-full py-2 text-white"
+                      : "w-full bg-transparent py-2 text-gray-300",
+                  ].join(" ")
+                }
+              >
                 Account
               </NavLink>
-              <NavLink to={"orders"} className={"w-full px-4"}>
-                Order
+              <NavLink
+                to={"Orders"}
+                className={({ isActive, isPending, isTransitioning }) =>
+                  [
+                    isActive
+                      ? "w-full py-2 text-white"
+                      : "w-full bg-transparent py-2 text-gray-300",
+                  ].join(" ")
+                }
+              >
+                Orders
               </NavLink>
             </div>
           </>
@@ -72,18 +111,18 @@ function Admin() {
           <Link
             to={"/"}
             target="_parent"
-            className="font-[Lobster] text-3xl text-primary"
+            className="font-[Lobster] text-3xl text-white"
           >
             Mel Bakes
           </Link>
           <Link
             to={"new"}
-            className="mt-16 flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary"
+            className="mt-16 flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-white"
           >
             <FontAwesomeIcon icon={faEnvelopeOpen} />
             New
           </Link>
-          <h1 className="flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primary">
+          <h1 className="flex w-full items-center gap-2 border-primarylight px-6 text-center text-sm text-primarylight">
             <FontAwesomeIcon icon={faDatabase} />
             Database
           </h1>
@@ -97,7 +136,7 @@ function Admin() {
                 [
                   isActive
                     ? "w-full bg-secondarylight py-2 text-primary"
-                    : "w-full bg-transparent py-2",
+                    : "text- w-full bg-transparent py-2 text-white",
                 ].join(" ")
               }
             >
@@ -110,7 +149,7 @@ function Admin() {
                 [
                   isActive
                     ? "w-full bg-secondarylight py-2 text-primary"
-                    : "w-full bg-transparent py-2",
+                    : "w-full bg-transparent py-2 text-white",
                 ].join(" ")
               }
             >
@@ -122,7 +161,7 @@ function Admin() {
                 [
                   isActive
                     ? "w-full bg-secondarylight py-2 text-primary"
-                    : "w-full bg-transparent py-2",
+                    : "w-full bg-transparent py-2 text-white",
                 ].join(" ")
               }
             >
