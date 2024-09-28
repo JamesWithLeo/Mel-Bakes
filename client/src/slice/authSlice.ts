@@ -4,8 +4,21 @@ import { IAccount } from "../appTypes";
 
 const userlocal = localStorage.getItem("melbakesUser");
 const user: IAccount | null = userlocal ? JSON.parse(userlocal) : null;
-type IAccountEditableFields = "firstName" | "lastName" | "address";
+type IAccountEditableFields =
+  | "firstName"
+  | "lastName"
+  | "address"
+  | "gender"
+  | "dateOfBirth"
+  | "phoneNumber";
 
+interface ISetupData {
+  firstName: string;
+  lastName: string;
+  address: string;
+  gender: string;
+  dateOfBirth: string;
+}
 interface IUserInit {
   User: IAccount | null;
 }
@@ -16,22 +29,6 @@ const authSlice = createSlice({
   initialState: userInit,
   name: "auth",
   reducers: {
-    SetPhoneNumber: (state, action: PayloadAction<string>) => {
-      if (state.User) {
-        const updatedUser: IAccount = {
-          ...state.User,
-          phoneNumber: action.payload,
-        };
-        console.log("dispatched", updatedUser);
-        localStorage.setItem("melbakesUser", JSON.stringify(updatedUser));
-        return {
-          ...state,
-          User: {
-            ...updatedUser,
-          },
-        };
-      }
-    },
     SetDisplayName: (state, action: PayloadAction<string>) => {
       if (state.User) {
         const updatedUser: IAccount = {
@@ -80,6 +77,49 @@ const authSlice = createSlice({
       // state.User = action.payload.User;
       localStorage.setItem("melbakesUser", JSON.stringify(action.payload.User));
     });
+    builder.addCase(bulkUpdate.fulfilled, (state, action) => {
+      const payload = action.payload.User;
+      if (!payload) {
+        return { ...state };
+      } else {
+        if (payload.phoneNumber) {
+          return {
+            ...state,
+            User: {
+              email: payload.email,
+              phoneNumber: payload.phoneNumber,
+              displayName: payload.displayName,
+              uid: payload.uid,
+              _id: payload._id,
+              role: payload.role,
+              gender: payload.gender,
+              dateOfBirth: payload.dateOfBirth,
+              firstName: payload.firstName,
+              lastName: payload.lastName,
+              address: payload.address,
+            },
+          };
+        } else {
+          return {
+            ...state,
+            User: {
+              ...state.User,
+              email: payload.email,
+              phoneNumber: payload.phoneNumber,
+              displayName: payload.displayName,
+              uid: payload.uid,
+              _id: payload._id,
+              role: payload.role,
+              gender: payload.gender,
+              dateOfBirth: payload.dateOfBirth,
+              firstName: payload.firstName,
+              lastName: payload.lastName,
+              address: payload.address,
+            },
+          };
+        }
+      }
+    });
     builder.addCase(DeleteAccount.fulfilled, (state, action) => {
       localStorage.removeItem("melbakesUser");
       return {
@@ -90,7 +130,7 @@ const authSlice = createSlice({
     builder.addCase(DeleteAccount.rejected, (state) => {});
   },
 });
-const LoginRequest = async (email: string, uid: string) => {
+const LoginRequest = async (email: string | null, uid: string | null) => {
   return axios
     .get("/melbake/login/", {
       params: { uid: uid, email: email },
@@ -114,8 +154,8 @@ export const Login = createAsyncThunk(
       DisplayName,
       PhoneNumber,
     }: {
-      Email: string;
-      Uid: string;
+      Email: string | null;
+      Uid: string | null;
       DisplayName: string | null;
       PhoneNumber: string | null;
     },
@@ -125,30 +165,27 @@ export const Login = createAsyncThunk(
     if (!document) {
       return Promise.reject("Account doesn't exist in database");
     }
-    document.displayName = DisplayName;
-    document.phoneNumber = PhoneNumber;
     return document;
   },
 );
 
-const SigninRequest = async (
-  email: string,
-  uid: string,
-  firstName: string,
-  lastName: string,
-  address: string,
-  gender: string,
-  dateOfBirth: string,
-) => {
+const SigninRequest = async ({
+  email,
+  uid,
+  phoneNumber,
+  displayName,
+}: {
+  email: string | null;
+  uid: string | null;
+  phoneNumber: string | null;
+  displayName: string | null;
+}) => {
   return axios.post("/melbake/signin/", {
     email: email,
     uid: uid,
     role: "user",
-    firstName: firstName,
-    lastName: lastName,
-    address: address,
-    gender: gender,
-    dateOfBirth: dateOfBirth,
+    displayName: displayName,
+    phoneNumber: phoneNumber,
   });
 };
 export const Signin = createAsyncThunk(
@@ -156,29 +193,20 @@ export const Signin = createAsyncThunk(
   async ({
     Email,
     Uid,
-    FirstName,
-    LastName,
-    Address,
-    Gender,
-    DateOfBirth,
+    PhoneNumber,
+    DisplayName,
   }: {
-    Email: string;
-    Uid: string;
-    Address: string;
-    FirstName: string;
-    LastName: string;
-    Gender: string;
-    DateOfBirth: string;
+    Email: string | null;
+    Uid: string | null;
+    PhoneNumber: string | null;
+    DisplayName: string | null;
   }) => {
-    const document = await SigninRequest(
-      Email,
-      Uid,
-      FirstName,
-      LastName,
-      Address,
-      Gender,
-      DateOfBirth,
-    );
+    const document = await SigninRequest({
+      email: Email,
+      uid: Uid,
+      phoneNumber: PhoneNumber,
+      displayName: DisplayName,
+    });
     console.log(document);
     return document.data;
   },
@@ -234,6 +262,25 @@ const updateRequest = async (
           address: updatedValue,
         })
         .then((response) => response.data);
+    case "dateOfBirth":
+      return axios
+        .put(`/melbake/account/` + id, {
+          dateOfBirth: updatedValue,
+        })
+        .then((response) => response.data);
+
+    case "phoneNumber":
+      return axios
+        .put(`/melbake/account/` + id, {
+          phoneNumber: updatedValue,
+        })
+        .then((response) => response.data);
+    case "gender":
+      return axios
+        .put(`/melbake/account/` + id, {
+          gender: updatedValue,
+        })
+        .then((response) => response.data);
   }
 };
 
@@ -258,5 +305,28 @@ export const update = createAsyncThunk(
     }
   },
 );
-export const { SetPhoneNumber, SetDisplayName } = authSlice.actions;
+
+const bulkUpdateRequest = async (id: string, updatedValues: ISetupData) => {
+  console.log(updatedValues);
+
+  const data = { ...updatedValues };
+  console.log(data);
+  return axios
+    .put(`/melbake/account/` + id, data)
+    .then((response) => response.data);
+};
+export const bulkUpdate = createAsyncThunk(
+  "auth/bulkUpdate",
+  async ({ id, updatedValues }: { id: string; updatedValues: ISetupData }) => {
+    const document: IAccount = await bulkUpdateRequest(id, updatedValues);
+    if (document && document._id) {
+      localStorage.removeItem("melbakesUser");
+      localStorage.setItem("melbakesUser", JSON.stringify(document));
+      return { User: document };
+    }
+    return { User: null };
+  },
+);
+
+export const { SetDisplayName } = authSlice.actions;
 export default authSlice.reducer;

@@ -29,7 +29,7 @@ function HeaderComponent({
   return (
     <>
       <div className="sticky top-0 z-10 flex w-full justify-center bg-secondarylight drop-shadow-lg">
-        <header className="flex h-16 max-h-max w-full max-w-7xl items-center justify-between px-4">
+        <header className="flex h-16 max-h-16 w-full max-w-7xl items-center justify-between px-4">
           <Link to={"/"} className="font-[Lobster] text-3xl text-primary">
             Mel Bakes
           </Link>

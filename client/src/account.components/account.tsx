@@ -1,15 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../store";
 import { Navigate, useNavigate } from "react-router-dom";
-import {
-  DeleteAccount,
-  SetDisplayName,
-  SetPhoneNumber,
-  update,
-} from "../slice/authSlice";
+import { DeleteAccount, SetDisplayName, update } from "../slice/authSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  auth,
   CreatePhoneAuthProvider,
   CreateRecaptchaVerifier,
   deleteUserAccount,
@@ -107,7 +101,9 @@ export default function Account() {
     if (!verificationCode.value || !recaptchaContainer) return;
     updateUserPhoneNumber(verficationId, verificationCode.value)
       .then(() => {
-        dispatch(SetPhoneNumber(phoneNumber));
+        dispatch(
+          update({ id: user!._id!, field: "phoneNumber", value: phoneNumber }),
+        );
         window.location.reload();
       })
       .catch((error) => {
@@ -453,7 +449,7 @@ export default function Account() {
                 <input
                   id="phoneNumber"
                   readOnly
-                  defaultValue={auth.currentUser?.phoneNumber ?? ""}
+                  defaultValue={user.phoneNumber!}
                   className="w-full border-b border-gray-100 text-gray-700 outline-none focus:border-gray-500"
                 />
                 <button id="phoneNumberEdit" onClick={HandleRenderCaptcha}>

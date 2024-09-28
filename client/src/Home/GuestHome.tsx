@@ -32,7 +32,7 @@ export default function GuestHome({ setLoginModal }: IGuestHome) {
           </p>
 
           <button
-            className="h-max w-max self-center rounded-sm bg-[#424874] px-4 py-2 text-white"
+            className="h-max w-max self-center rounded-sm bg-[#424874] px-4 py-2 text-white active:bg-opacity-90"
             id="loginButton"
             onClick={() => {
               setLoginModal(true);

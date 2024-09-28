@@ -22,8 +22,7 @@ import DeliveryLayout from "./delivery.components/deliveryLayout";
 import Account from "./account.components/account";
 import OrderLayout from "./order.components/ordersLayout";
 import RecievedLayout from "./order.components/recievedLayout";
-import SignPage from "./login-signin/sign";
-import LoginPage from "./login-signin/Login";
+import Setup from "./login-signin/setup";
 import ForgetLayout from "./components/forgetLayout";
 import Dashboard from "./admin.components/dashboard";
 const queryClient = new QueryClient();
@@ -75,13 +74,10 @@ const route = createBrowserRouter([
     ],
   },
   {
-    path: "Signin",
-    element: <SignPage />,
+    path: "setup",
+    element: <Setup />,
   },
-  {
-    path: "login",
-    element: <LoginPage />,
-  },
+
   {
     path: "forget",
     element: <ForgetLayout />,

@@ -9,6 +9,9 @@ import {
   RecaptchaVerifier,
   PhoneAuthProvider,
   updatePhoneNumber,
+  signInWithPopup,
+  GoogleAuthProvider,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -112,4 +115,58 @@ export const CreateRecaptchaVerifier = (
 
 export const deleteUserAccount = () => {
   auth.currentUser?.delete();
+};
+
+const googleProvider = new GoogleAuthProvider();
+
+export const SignInWithGooglePopup = async () => {
+  return await signInWithPopup(auth, googleProvider)
+    .then(async (result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential?.accessToken;
+
+      const user = result.user;
+
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
+      const idp = getAdditionalUserInfo(result);
+
+      if (idp && idp.isNewUser) {
+        return {
+          isNewUser: true,
+          user: {
+            email: user.email,
+            uid: user.uid,
+            phoneNumber: user.phoneNumber,
+            displayName: user.displayName,
+          },
+        };
+      } else if (idp && !idp.isNewUser) {
+        return {
+          isNewUser: false,
+          user: {
+            email: user.email,
+            uid: user.uid,
+            phoneNumber: user.phoneNumber,
+            displayName: user.displayName,
+          },
+        };
+      }
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+      console.log(errorCode);
+      console.log(errorMessage);
+      console.log(email);
+      console.log("credentital", credential);
+      return null;
+    });
 };
